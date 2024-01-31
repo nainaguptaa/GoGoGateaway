@@ -6,12 +6,14 @@ const Signup = () => {
   return (
     <div className="auth-wrapper">
       <div className="auth-container">
-        <h1>Create an Account</h1>
+        <h1>Create an ASDFASDFAccount</h1>
         <div className="input-container">
           <input className="auth-input" type="text" required />
           <div className="labelline">Email Address</div>
         </div>
-        <span>Already Have an Account? Login</span>
+        <span className="bg-gray-900 text-gray-300">
+          Already Have an Accoun nURUBAt? Login
+        </span>
         <div className="separator">
           <div className="line" />
           <span className="or">or</span>
