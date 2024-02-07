@@ -1,7 +1,10 @@
 import React from 'react';
+import { useUserContext } from '../context/userContext';
 import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
+  const { currentUser } = useUserContext();
+  console.log(currentUser);
   const navigate = useNavigate();
   return (
     <div className="flex justify-between bg-light-blue px-24 py-12">
@@ -26,12 +29,21 @@ const Navbar = () => {
             </li>
           </ul>
         </nav>
-        <button
-          className="btn cursor-pointer bg-blue-400 text-lg"
-          onClick={() => navigate('/signup')}
-        >
-          Sign Up
-        </button>
+        {currentUser && currentUser.username ? (
+          <button
+            className="btn cursor-pointer bg-blue-400 text-lg"
+            onClick={() => navigate('/profile')}
+          >
+            Profile
+          </button>
+        ) : (
+          <button
+            className="btn cursor-pointer bg-blue-400 text-lg"
+            onClick={() => navigate('/signup')}
+          >
+            Sign Up
+          </button>
+        )}
       </div>
     </div>
   );

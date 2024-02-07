@@ -60,19 +60,21 @@ export const UserProvider = ({ children }) => {
   }
 
   async function addNewEmailUser(result) {
+    console.log(result);
+    console.log('adding new');
     console.log(4, result.email);
-    console.log(5, result.username);
+    const username = result.email.split('@')[0];
     try {
       // Constructing the user data to be saved in Firestore
       const userData = {
-        username: result.username,
+        username: username,
         id: result.userId,
         email: result.email,
         photoURL: '',
         loggedIn: true,
         firstName: result.firstName,
         lastName: result.lastName,
-        age: result.age,
+        // age: result.age,
         admin: false,
       };
 
@@ -112,6 +114,7 @@ export const UserProvider = ({ children }) => {
       } else {
         // navigate('/dashboard');
       }
+      navigate('/');
     } catch (error) {
       console.log('error');
       console.log(error.message);
@@ -140,17 +143,20 @@ export const UserProvider = ({ children }) => {
     }
   };
   const emailSignUp = async (userDetails) => {
+    console.log('signup');
+    console.log(userDetails);
     // Check if email already exists in Firestore
     const usersRef = collection(db, 'users');
     const querySnapshot = await getDocs(
       query(usersRef, where('email', '==', userDetails.email)),
     );
-
+    console.log(2);
     if (!querySnapshot.empty) {
       // Handle case where email already exists
       console.error('Email already in exists.');
       return;
     }
+    console.log(3);
     createUserWithEmailAndPassword(
       auth,
       userDetails.email,
@@ -158,9 +164,10 @@ export const UserProvider = ({ children }) => {
     )
       .then((userCredential) => {
         // Signed up
+        console.log(4);
         const user = userCredential.user;
         const userId = user.uid;
-
+        console.log(user);
         // You can now use the userId for further operations, like adding the user to your database
         console.log(3);
         const data = {
@@ -170,10 +177,12 @@ export const UserProvider = ({ children }) => {
         addNewEmailUser(data);
       })
       .catch((error) => {
+        console.log(error.message);
         const errorCode = error.code;
         const errorMessage = error.message;
         // ..
       });
+    navigate('/');
   };
 
   const emailSignIn = async (email, password) => {
@@ -193,6 +202,7 @@ export const UserProvider = ({ children }) => {
       // Re-throw the error to be caught by the caller
       throw error;
     }
+    navigate('/');
   };
 
   useEffect(() => {

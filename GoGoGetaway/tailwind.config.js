@@ -6,7 +6,8 @@ export default {
     extend: {
       colors: {
         'light-blue': 'var(--light-blue)',
-        'blue-400': '#4EA8FC',
+        'clr-blue-400': '#4EA8FC',
+        'clr-red-400': '#FF6584',
         'secondary-text': '#757575',
       },
       height: {
@@ -24,6 +25,12 @@ export default {
       },
       spacing: {
         'neg-4': '-2rem', // Assuming '4' is not already used for a different value
+      },
+      borderRadius: {
+        '4xl': '2rem',
+      },
+      boxShadow: {
+        'deep-inner': 'inset 0 2px 3px 2px rgba(0, 0, 0, 0.15)',
       },
     },
   },
