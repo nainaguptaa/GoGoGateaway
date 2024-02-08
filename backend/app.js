@@ -3,6 +3,12 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const admin = require('firebase-admin');
+const serviceAccount = require('./GoGoGetaway Firebase Admin.json');
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -28,6 +34,19 @@ app.use('/users', usersRouter);
 app.use('/cities', citiesRouter);
 app.use('/hotels', hotelsRouter);
 app.use('/restaurants', restaurantsRouter);
+
+const db = admin.firestore();
+
+app.get('/example', async (req, res) => {
+  try {
+    const snapshot = await db.collection('hotels').get();
+    const data = snapshot.docs.map(doc => doc.data());
+    res.json(data);
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
