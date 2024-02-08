@@ -1,6 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
+<<<<<<< HEAD
+router.get("/", (req, res) => {
+  res.send("FIND AMAZING CITIES!");
+=======
 // Import the Firebase Admin SDK instance
 const admin = require('firebase-admin');
 
@@ -20,6 +24,7 @@ router.get("/", async (req, res) => {
     console.error('Error fetching cities data:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
+>>>>>>> b2a2c2dc6269b8b5787aff206f1d5a570ebf542d
 });
 
 module.exports = router;
