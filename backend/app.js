@@ -37,17 +37,6 @@ app.use('/restaurants', restaurantsRouter);
 
 const db = admin.firestore();
 
-app.get('/example', async (req, res) => {
-  try {
-    const snapshot = await db.collection('hotels').get();
-    const data = snapshot.docs.map(doc => doc.data());
-    res.json(data);
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
   next(createError(404));

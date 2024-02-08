@@ -10,12 +10,12 @@ const db = admin.firestore();
 // Define your route handler
 router.get("/", async (req, res) => {
   try {
-    // Fetch data from Firestore
-    const citiesSnapshot = await db.collection('cities').get();
-    const cities = citiesSnapshot.docs.map(doc => doc.data());
-
+    const city = req.query.city;
+    //get the hotels with the same city
+    const hotels = await db.collection('hotels').where('location', '==', city).get();
+    const hotelSnapshot = hotels.docs.map(doc => doc.data());
     // Respond with the fetched cities data
-    res.json(cities);
+    res.json(hotelSnapshot);
   } catch (error) {
     console.error('Error fetching cities data:', error);
     res.status(500).json({ error: 'Internal Server Error' });
