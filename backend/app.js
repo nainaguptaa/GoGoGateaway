@@ -4,7 +4,7 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 const admin = require('firebase-admin');
-const serviceAccount = require('./GoGoGetaway Firebase Admin.json');
+const serviceAccount = require('./firebaseKey.json');
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount)
