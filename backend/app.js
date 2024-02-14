@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const cors = require("cors");
 const admin = require('firebase-admin');
 const serviceAccount = require('./firebaseKey.json');
 
@@ -19,6 +20,8 @@ var itinerariesRouter = require("./routes/itineraries");
 
 
 var app = express();
+
+app.use(cors({ origin: true, credentials: true }));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
