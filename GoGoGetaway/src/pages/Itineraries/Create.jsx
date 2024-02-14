@@ -20,7 +20,7 @@ const Create = () => {
     };
 
     const handleChange = (e) => {
-        console.log(e.target.value);
+        console.log(e.target.name, e.target.value); // Add this line for debugging
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
