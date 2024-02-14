@@ -20,6 +20,7 @@ const Create = () => {
     };
 
     const handleChange = (e) => {
+        console.log(e.target.name, e.target.value);
         setFormData({ ...formData, [e.target.name]: e.target.value });
     };
 
@@ -28,9 +29,9 @@ const Create = () => {
             <h1>Create Itinerary</h1>
             <form onSubmit={handleSubmit}>
                 {/* Assuming Event, Hotel, and Restaurant components correctly update formData */}
-                <Event onChange={handleChange}></Event>
-                <Hotel onChange={handleChange}></Hotel>
-                <Restaurant onChange={handleChange}></Restaurant>
+                <Event handleChange={handleChange}></Event>
+                <Hotel handleChange={handleChange}></Hotel>
+                <Restaurant handleChange={handleChange}></Restaurant>
                 <button type="submit">Create</button>
             </form>
         </div>
