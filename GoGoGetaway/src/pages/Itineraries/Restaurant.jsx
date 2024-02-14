@@ -7,7 +7,7 @@ const Restaurant = ({handleChange}) => {
             <label htmlFor="restaurant">Restaurant Name</label>
             <input type="text" id="restaurant" name="restaurant" placeholder="Restaurant Name" onChange={handleChange} />
             <label htmlFor="rating">Rating</label>
-            <input type="number" id="rating" name="rating" placeholder="Rating" onChange={handleChange} />
+            <input type="number" id="rating" name="ratingRestaurant" placeholder="Rating" onChange={handleChange} />
             <label htmlFor="cuisine">Cuisine</label>
             <select id="cuisine" name="cuisine" onChange={handleChange}>
                 <option value="italian">Italian</option>
@@ -17,7 +17,7 @@ const Restaurant = ({handleChange}) => {
                 <option value="french">French</option>
             </select>
             <label htmlFor="location">Location</label>
-            <input type="text" id="location" name="location" placeholder="Location" onChange={handleChange} />
+            <input type="text" id="location" name="locationRestaurant" placeholder="Location" onChange={handleChange} />
         </div>
     )
 }
