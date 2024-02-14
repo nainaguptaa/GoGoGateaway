@@ -11,7 +11,8 @@ const db = admin.firestore();
 router.post("/create", async (req, res) => {
     try {
       const { data } = req.body;
-      const itineraryRef = await db.collection('itineraries').add(data);
+     // const itineraryRef = await db.collection('itineraries').add(data);
+     console.log(req.body);
       console.log(data);
       console.log('Itinerary created successfully');
       res.status(200).json({ message: 'Itinerary created successfully' });
