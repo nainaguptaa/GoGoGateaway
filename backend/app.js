@@ -15,6 +15,7 @@ var usersRouter = require('./routes/users');
 var citiesRouter = require("./routes/cities");
 var hotelsRouter = require("./routes/hotels");
 var restaurantsRouter = require("./routes/restaurants");
+var itinerariesRouter = require("./routes/itineraries");
 
 
 var app = express();
@@ -34,6 +35,7 @@ app.use('/users', usersRouter);
 app.use('/cities', citiesRouter);
 app.use('/hotels', hotelsRouter);
 app.use('/restaurants', restaurantsRouter);
+app.use('/itineraries', itinerariesRouter);
 
 const db = admin.firestore();
 
