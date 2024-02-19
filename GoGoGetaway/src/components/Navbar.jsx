@@ -8,7 +8,12 @@ const Navbar = () => {
   const navigate = useNavigate();
   return (
     <div className="flex justify-between bg-light-blue px-24 py-12">
-      <h1 className="text-xl">GoGoGetaway</h1>
+      <h1
+        className="cursor-pointer text-xl"
+        onClick={() => navigate('/foryou')}
+      >
+        GoGoGetaway
+      </h1>
       <div className="flex items-center justify-evenly gap-16 font-poppins">
         <nav>
           <ul class="flex list-none space-x-8">
