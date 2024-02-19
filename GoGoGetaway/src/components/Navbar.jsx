@@ -16,19 +16,19 @@ const Navbar = () => {
       </h1>
       <div className="flex items-center justify-evenly gap-16 font-poppins">
         <nav>
-          <ul class="flex list-none space-x-8">
+          <ul className="flex list-none space-x-8">
             <li>
-              <a href="#" class="text-lg hover:text-blue-700">
+              <a href="#" className="text-lg hover:text-blue-700">
                 Home
               </a>
             </li>
             <li>
-              <a href="#" class="text-lg hover:text-blue-700">
+              <a href="#" className="text-lg hover:text-blue-700">
                 About Us
               </a>
             </li>
             <li>
-              <a href="#" class="text-lg hover:text-blue-700">
+              <a href="#" className="text-lg hover:text-blue-700">
                 Deals
               </a>
             </li>
@@ -36,14 +36,14 @@ const Navbar = () => {
         </nav>
         {currentUser && currentUser.username ? (
           <button
-            className="btn cursor-pointer bg-blue-400 text-lg"
+            className="btn cursor-pointer bg-blue-400 text-lg text-white"
             onClick={() => navigate('/profile')}
           >
             Profile
           </button>
         ) : (
           <button
-            className="btn cursor-pointer bg-blue-400 text-lg"
+            className="btn cursor-pointer bg-blue-400 text-lg text-white"
             onClick={() => navigate('/signup')}
           >
             Sign Up
