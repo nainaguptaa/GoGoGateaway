@@ -3,6 +3,7 @@ import { Routes, Route } from 'react-router-dom';
 import Signup from './pages/Auth/Signup';
 import LandingPage from './pages/LandingPage/LandingPage';
 import Profile from './pages/Profile';
+import Create from './pages/Itineraries/Create';
 import SearchResults from './pages/SearchResults';
 import ForYou from './pages/ForYou/ForYou';
 import { useUserContext } from './context/userContext';
@@ -34,6 +35,7 @@ function App() {
           <Route path="/search" element={<SearchResults />} />
           <Route path="/following" element={<Following />} />
           <Route path="/itineraries" element={<Itinerary />} />
+          <Route path="/create" element={<Create />} />
         </Routes>
       </div>
     </>
