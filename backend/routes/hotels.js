@@ -1,5 +1,3 @@
-import { getHotels } from "../modal/hotel";
-
 const express = require("express");
 const router = express.Router();
 
@@ -31,7 +29,5 @@ router.get("/", async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
-getHotels();
 
 module.exports = router;

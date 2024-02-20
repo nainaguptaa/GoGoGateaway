@@ -1,12 +1,7 @@
 function getHotels(){
-
+    console.log('getHotels');
 }
 
 function getHotel(location){
-
-}
-
-module.exports = {
-    getHotels,
-    getHotel
+    console.log('getHotel');
 }
