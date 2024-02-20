@@ -21,6 +21,7 @@ router.post("/create", async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 router.get('/', async (req, res) => {
   try {
       const { location } = req.query;
@@ -45,9 +46,38 @@ router.get('/', async (req, res) => {
 router.get("/:id", async (req, res) => {
   try {
     const id = req.params.id;
+    
     // Fetch data from Firestore
-    const itinerary = await db.collection('itineraries').doc(id).get();
-    const itineraryData = itinerary.data();
+    const itineraryRef = db.collection('itineraries').doc(id);
+    const itinerarySnapshot = await itineraryRef.get();
+    const itineraryData = itinerarySnapshot.data();
+    
+    // Replace hotel reference with actual hotel data
+    if (itineraryData.hotel && itineraryData.hotel.hotelid) {
+      const hotelRef = itineraryData.hotel.hotelid;
+      const hotelSnapshot = await hotelRef.get();
+      itineraryData.hotel = hotelSnapshot.data();
+    }
+
+    // Replace event references with actual event data
+    if (itineraryData.event && itineraryData.event.length > 0) {
+      const eventPromises = itineraryData.event.map(async (event) => {
+        const eventRef = event.eventID;
+        const eventSnapshot = await eventRef.get();
+        return eventSnapshot.data();
+      });
+      itineraryData.event = await Promise.all(eventPromises);
+    }
+
+    // Replace restaurant references with actual restaurant data
+    if (itineraryData.restaurant && itineraryData.restaurant.length > 0) {
+      const restaurantPromises = itineraryData.restaurant.map(async (restaurant) => {
+        const restaurantRef = restaurant.restaurantID;
+        const restaurantSnapshot = await restaurantRef.get();
+        return restaurantSnapshot.data();
+      });
+      itineraryData.restaurant = await Promise.all(restaurantPromises);
+    }
 
     // Respond with the fetched itinerary data
     res.json(itineraryData);
@@ -57,5 +87,6 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 module.exports = router;
