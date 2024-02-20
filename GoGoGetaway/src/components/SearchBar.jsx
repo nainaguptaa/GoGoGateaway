@@ -25,7 +25,7 @@ const SearchBar = () => {
         value={search} // Bind the input value to the component's state
         onChange={handleChange} // Update the state when input changes
         placeholder="Search"
-        className="w-96 outline-none"
+        className="w-96 bg-transparent outline-none"
       />
     </form>
     // </div>

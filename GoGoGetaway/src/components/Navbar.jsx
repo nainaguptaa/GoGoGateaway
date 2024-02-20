@@ -19,6 +19,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { ModeToggle } from './ModeToggle';
 
 const Navbar = () => {
   const { currentUser, user, logout } = useUserContext();
@@ -37,7 +38,8 @@ const Navbar = () => {
         <SearchBar />
       </div>
 
-      <div className="flex items-center justify-evenly gap-16  font-poppins">
+      <div className="flex items-center justify-evenly gap-4  font-poppins">
+        <ModeToggle />
         {/* <nav>
           <ul className="flex list-none space-x-8">
             <li>
