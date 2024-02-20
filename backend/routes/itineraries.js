@@ -9,19 +9,18 @@ const db = admin.firestore();
 
 // Define your route handler
 router.post("/create", async (req, res) => {
-    try {
-      const { data } = req.body;
-     // const itineraryRef = await db.collection('itineraries').add(data);
-     console.log(req.body);
-      console.log(data);
-      console.log('Itinerary created successfully');
-      res.status(200).json({ message: 'Itinerary created successfully' });
-    } catch (error) {
-      console.error('Error creating itinerary:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
-    }
-  });
-
+  try {
+    const { data } = req.body;
+    // const itineraryRef = await db.collection('itineraries').add(data);
+    console.log(req.body);
+    console.log(data);
+    console.log('Itinerary created successfully');
+    res.status(200).json({ message: 'Itinerary created successfully' });
+  } catch (error) {
+    console.error('Error creating itinerary:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
 
 router.get("/", async (req, res) => {
   try {
