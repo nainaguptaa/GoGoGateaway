@@ -4,6 +4,7 @@ import ForYouLeft from './ForYouLeft';
 import itinerariesDummy from '../../dummyData/dummyItinerary.json';
 import { useNavigate } from 'react-router-dom';
 const ROW_HEIGHT = 100;
+
 import { FixedSizeList as List } from 'react-window';
 import {
   FaRegHeart,
@@ -62,64 +63,77 @@ const ForYou = () => {
 
   const Row = ({ index, style }) => (
     <div style={style} className=" px-20 pt-12">
-      <div className="dark:bg-card bg-card flex w-[65rem] flex-col rounded-[5rem] border-2 border-orange-300 px-6 pb-20 pt-12 shadow-lg dark:border-amber-500">
-        <div className="mb-2 flex items-center gap-3 ">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 bg-blue-200 text-lg font-semibold text-white dark:border-cyan-500">
-            s
-          </div>
-          <div className="flex flex-col">
-            <div
-              className="cursor-pointer text-4xl font-semibold"
-              onClick={() =>
-                navigate(
-                  `/itineraries?q=${encodeURIComponent(itinerariesDummy[index].title)}&id=${itinerariesDummy[index].id}`,
-                )
-              }
-            >
-              {itinerariesDummy[index].title}
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="font-lg text-xl">
-                {itinerariesDummy[index].user}
-              </div>
-              <div className="text-md font-lg items-center text-gray-500">
-                {`${calculateDaysAgo(itinerariesDummy[index].posted)} days ago`}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex items-end gap-3">
+      <div className="flex w-[65rem] items-end">
+        <div
+          className=" dark:bg-card bg-card flex cursor-pointer flex-col gap-2 overflow-hidden rounded-2xl border-2"
+          onClick={() =>
+            navigate(`/itineraries?id=${itinerariesDummy[index].id}`)
+          }
+        >
+          {/* <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"> */}
+          {/* {itinerariesDummy[index].images.map((image, imgIndex) => (
+              <img
+                key={imgIndex}
+                src={image}
+                alt={`Image ${imgIndex}`}
+                className="h-32 w-full object-cover md:h-48 lg:h-64" // Adjust height as needed
+              />
+            ))} */}
           <img
             src={itinerariesDummy[index].images[0]}
             // alt={`Slide ${imgIndex}`}
             className="z-10 max-h-[32rem] w-[55rem] max-w-[60rem] object-cover"
           />
-          <div className="ml-4 flex flex-col gap-6">
-            <div className="flex flex-col items-center gap-2">
-              <FaHeart
-                size={30}
-                className="ease cursor-pointer text-rose-500 transition duration-200 hover:text-rose-500"
-              />
-              <div className="text-lg font-bold">
+          <div className="flex justify-between px-4 pb-3">
+            <div className="flex flex-col">
+              {' '}
+              <div className="text-3xl font-bold">
+                {itinerariesDummy[index].title}
+              </div>
+              <div className="text-xl font-semibold">
+                {itinerariesDummy[index].location}
+              </div>
+              <div className="mt-2 text-xl font-semibold text-gray-400">
+                {itinerariesDummy[index].tripLength} days
+              </div>
+            </div>
+            <div className="text-2xl font-bold">
+              {new Intl.NumberFormat('en-CA', {
+                style: 'currency',
+                currency: 'CAD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+              }).format(itinerariesDummy[index].price)}{' '}
+              Total
+            </div>
+          </div>
+          {/* </div> */}
+        </div>
+        <div className="mb-8 ml-4 flex flex-col gap-6">
+          <div className="flex flex-col items-center gap-2">
+            <FaHeart
+              size={30}
+              className="ease cursor-pointer text-rose-500 transition duration-200 hover:text-rose-500"
+            />
+            <div className="text-lg font-bold">
+              {itinerariesDummy[index].likes}
+            </div>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <FaRegCommentAlt size={30} />
+            <div className="text-lg font-bold">
+              {itinerariesDummy[index].comments}
+            </div>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <FaRegBookmark size={30} />
+            {/* <div className="text-lg font-bold">
                 {itinerariesDummy[index].likes}
-              </div>
-            </div>
-            <div className="flex flex-col items-center gap-2">
-              <FaRegCommentAlt size={30} />
-              <div className="text-lg font-bold">
-                {itinerariesDummy[index].comments}
-              </div>
-            </div>
-            {/* <div className="flex flex-col items-center gap-2">
-              <FaRegBookmark size={30} />
-              <div className="text-lg font-bold">
-                {itinerariesDummy[index].likes}
-              </div>
-            </div> */}
-            <div className="flex flex-col items-center gap-2">
-              <PiShareFat size={30} />
-              <div className="text-lg font-bold">Share</div>
-            </div>
+              </div> */}
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <PiShareFat size={30} />
+            <div className="text-lg font-bold">Share</div>
           </div>
         </div>
       </div>
