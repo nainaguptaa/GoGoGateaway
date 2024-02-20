@@ -6,6 +6,9 @@ import ProfilePicture from './ProfilePicture';
 import { CgProfile } from 'react-icons/cg';
 import { IoPersonOutline } from 'react-icons/io5';
 import { CiLogout } from 'react-icons/ci';
+import Logo from '../assets/LogosTwo/logo-transparent-svg.svg';
+import LogoDark from '../assets/LogosTwo/logo-dark.svg';
+import { FaHome } from 'react-icons/fa';
 import {
   Popover,
   PopoverContent,
@@ -20,21 +23,22 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
 import { ModeToggle } from './ModeToggle';
-
+import { useTheme } from '@/components/theme-provider';
 const Navbar = () => {
   const { currentUser, user, logout } = useUserContext();
-
+  const { theme } = useTheme();
   const navigate = useNavigate();
+
   return (
-    <div className="flex items-center justify-between border-b-2 bg-light-blue px-12 py-6">
+    <div className="fixed left-0 top-0 z-10 flex w-full items-center justify-between border-b-2 bg-white px-12 py-6 dark:bg-transparent">
       <div className="flex items-center gap-8 ">
         {' '}
-        <h1
-          className="cursor-pointer text-xl"
+        <img
+          src={theme == 'light' ? Logo : LogoDark}
+          className="w-56 cursor-pointer "
           onClick={() => navigate('/foryou')}
-        >
-          GoGoGetaway
-        </h1>{' '}
+          alt="logo"
+        />
         <SearchBar />
       </div>
 
@@ -67,9 +71,17 @@ const Navbar = () => {
                 {' '}
                 <ProfilePicture />
               </DropdownMenuTrigger>
+
               <DropdownMenuContent className="mr-4 mt-4 w-56 text-lg">
                 <DropdownMenuLabel>My Account</DropdownMenuLabel>
                 <DropdownMenuSeparator />
+                <DropdownMenuItem
+                  className="flex items-center gap-2"
+                  onClick={() => navigate('/')}
+                >
+                  <FaHome size={25} />
+                  <div>Home</div>
+                </DropdownMenuItem>
                 <DropdownMenuItem
                   className="flex items-center gap-2"
                   onClick={() => navigate('/profile')}
