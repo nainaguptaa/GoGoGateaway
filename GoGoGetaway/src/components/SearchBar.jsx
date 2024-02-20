@@ -1,50 +1,34 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { CiLocationOn } from 'react-icons/ci';
+import { FaSearch } from 'react-icons/fa';
+import { Input } from '@/components/ui/input';
 const SearchBar = () => {
-  const [searchTerm, setSearchTerm] = useState(''); // State to store the search term
-
-  // Function to handle the input change
-  const handleInputChange = (event) => {
-    setSearchTerm(event.target.value);
+  const [search, setSearch] = useState(''); // Initialize state
+  const navigate = useNavigate();
+  const handleChange = (event) => {
+    setSearch(event.target.value); // Update state on change
   };
-
-  const handleSearchSubmit = (event) => {
-    event.preventDefault(); // Prevent the default form submit action
-
-    const baseUrl = '/search';
-
-    // Constructing the query parameters string from the form inputs
-    const queryParams = new URLSearchParams({
-      city: searchTerm,
-    }).toString();
-
-    // Final search URL
-    const searchUrl = `${baseUrl}?${queryParams}`;
-    navigate(`${baseUrl}?${queryParams}`); // Navigate to the search page with the search term
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Prevent the default form submission behavior
+    navigate(`/search?q=${encodeURIComponent(search)}`); // Use navigate to change the URL
   };
   return (
-    <div className="absolute bottom-neg-4 left-14 right-14 flex flex-col justify-center gap-4 rounded-xl border bg-white p-8 shadow-md">
-      <div className="text-xl font-semibold">Search Destinations</div>
-      <form
-        className="flex w-1/3 items-center gap-4 rounded-md border px-8 py-4"
-        onSubmit={handleSearchSubmit}
-      >
-        <CiLocationOn size={25} />
-        <input
-          type="text"
-          className="w-full border-b-2 outline-none"
-          value={searchTerm}
-          onChange={handleInputChange}
-          placeholder="Enter destination" // optional, for user guidance
-        />
-        <button
-          type="submit"
-          className="rounded-md bg-blue-500 px-4 py-2 text-white"
-        >
-          Search
-        </button>
-      </form>
-    </div>
+    // <div className="flex w-full justify-center ">
+    <form
+      onSubmit={handleSubmit}
+      className="flex items-center gap-2 rounded-2xl border-2 px-4 py-3"
+    >
+      <FaSearch size={15} />
+      <input
+        type="text"
+        value={search} // Bind the input value to the component's state
+        onChange={handleChange} // Update the state when input changes
+        placeholder="Search"
+        className="w-96 outline-none"
+      />
+    </form>
+    // </div>
   );
 };
 
