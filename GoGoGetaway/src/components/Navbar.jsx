@@ -30,7 +30,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="fixed left-0 top-0 z-10 flex w-full items-center justify-between border-b-2 bg-white px-12 py-6 dark:bg-transparent">
+    <div className="fixed left-0 top-0 z-10 flex w-full items-center justify-between border-b-2 bg-white px-12 py-6 dark:bg-gray-900">
       <div className="flex items-center gap-8 ">
         {' '}
         <img
