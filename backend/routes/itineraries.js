@@ -22,4 +22,35 @@ router.post("/create", async (req, res) => {
     }
   });
 
+
+router.get("/", async (req, res) => {
+  try {
+    // Fetch data from Firestore
+    const itinerariesSnapshot = await db.collection('itineraries').get();
+    const itineraries = itinerariesSnapshot.docs.map(doc => doc.data());
+
+    // Respond with the fetched itineraries data
+    res.json(itineraries);
+  } catch (error) {
+    console.error('Error fetching itineraries data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+router.get("/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    // Fetch data from Firestore
+    const itinerary = await db.collection('itineraries').doc(id).get();
+    const itineraryData = itinerary.data();
+
+    // Respond with the fetched itinerary data
+    res.json(itineraryData);
+  } catch (error) {
+    console.error('Error fetching itinerary data:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+);
+
 module.exports = router;
