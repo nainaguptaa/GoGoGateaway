@@ -7,12 +7,12 @@ export default function Itinerary() {
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
-    const title = queryParams.get('q');
+    // const title = queryParams.get('q');
     const id = queryParams.get('id');
 
     // Assuming id is unique and you want to match it precisely
     const matchingItinerary = itinerariesDummy.find(
-      (itin) => itin.id.toString() === id && itin.title === title,
+      (itin) => itin.id.toString() === id,
     );
 
     setItinerary(matchingItinerary);
@@ -22,7 +22,7 @@ export default function Itinerary() {
     return <div>No itinerary found.</div>;
   }
   return (
-    <div>
+    <div className="mt-5">
       <h2>{itinerary.title}</h2>
       <p>Posted by: {itinerary.user}</p>
       <p>{`${itinerary.posted} (days ago calculation could be added here)`}</p>
