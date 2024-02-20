@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import HeroImage from '../../assets/svgs/hero5.svg';
 import { Typewriter } from 'react-simple-typewriter';
-import { CiLocationOn } from 'react-icons/ci';
+
+import { useNavigate } from 'react-router-dom';
+import SearchBar from '@/components/SearchBar';
 const Hero = () => {
+  const navigate = useNavigate(); // Hook to navigate
   const handleType = (count) => {
     // access word count number
     // console.log(count);
@@ -37,14 +40,8 @@ const Hero = () => {
           interactive maps tailored just for you.
         </div>
       </div>
+      {/* <SearchBar /> */}
       <img src={HeroImage} className="h-96"></img>
-      <div className="absolute bottom-neg-4 left-14 right-14 flex flex-col justify-center gap-4 rounded-xl border bg-white p-8 shadow-md">
-        <div className="text-xl font-semibold">Search Destinations</div>
-        <div className="flex w-1/3 items-center gap-4 rounded-md border px-8 py-4">
-          <CiLocationOn size={25} />
-          <input type="text" className="w-full border-b-2 outline-none" />
-        </div>
-      </div>
     </div>
   );
 };

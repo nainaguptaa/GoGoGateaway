@@ -43,6 +43,7 @@ export const UserProvider = ({ children }) => {
   const [isNewGoogleUser, setIsNewGoogleUser] = useState(false);
 
   async function addNewGoogleUser(result) {
+    console.log(result);
     const addUserData = {
       username: result.user.email.split('@')[0],
       id: result.user.uid,
@@ -53,6 +54,7 @@ export const UserProvider = ({ children }) => {
       lastName: '',
       age: '',
       admin: false,
+      googleUser: true,
     };
     console.log('user Data', addUserData);
     const userDocRef = doc(db, 'users', result.user.uid);
@@ -76,6 +78,7 @@ export const UserProvider = ({ children }) => {
         lastName: result.lastName,
         // age: result.age,
         admin: false,
+        googleUser: false,
       };
 
       // Reference to the user's document in Firestore
@@ -131,7 +134,7 @@ export const UserProvider = ({ children }) => {
         await signOut(auth); // Sign out the user
         setTimeout(() => {
           setLoadingAuthState(false);
-        }, 1000); // Delay for better user experience
+        }, 3000); // Delay for better user experience
         // navigate("/signup"); // Navigate to login or another appropriate route after logout
       } catch (error) {
         console.error('Error signing out: ', error);

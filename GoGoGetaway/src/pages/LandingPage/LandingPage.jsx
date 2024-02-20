@@ -5,7 +5,7 @@ import Hero from './Hero';
 const LandingPage = () => {
   return (
     <div className="">
-      <Navbar />
+      {/* <Navbar /> */}
       <Hero />
     </div>
   );
