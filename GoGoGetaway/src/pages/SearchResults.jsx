@@ -1,6 +1,7 @@
 import Navbar from '@/components/Navbar';
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import ForYouLeft from './ForYou/ForYouLeft';
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q'); // Get the search query from the URL
@@ -37,17 +38,23 @@ const SearchResults = () => {
   }, [query]);
   return (
     <div>
-      <Navbar />
-      <h2>Search Results for: {query}</h2>
-      {loading ? (
-        <p>Loading...</p>
-      ) : (
-        <ul>
-          {results.map((result) => (
-            <li key={result.id}>{result.name}</li>
-          ))}
-        </ul>
-      )}
+      <div className="">
+        <div className="flex h-screen">
+          <ForYouLeft className="" />
+          <div className="ml-64 flex flex-grow gap-2 overflow-hidden">
+            <h2>Search Results for: {query}</h2>
+            {loading ? (
+              <p>Loading...</p>
+            ) : (
+              <ul>
+                {results.map((result) => (
+                  <li key={result.id}>{result.name}</li>
+                ))}
+              </ul>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

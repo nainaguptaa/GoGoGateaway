@@ -60,9 +60,9 @@ const ForYou = () => {
 
   const Row = ({ index, style }) => (
     <div style={style} className=" px-20 pt-12">
-      <div className="flex w-[65rem] flex-col rounded-xl border-2 px-2 pb-4 pt-2 ">
+      <div className="dark:bg-card bg-card flex w-[65rem] flex-col rounded-[5rem] border-2 border-orange-300 px-6 pb-20 pt-12 shadow-lg dark:border-amber-500">
         <div className="mb-2 flex items-center gap-3 ">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full bg-gray-300">
+          <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 bg-blue-200 text-lg font-semibold text-white dark:border-cyan-500">
             s
           </div>
           <div className="flex flex-col">
@@ -85,9 +85,12 @@ const ForYou = () => {
             // alt={`Slide ${imgIndex}`}
             className="z-10 max-h-[32rem] w-[55rem] max-w-[60rem] object-cover"
           />
-          <div className="flex flex-col gap-6">
+          <div className="ml-4 flex flex-col gap-6">
             <div className="flex flex-col items-center gap-2">
-              <FaRegHeart size={30} />
+              <FaHeart
+                size={30}
+                className="ease cursor-pointer text-rose-500 transition duration-200 hover:text-rose-500"
+              />
               <div className="text-lg font-bold">
                 {itinerariesDummy[index].likes}
               </div>
@@ -98,12 +101,12 @@ const ForYou = () => {
                 {itinerariesDummy[index].comments}
               </div>
             </div>
-            <div className="flex flex-col items-center gap-2">
+            {/* <div className="flex flex-col items-center gap-2">
               <FaRegBookmark size={30} />
               <div className="text-lg font-bold">
                 {itinerariesDummy[index].likes}
               </div>
-            </div>
+            </div> */}
             <div className="flex flex-col items-center gap-2">
               <PiShareFat size={30} />
               <div className="text-lg font-bold">Share</div>
