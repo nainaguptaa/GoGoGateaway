@@ -2,6 +2,7 @@ import Navbar from '@/components/Navbar';
 import React, { useState, useEffect, useRef } from 'react';
 import ForYouLeft from './ForYouLeft';
 import itinerariesDummy from '../../dummyData/dummyItinerary.json';
+import { useNavigate } from 'react-router-dom';
 const ROW_HEIGHT = 100;
 import { FixedSizeList as List } from 'react-window';
 import {
@@ -23,6 +24,7 @@ import {
 } from '@/components/ui/carousel';
 import { PiShareFat } from 'react-icons/pi';
 const ForYou = () => {
+  const navigate = useNavigate();
   const [displayedPosts, setDisplayedPosts] = useState([]);
   // State to track the current page
   const [page, setPage] = useState(1);
@@ -66,7 +68,14 @@ const ForYou = () => {
             s
           </div>
           <div className="flex flex-col">
-            <div className="text-4xl font-semibold">
+            <div
+              className="cursor-pointer text-4xl font-semibold"
+              onClick={() =>
+                navigate(
+                  `/itineraries?q=${encodeURIComponent(itinerariesDummy[index].title)}&id=${itinerariesDummy[index].id}`,
+                )
+              }
+            >
               {itinerariesDummy[index].title}
             </div>
             <div className="flex items-center gap-4">
