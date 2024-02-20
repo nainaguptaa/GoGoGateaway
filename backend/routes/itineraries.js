@@ -11,16 +11,76 @@ const db = admin.firestore();
 router.post("/create", async (req, res) => {
   try {
     const { data } = req.body;
-    // const itineraryRef = await db.collection('itineraries').add(data);
-    console.log(req.body);
     console.log(data);
-    console.log('Itinerary created successfully');
-    res.status(200).json({ message: 'Itinerary created successfully' });
+
+    if (!data || !data.event || !data.hotel || !data.restaurant) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
+
+    // Define a default imageURL
+    const defaultImageURL = 'www.random.com';
+
+    // Add restaurant to its collection and get the reference
+    const restaurantRef = await db.collection('restaurants').add({
+      name: data.restaurant,
+      location: data.locationRestaurant,
+      rating: parseFloat(data.ratingRestaurant),
+      cuisine: data.cuisine || null, // Store null if cuisine is undefined
+    });
+
+    // Add hotel to its collection and get the reference
+// Add hotel to its collection and get the reference
+    const hotelRef = await db.collection('hotels').add({
+      name: data.hotel,
+      location: data.locationHotel,
+      rating: parseFloat(data.ratingHotel),
+      bookingURL: data.bookingURL,
+      imageURL: data.imageURL,
+    });
+
+    // Handling a single event with a default imageURL if not provided
+    const eventRef = await db.collection('events').add({
+      name: data.event,
+      location: data.locationEvent,
+      rating: parseFloat(data.ratingEvent),
+      typeOfActivity: data.typeOfActivity,
+    });
+
+    // Construct the itinerary object with references
+    const itinerary = {
+      events: [{
+        eventID: db.doc(`/events/${eventRef.id}`),
+        imageURL: defaultImageURL,
+      }],
+      hotel: {
+        hotelID: db.doc(`/hotels/${hotelRef.id}`),
+        imageURL: data.imageURL
+      },
+      locations: [data.locationEvent, data.locationHotel, data.locationRestaurant].filter((v, i, a) => a.indexOf(v) === i),
+      restaurant: [{
+        restaurantID: db.doc(`/restaurants/${restaurantRef.id}`),
+        imageURL: defaultImageURL,
+      }],
+      price: parseFloat(data.price) || 3000,
+      rating: parseFloat(data.rating) || 3,
+    };
+
+    // Add the itinerary to the 'itineraries' collection
+    const itineraryRef = await db.collection('itineraries').add(itinerary);
+
+    console.log('Itinerary created successfully with ID:', itineraryRef.id);
+    res.status(201).json({ message: 'Itinerary created successfully', id: itineraryRef.id });
   } catch (error) {
     console.error('Error creating itinerary:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
+
+
+
+//  price: data.price, // Assuming price is part of the data
+      //rating: parseFloat(data.rating), // Assuming rating is part of the data
 
 router.get('/', async (req, res) => {
   try {
