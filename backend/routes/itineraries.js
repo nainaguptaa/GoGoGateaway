@@ -21,63 +21,26 @@ router.post("/create", async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
-
 router.get('/', async (req, res) => {
   try {
-    const { location } = req.query;
+      const { location } = req.query;
 
-    if (!location) {
-        return res.status(400).json({ error: 'Location parameter is required' });
-    }
-
-  
-    const [hotelsSnapshot, restaurantsSnapshot, eventsSnapshot] = await Promise.all([
-        db.collection('hotels').where('location', '==', location).get(),
-        db.collection('restaurants').where('location', '==', location).get(),
-        db.collection('events').where('location', '==', location).get(),
-    ]);
-
-
-    const hotels = hotelsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    console.log('Hotels:', hotels);
-    const restaurants = restaurantsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    console.log('Restuarants', restaurants);
-    const events = eventsSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-    console.log('events', events);
-
-
-    const itinerariesSnapshot = await db.collection('itineraries').get();
-    const itineraries = [];
-
-    itinerariesSnapshot.forEach(doc => {
-      const data = doc.data();
-
-    
-      if ((data.hotelId && hotels.some(hotel => hotel.id === data.hotelId)) || 
-        (data.restaurantIds && restaurants.some(restaurant => data.restaurantIds.includes(restaurant.id))) || 
-        (data.eventId && events.some(event => event.id === data.eventId))) {
-        
-    
-        const itineraryHotels = data.hotelId ? hotels.filter(hotel => hotel.id === data.hotelId) : [];
-        const itineraryRestaurants = data.restaurantIds ? restaurants.filter(restaurant => data.restaurantIds.includes(restaurant.id)) : [];
-        const itineraryEvents = data.eventId ? events.filter(event => event.id === data.eventId) : [];
-
-        itineraries.push({ 
-            id: doc.id, 
-            ...data,
-            hotels: itineraryHotels,
-            restaurants: itineraryRestaurants,
-            events: itineraryEvents
-        });
+      if (!location) {
+          return res.status(400).json({ error: 'Location parameter is required' });
       }
-    });
 
-    res.json(itineraries);
+      // Query itineraries that include the specified location
+      const itinerariesSnapshot = await db.collection('itineraries').where('locations', 'array-contains', location).get();
+      const itineraries = itinerariesSnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      res.json(itineraries);
+      console.log(itineraries);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
   }
 });
+
 
 router.get("/:id", async (req, res) => {
   try {
@@ -88,6 +51,7 @@ router.get("/:id", async (req, res) => {
 
     // Respond with the fetched itinerary data
     res.json(itineraryData);
+    console.log('Itinerary data:', itineraryData);
   } catch (error) {
     console.error('Error fetching itinerary data:', error);
     res.status(500).json({ error: 'Internal Server Error' });
