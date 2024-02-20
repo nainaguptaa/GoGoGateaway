@@ -23,16 +23,16 @@ export default function ForYouLeft() {
     setActive();
   }, []);
   return (
-    <div className="fixed flex h-full w-64 flex-col border-r-2 border-gray-200">
-      <div>
+    <div className="fixed flex h-full w-64 flex-col border-r-2 border-gray-200 pt-6">
+      <div className="">
         {navigationLinks.map((link) => (
           <NavLink
             key={link.name}
             to={link.path}
             className={({ isActive }) =>
               isActive
-                ? 'flex items-center gap-4 p-5 text-red-400 no-underline'
-                : 'flex items-center gap-4 p-5 no-underline'
+                ? 'flex items-center gap-4 p-5 text-xl font-bold text-cyan-500 no-underline transition duration-100 hover:bg-gray-400  hover:text-white hover:dark:bg-gray-700'
+                : 'ease duration-400 hover:white flex items-center gap-4 p-5 text-xl font-bold  no-underline transition hover:bg-gray-400  hover:text-white hover:dark:bg-gray-700'
             }
             // This function dynamically sets the class based on the active state
           >

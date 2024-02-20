@@ -6,8 +6,8 @@ import ProfilePicture from './ProfilePicture';
 import { CgProfile } from 'react-icons/cg';
 import { IoPersonOutline } from 'react-icons/io5';
 import { CiLogout } from 'react-icons/ci';
-import Logo from '../assets/LogosTwo/logo-transparent-svg.svg';
-import LogoDark from '../assets/LogosTwo/logo-dark.svg';
+import Logo from '../assets/LogosFive/logo-transparent-svg.svg';
+import LogoDark from '../assets/LogosFour/logo-transparent-svg.svg';
 import { FaHome } from 'react-icons/fa';
 import {
   Popover,
@@ -30,7 +30,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="fixed left-0 top-0 z-10 flex w-full items-center justify-between border-b-2 bg-white px-12 py-6 dark:bg-gray-900">
+    <div className="dark:bg-card fixed left-0 top-0 z-10 flex w-full items-center justify-between border-b-2 bg-white px-12 py-6">
       <div className="flex items-center gap-8 ">
         {' '}
         <img
@@ -39,6 +39,9 @@ const Navbar = () => {
           onClick={() => navigate('/foryou')}
           alt="logo"
         />
+        {/* <div className="text-3xl font-bold text-orange-400 dark:text-orange-500">
+          GoGoGetaway
+        </div> */}
         <SearchBar />
       </div>
 
