@@ -10,6 +10,7 @@ import Loading from './components/Loading/Loading';
 import Navbar from './components/Navbar';
 import Following from './pages/Following/Following';
 import ForYouLeft from './pages/ForYou/ForYouLeft';
+import Itinerary from './pages/Itineraries/Itinerary';
 function App() {
   const { loadingAuthState } = useUserContext();
   if (loadingAuthState) {
@@ -32,6 +33,7 @@ function App() {
           <Route path="/foryou" element={<ForYou />} />
           <Route path="/search" element={<SearchResults />} />
           <Route path="/following" element={<Following />} />
+          <Route path="/itineraries" element={<Itinerary />} />
         </Routes>
       </div>
     </>
