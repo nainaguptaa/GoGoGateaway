@@ -13,6 +13,7 @@ import {
   FaRegCommentAlt,
   FaCommentAlt,
 } from 'react-icons/fa';
+
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa6';
 const BUFFER = 5;
 import { Card, CardContent } from '@/components/ui/card';
@@ -24,7 +25,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { PiShareFat } from 'react-icons/pi';
-const ForYou = () => {
+const ForYou = ({ isMobile }) => {
   const navigate = useNavigate();
   const [displayedPosts, setDisplayedPosts] = useState([]);
   // State to track the current page
@@ -62,10 +63,10 @@ const ForYou = () => {
   };
 
   const Row = ({ index, style }) => (
-    <div style={style} className=" px-20 pt-12">
-      <div className="flex w-[65rem] items-end">
+    <div style={style} className=" pt-12 sm:px-20">
+      <div className="flex w-full items-end  justify-center">
         <div
-          className=" dark:bg-card bg-card flex cursor-pointer flex-col gap-2 overflow-hidden rounded-2xl border-2"
+          className=" sm:dark:bg-card sm:bg-card flex cursor-pointer flex-col gap-2 overflow-hidden rounded-2xl sm:border-2 2xl:w-[95rem]"
           onClick={() =>
             navigate(`/itineraries?id=${itinerariesDummy[index].id}`)
           }
@@ -82,7 +83,7 @@ const ForYou = () => {
           <img
             src={itinerariesDummy[index].images[0]}
             // alt={`Slide ${imgIndex}`}
-            className="z-10 max-h-[32rem] w-[55rem] max-w-[60rem] object-cover"
+            className="z-10 h-[25rem] object-cover lg:max-h-[32rem] lg:w-[55rem] lg:max-w-[60rem] "
           />
           <div className="flex justify-between px-4 pb-3">
             <div className="flex flex-col">
@@ -109,40 +110,41 @@ const ForYou = () => {
           </div>
           {/* </div> */}
         </div>
-        <div className="mb-8 ml-4 flex flex-col gap-6">
+        <div className="ounded-xl absolute right-4 top-32 z-10 mb-12 flex flex-col gap-6 bg-transparent px-2 py-4 text-sm sm:mb-8 sm:ml-4 sm:bg-transparent sm:text-lg">
           <div className="flex flex-col items-center gap-2">
             <FaHeart
               size={30}
-              className="ease cursor-pointer text-rose-500 transition duration-200 hover:text-rose-500"
+              className="ease  cursor-pointer text-rose-500 transition duration-200 hover:text-rose-500"
             />
-            <div className="text-lg font-bold">
-              {itinerariesDummy[index].likes}
-            </div>
+            <div className=" font-bold">{itinerariesDummy[index].likes}</div>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <FaRegCommentAlt size={30} />
-            <div className="text-lg font-bold">
-              {itinerariesDummy[index].comments}
-            </div>
+            <FaCommentAlt size={30} />
+            <div className=" font-bold">{itinerariesDummy[index].comments}</div>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <FaRegBookmark size={30} />
+            <FaBookmark size={30} />
             {/* <div className="text-lg font-bold">
                 {itinerariesDummy[index].likes}
               </div> */}
           </div>
           <div className="flex flex-col items-center gap-2">
-            <PiShareFat size={30} />
-            <div className="text-lg font-bold">Share</div>
+            <FaShare size={30} />
+            <div className=" font-bold">Share</div>
           </div>
         </div>
       </div>
     </div>
   );
+
+  // if (isMobile) {
+  //   return <>sdf</>;
+  // }
+  // console.log(isMobile);
   return (
     <div className="flex h-screen">
-      <ForYouLeft />
-      <div className="ml-64 flex flex-grow gap-2 overflow-hidden">
+      {!isMobile && <ForYouLeft />}
+      <div className="flex flex-grow gap-2 overflow-hidden sm:ml-[10rem] md:ml-64">
         <List
           className="flex gap-2"
           height={window.innerHeight} // Adjust based on your layout
