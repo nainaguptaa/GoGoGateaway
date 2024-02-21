@@ -23,7 +23,7 @@ export default function ForYouLeft() {
     setActive();
   }, []);
   return (
-    <div className="fixed flex h-full w-64 flex-col border-r-2 border-gray-200 pt-6">
+    <div className="fixed flex h-full w-64 flex-col border-r-2 border-gray-200 pt-6 sm:w-44 md:w-64">
       <div className="">
         {navigationLinks.map((link) => (
           <NavLink
