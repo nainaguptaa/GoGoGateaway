@@ -46,6 +46,9 @@ const Navbar = () => {
       </div>
 
       <div className="flex items-center justify-evenly gap-4  font-poppins">
+        <button className="flex items-center justify-center rounded-xl bg-cyan-500 px-4 py-2 font-semibold text-white">
+          Upload
+        </button>
         <ModeToggle />
         {/* <nav>
           <ul className="flex list-none space-x-8">
