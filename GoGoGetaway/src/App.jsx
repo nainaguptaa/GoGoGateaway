@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 // import Signup from './pages/Auth/Signup';
 import LandingPage from './pages/LandingPage/LandingPage';
 import Profile from './pages/Profile';
@@ -61,6 +61,7 @@ function App() {
             <Route path="/itineraries" element={<Itinerary />} />{' '}
             <Route path="/create" element={<Create />} />
             <Route path="/test" element={<Test />} />
+            <Route path="*" element={<Navigate to="/ " replace />} />
           </Routes>
         </Suspense>
       </div>
