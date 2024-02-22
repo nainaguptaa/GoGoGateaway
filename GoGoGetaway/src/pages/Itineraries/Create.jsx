@@ -38,7 +38,7 @@ import { useUserContext } from '@/context/userContext';
 import SignUpReminder from '@/components/SignUpReminder';
 const Create = () => {
   const location = useLocation();
-  const { currentUser } = useUserContext();
+  const { currentUser, signPopup } = useUserContext();
   const [formData, setFormData] = useState({});
   const [editingIndex, setEditingIndex] = useState({ id: null, type: null });
   const [editingItem, setEditingItem] = useState({ id: null, type: null });
@@ -76,7 +76,7 @@ const Create = () => {
     restaurant: [],
     hotel: null,
   });
-  console.log(popup);
+  console.log(popup, signPopup);
   const saveItineraryToAPI = async () => {
     if (!currentUser) {
       console.log('not logged in');
@@ -404,7 +404,7 @@ const Create = () => {
       {/* <ForYouLeft /> */}
       <div className="  flex flex-grow flex-col gap-2  px-8 py-8">
         {/* <h1 className="text-3xl font-bold">Create Itinerary</h1> */}
-        <div className="bg-card flex items-center gap-4 border-b-2 p-3 ">
+        <div className="flex items-center gap-4 border-b-2 bg-card p-3 ">
           <Input
             type="text"
             value={itineraries.name}
@@ -430,7 +430,7 @@ const Create = () => {
         </div>
         <div className="flex pb-20">
           <div className="w-8/12 ">
-            <div className="bg-card  rounded-xl border-2 px-5 py-6">
+            <div className="rounded-xl  border-2 bg-card px-5 py-6">
               <div className="text-4xl font-normal">
                 {toTitleCase(itineraries.city)} Trip
               </div>
@@ -634,7 +634,7 @@ const Create = () => {
             <ItineraryOverview itineraries={itineraries} />
           </div>
           <div className="flex grow flex-col items-center  gap-10   text-lg">
-            <div className="bg-card w-[30rem] overflow-hidden rounded-xl border-2 shadow-sm">
+            <div className="w-[30rem] overflow-hidden rounded-xl border-2 bg-card shadow-sm">
               {' '}
               <SearchableMap searchAddress={itineraries.city} loading="lazy" />
               <div className="p-5 text-xl font-semibold">

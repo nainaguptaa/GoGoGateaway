@@ -18,6 +18,7 @@ const Itinerary = lazy(() => import('./pages/Itineraries/Itinerary'));
 // import Itinerary from './pages/Itineraries/Itinerary';
 import Test from './pages/Test';
 import BottomBar from './components/BottomBar';
+import Signup from './pages/Auth/Signup';
 function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
@@ -33,7 +34,7 @@ function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const { loadingAuthState } = useUserContext();
+  const { loadingAuthState, signPopup } = useUserContext();
   if (loadingAuthState) {
     return (
       <div className="absolute flex h-screen w-full items-center justify-center ">
@@ -41,8 +42,10 @@ function App() {
       </div>
     );
   }
+
   return (
     <>
+      {signPopup && <Signup />}
       <Navbar isMobile={isMobile} />
       <div className=" lg:pt-[6.25rem] ">
         {/* <ForYouLeft className="" />{' '} */}
