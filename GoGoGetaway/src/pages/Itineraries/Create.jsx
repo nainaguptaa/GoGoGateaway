@@ -412,11 +412,11 @@ const Create = () => {
     console.log('Saved');
     console.log('Iterineraries Data', itineraries);
     try {
-      //   const response = await axios.post(
-      //     'https://yourapi.com/itineraries',
-      //     itineraries,
-      //   );
-      //   console.log('Itinerary saved successfully:', response.data);
+      const response = await axios.post(
+        'http://localhost:3000/itineraries/create',
+        { data: itineraries },
+      );
+      console.log('Itinerary saved successfully:', response.data);
       // Handle the response from the server, e.g., displaying a success message
     } catch (error) {
       console.error('Error saving itinerary:', error);
