@@ -30,7 +30,7 @@ export default function MobileSidebar({ isOpen, closeSidebar }) {
           ></div>
         )}
         <div
-          className={`fixed left-0 top-0 z-[100] h-full w-2/5 bg-card p-5  pb-4 pt-7 transition-transform duration-300 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
+          className={`fixed left-0 top-0 z-[100] h-full w-11/12 bg-card p-5 pb-4  pt-7 transition-transform duration-300 sm:w-4/6 ${isOpen ? 'translate-x-0' : '-translate-x-full'}`}
         >
           <div className="pb-5 pl-3">
             <GiHamburgerMenu size={35} onClick={() => closeSidebar()} />
