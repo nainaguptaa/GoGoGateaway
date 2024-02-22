@@ -60,7 +60,10 @@ function App() {
             <Route path="/search" element={<SearchResults />} />
             <Route path="/foryou" element={<ForYou isMobile={isMobile} />} />
             <Route path="/search" element={<SearchResults />} />
-            <Route path="/following" element={<Following />} />
+            <Route
+              path="/following"
+              element={<Following isMobile={isMobile} />}
+            />
             <Route path="/itineraries" element={<Itinerary />} />{' '}
             <Route path="/create" element={<Create />} />
             <Route path="/test" element={<Test />} />
