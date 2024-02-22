@@ -34,7 +34,7 @@ const Navbar = ({ isMobile }) => {
   if (isMobile) {
     return (
       <>
-        <div className="flex w-full items-center justify-between  px-6 py-6">
+        <div className="bg-card fixed top-0 z-50 flex w-full  items-center justify-between px-6 py-6">
           {' '}
           {/* <img
             src={theme == 'light' ? LogoOnly : LogoOnly}

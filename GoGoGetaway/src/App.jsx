@@ -62,7 +62,7 @@ function App() {
         </Suspense>
       </div>
       {isMobile && (
-        <div className="absolute bottom-0 w-full">
+        <div className="fixed bottom-0 w-full">
           <BottomBar />
         </div>
       )}
