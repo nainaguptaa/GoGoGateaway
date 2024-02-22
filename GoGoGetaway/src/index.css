@@ -39,6 +39,8 @@
   }
 
   .dark {
+    --bgd: rgba(80, 80, 80, 0.374);
+    --transparent: 80, 80, 80, 0.374;
     --background: 0, 0%, 9%;
     --foreground: 210 40% 86%;
     --bgd: hsl(0, 0%, 89%);

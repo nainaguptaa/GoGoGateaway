@@ -12,8 +12,6 @@ const ProfilePicture = () => {
     setImageError(true);
   };
 
-  console.log(user);
-  console.log(user.photoURL);
   return (
     <div>
       {isGoogleUser && !imageError ? (

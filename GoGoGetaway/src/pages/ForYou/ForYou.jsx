@@ -1,6 +1,7 @@
 import Navbar from '@/components/Navbar';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import ForYouLeft from './ForYouLeft';
+
 import itinerariesDummy from '../../dummyData/dummyItinerary.json';
 import { useNavigate } from 'react-router-dom';
 const ROW_HEIGHT = 100;
@@ -13,6 +14,7 @@ import {
   FaRegCommentAlt,
   FaCommentAlt,
 } from 'react-icons/fa';
+
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa6';
 const BUFFER = 5;
 import { Card, CardContent } from '@/components/ui/card';
@@ -24,7 +26,7 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { PiShareFat } from 'react-icons/pi';
-const ForYou = () => {
+const ForYou = ({ isMobile }) => {
   const navigate = useNavigate();
   const [displayedPosts, setDisplayedPosts] = useState([]);
   // State to track the current page
@@ -61,11 +63,41 @@ const ForYou = () => {
     return daysAgo;
   };
 
+  const getItemSize = () => {
+    const screenWidth = window.innerWidth;
+
+    if (screenWidth >= 1536) {
+      // for very large screens, e.g., 2k displays
+      return 950; // or any size suitable for large screens
+    } else if (screenWidth >= 1280) {
+      // for desktops
+      return 800; // or any size suitable for medium screens
+    } else if (screenWidth >= 1024) {
+      return 850;
+    } else if (screenWidth >= 768) {
+      return 800;
+    } else {
+      // for tablets and mobiles
+      return 780; // or any size suitable for small screens
+    }
+  };
+  const [itemSize, setItemSize] = useState(getItemSize());
+
+  // Adjust the itemSize on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setItemSize(getItemSize());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   const Row = ({ index, style }) => (
-    <div style={style} className=" px-20 pt-12">
-      <div className="flex w-[65rem] items-end">
+    <div style={style} className="mx:px-20 px-4 lg:px-14 lg:pt-8 ">
+      <div className="flex h-full  items-end md:h-[48rem] md:items-center md:justify-center">
         <div
-          className=" dark:bg-card bg-card flex cursor-pointer flex-col gap-2 overflow-hidden rounded-2xl border-2"
+          className="lg:dark:bg-card lg:bg-card flex cursor-pointer flex-col gap-2 overflow-hidden sm:h-[47rem] md:h-[46rem] md:w-[55rem]  lg:w-[65rem] lg:rounded-2xl lg:border-2 2xl:w-[75rem]"
           onClick={() =>
             navigate(`/itineraries?id=${itinerariesDummy[index].id}`)
           }
@@ -82,7 +114,8 @@ const ForYou = () => {
           <img
             src={itinerariesDummy[index].images[0]}
             // alt={`Slide ${imgIndex}`}
-            className="z-10 max-h-[32rem] w-[55rem] max-w-[60rem] object-cover"
+            loading="lazy"
+            className="z-10 h-[39rem]  object-cover md:h-[38rem] lg:h-[38rem] 2xl:max-h-[38rem]"
           />
           <div className="flex justify-between px-4 pb-3">
             <div className="flex flex-col">
@@ -109,45 +142,58 @@ const ForYou = () => {
           </div>
           {/* </div> */}
         </div>
-        <div className="mb-8 ml-4 flex flex-col gap-6">
+        <div className="h-70 absolute bottom-40 right-6 z-10 mb-12 flex flex-col gap-6 rounded-xl  bg-white/60 px-2 py-4 text-sm sm:mb-8 sm:ml-4 sm:text-lg lg:static lg:right-16 lg:bg-transparent">
           <div className="flex flex-col items-center gap-2">
-            <FaHeart
-              size={30}
-              className="ease cursor-pointer text-rose-500 transition duration-200 hover:text-rose-500"
-            />
-            <div className="text-lg font-bold">
-              {itinerariesDummy[index].likes}
-            </div>
+            {isMobile ? (
+              <FaRegHeart
+                size={30}
+                className="ease  cursor-pointer text-rose-500 transition duration-200 hover:text-rose-500"
+              />
+            ) : (
+              <FaHeart
+                size={30}
+                className="ease  cursor-pointer text-rose-500 transition duration-200 hover:text-rose-500"
+              />
+            )}
+
+            <div className=" font-bold">{itinerariesDummy[index].likes}</div>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <FaRegCommentAlt size={30} />
-            <div className="text-lg font-bold">
-              {itinerariesDummy[index].comments}
-            </div>
+            {isMobile ? (
+              <FaRegCommentAlt size={30} />
+            ) : (
+              <FaCommentAlt size={30} />
+            )}
+            <div className=" font-bold">{itinerariesDummy[index].comments}</div>
           </div>
           <div className="flex flex-col items-center gap-2">
-            <FaRegBookmark size={30} />
+            {isMobile ? <FaRegBookmark size={30} /> : <FaBookmark size={30} />}
             {/* <div className="text-lg font-bold">
                 {itinerariesDummy[index].likes}
               </div> */}
           </div>
           <div className="flex flex-col items-center gap-2">
-            <PiShareFat size={30} />
-            <div className="text-lg font-bold">Share</div>
+            <FaShare size={30} />
+            <div className=" font-bold">Share</div>
           </div>
         </div>
       </div>
     </div>
   );
+
+  // if (isMobile) {
+  //   return <>sdf</>;
+  // }
+  // console.log(isMobile);
   return (
     <div className="flex h-screen">
-      <ForYouLeft />
-      <div className="ml-64 flex flex-grow gap-2 overflow-hidden">
+      {!isMobile && <ForYouLeft />}
+      <div className="flex flex-grow gap-2 overflow-hidden  lg:ml-[14rem] xl:ml-64">
         <List
-          className="flex gap-2"
+          className="flex lg:gap-12 2xl:gap-24 "
           height={window.innerHeight} // Adjust based on your layout
           itemCount={itinerariesDummy.length}
-          itemSize={750} // Adjust based on the average height of your posts
+          itemSize={itemSize} // Dynamically adjusted
           width={'100%'} // Adjust as necessary
         >
           {/* <div className="flex flex-colgap-2"></div> */}
