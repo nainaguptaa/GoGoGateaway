@@ -30,6 +30,7 @@ import { Label } from '@/components/ui/label';
 import ForYouLeft from '../ForYou/ForYouLeft';
 import { DatePickerDemo } from '@/components/ui/DatePicker';
 import ChooseCity from './ChooseCity';
+import ItineraryOverview from './ItineraryOverview';
 
 const Create = () => {
   const location = useLocation();
@@ -332,11 +333,10 @@ const Create = () => {
 
   //     setEditingIndex(index); // Store the index of the item being edited
   //   };
-  console.log(selectedCategory);
+
   const handleEditItemClick = (item) => {
-    console.log(item);
     setEditingItem({ id: item.id, type: item.category }); // Assuming 'category' field holds 'Event', 'Restaurant', or 'Hotel'
-    console.log(editingItem);
+
     if (item.category === 'Event') {
       setEventState({ ...item });
     } else if (item.category === 'Hotel') {
@@ -347,7 +347,6 @@ const Create = () => {
 
     setOpenEditor((prev) => !prev);
     setSelectedCategory(item.category);
-    console.log(1, selectedCategory);
     // setIsDialogOpen(true);
     // setSelectedCategory(item.category); // Make sure the dialog opens with the correct category selected
   };
@@ -407,12 +406,30 @@ const Create = () => {
   }, []); // Empty dependency array means this effect runs once on mount
 
   //   console.log(selectedCategory);
+
+  //   THIS IS THE API FUNCTIONM
+  const saveItineraryToAPI = async () => {
+    console.log('Saved');
+    console.log('Iterineraries Data', itineraries);
+    try {
+      //   const response = await axios.post(
+      //     'https://yourapi.com/itineraries',
+      //     itineraries,
+      //   );
+      //   console.log('Itinerary saved successfully:', response.data);
+      // Handle the response from the server, e.g., displaying a success message
+    } catch (error) {
+      console.error('Error saving itinerary:', error);
+      // Handle errors, e.g., displaying an error message
+    }
+  };
+
   return (
-    <div className="bg-background flex h-screen overflow-scroll">
+    <div className="flex h-screen overflow-scroll">
       {/* <ForYouLeft /> */}
-      <div className="bg-card  flex flex-grow flex-col gap-2  px-8 py-8">
+      <div className="  flex flex-grow flex-col gap-2  px-8 py-8">
         {/* <h1 className="text-3xl font-bold">Create Itinerary</h1> */}
-        <div className=" b flex items-center gap-4 border-b-2 pb-4 ">
+        <div className="bg-card flex items-center gap-4 border-b-2 p-3 ">
           <Input
             type="text"
             value={itineraries.name}
@@ -432,281 +449,197 @@ const Create = () => {
             <ChooseCity city={itineraries.city} setCity={handleCityChange} />
           </Dialog>
         </div>
-        <div className=" flex flex-row ">
-          <div className="w-11/12">
-            <div className="ml-4 mt-3 flex-col text-lg font-semibold">
-              Add To Your Itinerary
-            </div>
+        <div className="flex">
+          <div className="w-10/12 ">
+            <div className="bg-card  rounded-xl border-2 px-5 py-6">
+              <div className="text-4xl font-normal">
+                {itineraries.city} Trip
+              </div>
+              <div className="ml-4 mt-3 flex-col text-lg font-semibold">
+                Add To Your Itinerary
+              </div>
 
-            <div className="ml-5 mt-6 ">
-              <ol className="relative  border-l border-neutral-300 dark:border-neutral-500">
-                {getSortedItineraries().map((item, index) => (
-                  <>
-                    <div
-                      key={item.id || index}
-                      className="ease flex cursor-pointer transition duration-500 hover:bg-zinc-200 dark:hover:bg-stone-600"
-                    >
-                      {' '}
-                      <li
-                        key={index}
-                        className="b mb-3 flex items-center  gap-4"
+              <div className="ml-7 mt-6 w-4/6">
+                <ol className="relative  w-4/5 border-l border-neutral-300 dark:border-neutral-500">
+                  {getSortedItineraries().map((item, index) => (
+                    <>
+                      <div
+                        key={item.id || index}
+                        className="ease flex cursor-pointer justify-between py-5 pr-4 transition duration-500 hover:bg-slate-100 dark:hover:bg-stone-600"
                         onClick={() => handleEditItemClick(item)}
                       >
-                        <div className="flex items-center  pt-3">
-                          <div className="-ml-[5px] mr-3 h-[9px] w-[9px] rounded-full bg-neutral-300 dark:bg-neutral-500"></div>
+                        {' '}
+                        <li
+                          key={index}
+                          className="b 0 mb-3 flex  w-2/5 items-center gap-6"
+                        >
+                          <div className="flex items-center  pt-3">
+                            <div className="-ml-[12px] mr-3 h-[22px] w-[22px] rounded-full bg-neutral-300 dark:bg-neutral-500"></div>
 
-                          <p className="b text-neutral-500 dark:text-neutral-300 md:text-lg">
-                            {item.time}
-                          </p>
-                        </div>
-                        <div className="flex flex-col justify-center ">
-                          <h4 className=" text-xl font-semibold">
-                            {item.event || item.hotel || item.restaurant}
-                          </h4>
-                          <p className=" text-neutral-500 dark:text-neutral-300">
-                            {item.category}
-                            {/* You can add more item-specific details here */}
-                          </p>
-                        </div>
-                      </li>
-                      {editingItem.id === item.id && (
-                        <div className="ml-9 flex items-center justify-center gap-2 text-lg">
-                          <Button
-                            onClick={() => {
-                              //   setOpenEditor((prev) => !prev);
-                              //   setEditingItem(null);
+                            <p className="b text-neutral-500 dark:text-neutral-300 md:text-lg">
+                              {item.time}
+                            </p>
+                          </div>
+                          <div className="flex flex-col justify-center ">
+                            <h4 className=" text-xl font-semibold">
+                              {item.event || item.hotel || item.restaurant}
+                            </h4>
+                            <p className=" text-neutral-500 dark:text-neutral-300">
+                              {item.category}
+                              {/* You can add more item-specific details here */}
+                            </p>
+                          </div>
+                        </li>
+                        {editingItem.id === item.id && (
+                          <div className="ml-9 flex items-center justify-center gap-2 text-lg">
+                            <Button
+                              onClick={() => {
+                                //   setOpenEditor((prev) => !prev);
+                                //   setEditingItem(null);
 
-                              console.log(selectedCategory);
-                              setIsDialogOpen(true);
-                            }}
-                            className="bg-green-400"
-                          >
-                            Edit
-                          </Button>
-                          <Button
-                            onClick={() =>
-                              handleDeleteItem(item.id, item.category)
-                            }
-                            className="bg-red-400"
-                          >
-                            Delete
-                          </Button>
-                        </div>
-                      )}
-                    </div>
-                  </>
-                ))}
-              </ol>
-              <div className="flex w-1/4 items-center justify-between ">
-                <div className="flex items-center gap-2 text-xl">
-                  <Dialog
-                    open={isDialogOpen}
-                    onOpenChange={setIsDialogOpen}
-                    // isOpen={isDialogOpen}
-                    // onDismiss={() => setIsDialogOpen(false)}
-                  >
-                    <DialogTrigger asChild>
-                      <button
-                        variant="outline"
-                        //   className="bg-red-400"
-                        onClick={() => {
-                          setIsDialogOpen(true);
-
-                          setEventState('');
-                          setResState('');
-                          setHotelState('');
-                          setEditingItem({ id: null, type: null });
-                        }}
-                      >
-                        <CiCirclePlus size={40} className="cursor-pointer" />
-                      </button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-[425px]">
-                      <DialogHeader>
-                        <DialogTitle>Edit profile</DialogTitle>
-                        <DialogDescription>
-                          Make changes to your profile here. Click save when
-                          you're done.
-                        </DialogDescription>
-                      </DialogHeader>
-                      <form onSubmit={handleAddItinerary}>
-                        {selectedCategory == 'Event' && (
-                          <>
-                            asdfasdf event
-                            <Event
-                              handleChange={handleChange('Event')}
-                              eventState={eventState}
-                              setEventState={setEventState}
-                            />
-                            <button onClick={handleEventSubmit}>
-                              Add Event
-                            </button>
-                          </>
+                                console.log(selectedCategory);
+                                setIsDialogOpen(true);
+                              }}
+                              className="bg-green-400"
+                            >
+                              Edit
+                            </Button>
+                            <Button
+                              onClick={() =>
+                                handleDeleteItem(item.id, item.category)
+                              }
+                              className="bg-red-400"
+                            >
+                              Delete
+                            </Button>
+                          </div>
                         )}
-                        {selectedCategory == 'Restaurant' && (
-                          <>
-                            RESTAN{' '}
-                            <Restaurant
-                              handleChange={handleChange('Restaurant')}
-                              resState={resState}
-                              setResState={setResState}
-                            ></Restaurant>
-                            <button onClick={handleRestaurantSubmit}>
-                              Add Restaurant
-                            </button>
-                          </>
-                        )}
-
-                        {selectedCategory == 'Hotel' && (
-                          <>
-                            <Hotel
-                              handleChange={handleChange('Hotel')}
-                              hotelState={hotelState}
-                              setHotelState={setHotelState}
-                            ></Hotel>
-                            <button onClick={handleHotelSubmit}>
-                              Add Hotel
-                            </button>
-                          </>
-                        )}
-                      </form>
-                    </DialogContent>
-                  </Dialog>
-
-                  <Select
-                    value={selectedCategory} // Control the selected value
-                    onValueChange={handleCategoryChange} // Handle changes
-                  >
-                    {' '}
-                    {/* Ensure your Select component can accept and handle an `onChange` prop */}
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Select a Category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectGroup>
-                        <SelectLabel>Categories</SelectLabel>
-                        <SelectItem value="Event">Event</SelectItem>
-                        <SelectItem value="Restaurant">Restaurant</SelectItem>
-                        <SelectItem value="Hotel">Hotel</SelectItem>
-                      </SelectGroup>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <div className="mt-96">Events List</div>
-              <div className="text-lg">{itineraries.city}</div>
-              <div className="text-lg">{itineraries.name}</div>
-              <div>
-                <h2 className="text-2xl font-semibold">Events</h2>
-                <div className="flex gap-2">
-                  {' '}
-                  {itineraries.events.length > 0 ? (
-                    itineraries.events.map((event, index) => (
-                      <div
-                        key={index}
-                        className="rounded-xl border-2 p-3 shadow-md"
-                      >
-                        <p className="flex gap-2">
-                          <strong>Time:</strong>{' '}
-                          <div className="text-normal">{event.time}</div>
-                        </p>
-                        <p>
-                          <strong>Event:</strong> {event.event}
-                        </p>
-                        <p>
-                          <strong>Rating:</strong> {event.ratingEvent}
-                        </p>
-                        <p>
-                          <strong>Type of Activity:</strong>{' '}
-                          {event.typeOfActivity}
-                        </p>
-                        <p>
-                          <strong>Location:</strong> {event.locationEvent}
-                        </p>
                       </div>
-                    ))
-                  ) : (
-                    <p>No events added.</p>
-                  )}
-                </div>
-              </div>
-              <div>
-                <h2 className="text-2xl font-semibold">Hotel</h2>
-                {itineraries.hotel ? (
-                  <div className="rounded-xl border-2 p-3 shadow-md">
-                    <p>
-                      <strong>Hotel:</strong> {itineraries.hotel.hotel}
-                    </p>
-                    <p>
-                      <strong>Rating:</strong> {itineraries.hotel.ratingHotel}
-                    </p>
-                    <p>
-                      <strong>Booking URL:</strong>{' '}
-                      <a
-                        href={itineraries.hotel.bookingURL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {itineraries.hotel.bookingURL}
-                      </a>
-                    </p>
-                    <p>
-                      <strong>Image URL:</strong>{' '}
-                      <a
-                        href={itineraries.hotel.imageURL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        {itineraries.hotel.imageURL}
-                      </a>
-                    </p>
-                    <p>
-                      <strong>Location:</strong>{' '}
-                      {itineraries.hotel.locationHotel}
-                    </p>
+                    </>
+                  ))}
+                </ol>
+                <div className="-ml-[1rem] flex w-1/4 items-center justify-between ">
+                  <div className="flex items-center gap-2 text-xl">
+                    <Dialog
+                      open={isDialogOpen}
+                      onOpenChange={setIsDialogOpen}
+                      // isOpen={isDialogOpen}
+                      // onDismiss={() => setIsDialogOpen(false)}
+                    >
+                      <DialogTrigger asChild>
+                        <button
+                          variant="outline"
+                          //   className="bg-red-400"
+                          onClick={() => {
+                            setIsDialogOpen(true);
+
+                            setEventState('');
+                            setResState('');
+                            setHotelState('');
+                            setEditingItem({ id: null, type: null });
+                          }}
+                        >
+                          <CiCirclePlus size={40} className="cursor-pointer" />
+                        </button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-[425px]">
+                        <form onSubmit={handleAddItinerary}>
+                          {selectedCategory == 'Event' && (
+                            <>
+                              <DialogHeader>
+                                <DialogTitle>
+                                  {editingItem.id ? 'Edit' : ' Add event'}
+                                </DialogTitle>
+                                <DialogDescription>
+                                  Add event to your itinerary
+                                </DialogDescription>
+                              </DialogHeader>
+                              <Event
+                                handleChange={handleChange('Event')}
+                                eventState={eventState}
+                                setEventState={setEventState}
+                              />
+                              <Button onClick={handleEventSubmit}>
+                                {editingItem.id ? 'Edit' : ' Add To Itinerary'}
+                              </Button>
+                            </>
+                          )}
+                          {selectedCategory == 'Restaurant' && (
+                            <>
+                              <DialogHeader>
+                                <DialogTitle>
+                                  {editingItem.id ? 'Edit' : ' Add Restaurant'}
+                                </DialogTitle>
+                                <DialogDescription>
+                                  Add Restaurant to your itinerary
+                                </DialogDescription>
+                              </DialogHeader>
+                              <Restaurant
+                                handleChange={handleChange('Restaurant')}
+                                resState={resState}
+                                setResState={setResState}
+                              ></Restaurant>
+                              <Button onClick={handleRestaurantSubmit}>
+                                {editingItem.id ? 'Edit' : ' Add To Itinerary'}
+                              </Button>
+                            </>
+                          )}
+
+                          {selectedCategory == 'Hotel' && (
+                            <>
+                              <DialogHeader>
+                                <DialogTitle>
+                                  {editingItem.id ? 'Edit' : ' Add Hotel'}
+                                </DialogTitle>
+                                <DialogDescription>
+                                  Add Hotel to your itinerary
+                                </DialogDescription>
+                              </DialogHeader>
+                              <Hotel
+                                handleChange={handleChange('Hotel')}
+                                hotelState={hotelState}
+                                setHotelState={setHotelState}
+                              ></Hotel>
+                              <Button onClick={handleHotelSubmit}>
+                                {editingItem.id ? 'Edit' : ' Add To Itinerary'}
+                              </Button>
+                            </>
+                          )}
+                        </form>
+                      </DialogContent>
+                    </Dialog>
+
+                    <Select
+                      value={selectedCategory} // Control the selected value
+                      onValueChange={handleCategoryChange} // Handle changes
+                    >
+                      {' '}
+                      {/* Ensure your Select component can accept and handle an `onChange` prop */}
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Select a Category" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectGroup>
+                          <SelectLabel>Categories</SelectLabel>
+                          <SelectItem value="Event">Event</SelectItem>
+                          <SelectItem value="Restaurant">Restaurant</SelectItem>
+                          <SelectItem value="Hotel">Hotel</SelectItem>
+                        </SelectGroup>
+                      </SelectContent>
+                    </Select>
                   </div>
-                ) : (
-                  <p>No hotel added.</p>
-                )}
-              </div>
-              <div>
-                <h2 className="text-2xl font-semibold">Restaurants</h2>
-                <div className="flex gap-2">
-                  {' '}
-                  {itineraries.restaurant.length > 0 ? (
-                    itineraries.restaurant.map((restaurant, index) => (
-                      <div
-                        key={index}
-                        className="rounded-xl border-2 p-3 shadow-md"
-                      >
-                        <p>
-                          <strong>Restaurant:</strong> {restaurant.restaurant}
-                        </p>
-                        <p>
-                          <strong>Rating:</strong> {restaurant.ratingRestaurant}
-                        </p>
-                        <p>
-                          <strong>Cuisine:</strong> {restaurant.cuisine}
-                        </p>
-                        <p>
-                          <strong>Location:</strong>{' '}
-                          {restaurant.locationRestaurant}
-                        </p>
-                      </div>
-                    ))
-                  ) : (
-                    <p>No restaurants added.</p>
-                  )}
                 </div>
+                <Button
+                  onClick={saveItineraryToAPI}
+                  className="my-4 mt-9 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+                >
+                  Save Itinerary
+                </Button>
               </div>
             </div>
+            <ItineraryOverview itineraries={itineraries} />
           </div>
-          <div className="0 flex grow justify-center">
-            {' '}
-            <div className="text-3xl font-semibold">
-              {itineraries.city} Trip
-            </div>
-          </div>
+          <div className="flex grow justify-center text-lg">asdf</div>
         </div>
       </div>{' '}
     </div>
