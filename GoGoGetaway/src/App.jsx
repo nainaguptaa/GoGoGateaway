@@ -42,6 +42,9 @@ function App() {
       </div>
     );
   }
+  // if (isMobile) {
+  //   return <Navigate to="/foryou" replace />;
+  // }
 
   return (
     <>

@@ -404,7 +404,7 @@ const Create = () => {
       {/* <ForYouLeft /> */}
       <div className="  flex flex-grow flex-col gap-2  px-8 py-8">
         {/* <h1 className="text-3xl font-bold">Create Itinerary</h1> */}
-        <div className="flex items-center gap-4 border-b-2 bg-card p-3 ">
+        <div className="sticky flex items-center gap-4 border-b-2 bg-card p-3 ">
           <Input
             type="text"
             value={itineraries.name}
@@ -427,6 +427,12 @@ const Create = () => {
               toTitleCase={toTitleCase}
             />
           </Dialog>
+          <Button
+            onClick={saveItineraryToAPI}
+            className="rounded bg-blue-500 px-4 py-6 font-bold text-white hover:bg-blue-700"
+          >
+            Save Itinerary
+          </Button>
         </div>
         <div className="flex pb-20">
           <div className="w-8/12 ">
@@ -623,12 +629,6 @@ const Create = () => {
                     </Select>
                   </div>
                 </div>
-                <Button
-                  onClick={saveItineraryToAPI}
-                  className="my-4 mt-9 rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
-                >
-                  Save Itinerary
-                </Button>
               </div>
             </div>
             <ItineraryOverview itineraries={itineraries} />
