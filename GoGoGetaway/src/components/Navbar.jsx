@@ -27,14 +27,15 @@ import {
 import { ModeToggle } from './ModeToggle';
 import { useTheme } from '@/components/theme-provider';
 const Navbar = ({ isMobile }) => {
-  const { currentUser, user, logout } = useUserContext();
+  const { currentUser, user, logout, signPopup, setSignPopup } =
+    useUserContext();
   const { theme } = useTheme();
   const navigate = useNavigate();
-
+  console.log(signPopup);
   if (isMobile) {
     return (
       <>
-        <div className="bg-card fixed top-0 z-50 flex w-full  items-center justify-between px-6 py-6">
+        <div className="fixed top-0 z-50 flex w-full items-center  justify-between bg-card px-6 py-6">
           {' '}
           {/* <img
             src={theme == 'light' ? LogoOnly : LogoOnly}
@@ -49,7 +50,7 @@ const Navbar = ({ isMobile }) => {
     );
   }
   return (
-    <div className="dark:bg-card fixed left-0 top-0 z-20 flex w-full items-center justify-between border-b-2 bg-white px-12 py-6">
+    <div className="fixed left-0 top-0 z-20 flex w-full items-center justify-between border-b-2 bg-white px-12 py-6 dark:bg-card">
       <div className="flex items-center gap-8 ">
         <img
           src={theme == 'light' ? Logo : LogoDark}
@@ -64,7 +65,7 @@ const Navbar = ({ isMobile }) => {
         <SearchBar />
       </div>
 
-      <div className="flex items-center justify-evenly gap-4  font-poppins">
+      <div className="font-poppins flex items-center justify-evenly  gap-4">
         <button
           onClick={() => navigate('/create')}
           className="flex items-center justify-center gap-2 rounded-xl bg-cyan-500 px-4 py-2 font-semibold text-white"
@@ -132,7 +133,7 @@ const Navbar = ({ isMobile }) => {
           <>
             <button
               className="btn cursor-pointer bg-blue-400 text-lg text-white"
-              onClick={() => navigate('/signup')}
+              onClick={() => setSignPopup(true)}
             >
               Sign Up
             </button>

@@ -97,7 +97,7 @@ const ForYou = ({ isMobile }) => {
     <div style={style} className="mx:px-20 px-4 lg:px-14 lg:pt-8 ">
       <div className="flex h-full  items-end md:h-[48rem] md:items-center md:justify-center">
         <div
-          className="lg:dark:bg-card lg:bg-card flex cursor-pointer flex-col gap-2 overflow-hidden sm:h-[47rem] md:h-[46rem] md:w-[55rem]  lg:w-[65rem] lg:rounded-2xl lg:border-2 2xl:w-[75rem]"
+          className="flex cursor-pointer flex-col gap-2 overflow-hidden sm:h-[47rem] md:h-[46rem] md:w-[55rem] lg:w-[65rem] lg:rounded-2xl  lg:border-2 lg:bg-card lg:dark:bg-card 2xl:w-[75rem]"
           onClick={() =>
             navigate(`/itineraries?id=${itinerariesDummy[index].id}`)
           }
@@ -150,7 +150,7 @@ const ForYou = ({ isMobile }) => {
                 className="ease  cursor-pointer text-rose-500 transition duration-200 hover:text-rose-500"
               />
             ) : (
-              <FaHeart
+              <FaRegHeart
                 size={30}
                 className="ease  cursor-pointer text-rose-500 transition duration-200 hover:text-rose-500"
               />
@@ -162,12 +162,16 @@ const ForYou = ({ isMobile }) => {
             {isMobile ? (
               <FaRegCommentAlt size={30} />
             ) : (
-              <FaCommentAlt size={30} />
+              <FaRegCommentAlt size={30} />
             )}
             <div className=" font-bold">{itinerariesDummy[index].comments}</div>
           </div>
           <div className="flex flex-col items-center gap-2">
-            {isMobile ? <FaRegBookmark size={30} /> : <FaBookmark size={30} />}
+            {isMobile ? (
+              <FaRegBookmark size={30} />
+            ) : (
+              <FaRegBookmark size={30} />
+            )}
             {/* <div className="text-lg font-bold">
                 {itinerariesDummy[index].likes}
               </div> */}

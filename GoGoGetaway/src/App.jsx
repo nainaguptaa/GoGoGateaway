@@ -1,5 +1,5 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 // import Signup from './pages/Auth/Signup';
 import LandingPage from './pages/LandingPage/LandingPage';
 import Profile from './pages/Profile';
@@ -18,6 +18,7 @@ const Itinerary = lazy(() => import('./pages/Itineraries/Itinerary'));
 // import Itinerary from './pages/Itineraries/Itinerary';
 import Test from './pages/Test';
 import BottomBar from './components/BottomBar';
+import Signup from './pages/Auth/Signup';
 function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
@@ -33,7 +34,7 @@ function App() {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
 
-  const { loadingAuthState } = useUserContext();
+  const { loadingAuthState, signPopup } = useUserContext();
   if (loadingAuthState) {
     return (
       <div className="absolute flex h-screen w-full items-center justify-center ">
@@ -41,8 +42,10 @@ function App() {
       </div>
     );
   }
+
   return (
     <>
+      {signPopup && <Signup />}
       <Navbar isMobile={isMobile} />
       <div className=" lg:pt-[6.25rem] ">
         {/* <ForYouLeft className="" />{' '} */}
@@ -58,6 +61,7 @@ function App() {
             <Route path="/itineraries" element={<Itinerary />} />{' '}
             <Route path="/create" element={<Create />} />
             <Route path="/test" element={<Test />} />
+            <Route path="*" element={<Navigate to="/ " replace />} />
           </Routes>
         </Suspense>
       </div>
