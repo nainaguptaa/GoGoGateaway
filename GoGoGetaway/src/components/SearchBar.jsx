@@ -3,22 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import { CiLocationOn } from 'react-icons/ci';
 import { FaSearch } from 'react-icons/fa';
 import { Input } from '@/components/ui/input';
-const SearchBar = () => {
+const SearchBar = ({ isMobile }) => {
   const [search, setSearch] = useState(''); // Initialize state
   const navigate = useNavigate();
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 640);
-    };
-
-    window.addEventListener('resize', handleResize);
-    // Call handleResize initially in case the initial window size is mobile
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
   const handleChange = (event) => {
     setSearch(event.target.value); // Update state on change
   };
