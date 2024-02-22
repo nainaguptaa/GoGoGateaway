@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import axios from 'axios';
-import Event from './Event';
-import Hotel from './Hotel';
-import Restaurant from './Restaurant';
+// import Event from './Event';
+// import Hotel from './Hotel';
+// import Restaurant from './Restaurant';
+const Event = lazy(() => import('./Event'));
+const Hotel = lazy(() => import('./Hotel'));
+const Restaurant = lazy(() => import('./Restaurant'));
 import { CiCirclePlus } from 'react-icons/ci';
 import { Button } from '@/components/ui/button';
 import { useLocation } from 'react-router-dom';
@@ -26,17 +29,20 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import ForYouLeft from '../ForYou/ForYouLeft';
+
 import { DatePickerDemo } from '@/components/ui/DatePicker';
 import ChooseCity from './ChooseCity';
 import ItineraryOverview from './ItineraryOverview';
-
+import SearchableMap from '@/components/SearchableMap';
+import { useUserContext } from '@/context/userContext';
+import SignUpReminder from '@/components/SignUpReminder';
 const Create = () => {
   const location = useLocation();
+  const { currentUser } = useUserContext();
   const [formData, setFormData] = useState({});
   const [editingIndex, setEditingIndex] = useState({ id: null, type: null });
   const [editingItem, setEditingItem] = useState({ id: null, type: null });
+  const [popup, setPopup] = useState(false);
   // Define handleChange function
   const [eventState, setEventState] = useState({
     time: '',
@@ -70,12 +76,33 @@ const Create = () => {
     restaurant: [],
     hotel: null,
   });
-  useEffect(() => {
-    const savedItineraries = sessionStorage.getItem('itineraries');
-    if (savedItineraries) {
-      setItineraries(JSON.parse(savedItineraries));
+  console.log(popup);
+  const saveItineraryToAPI = async () => {
+    if (!currentUser) {
+      console.log('not logged in');
+      setPopup((prev) => !prev);
     }
-  }, []);
+    console.log('Saved');
+    console.log('Iterineraries Data', itineraries);
+    try {
+      //   const response = await axios.post(
+      //     'http://localhost:3000/itineraries/create',
+      //     { data: itineraries },
+      //   );
+      //   console.log('Itinerary saved successfully:', response.data);
+      //   // Handle the response from the server, e.g., displaying a success message
+    } catch (error) {
+      console.error('Error saving itinerary:', error);
+      // Handle errors, e.g., displaying an error message
+    }
+  };
+  //   useEffect(() => {
+  //     const savedItineraries = sessionStorage.getItem('itineraries');
+  //     if (savedItineraries) {
+  //       setItineraries(JSON.parse(savedItineraries));
+  //     }
+  //   }, []);
+
   const handleChange = (type) => (e) => {
     const { name, value } = e.target;
     if (type === 'Event') {
@@ -126,35 +153,6 @@ const Create = () => {
     });
   };
 
-  //   const handleEventSubmit = (e) => {
-  //     e.preventDefault();
-  //     setItineraries((prevItineraries) => {
-  //       let updatedEvents = [...prevItineraries.events];
-  //       if (editingIndex !== null) {
-  //         console.log('editing');
-  //         // Update existing item
-  //         updatedEvents[editingIndex] = eventState;
-  //       } else {
-  //         // Add new ite
-  //         console.log('addingh');
-  //         console.log(eventState);
-  //         updatedEvents.push(eventState);
-  //       }
-  //       const updatedItineraries = { ...prevItineraries, events: updatedEvents };
-  //       sessionStorage.setItem('itineraries', JSON.stringify(updatedItineraries));
-  //       //   return { ...prevItineraries, events: updatedEvents };
-  //       return updatedItineraries;
-  //     });
-  //     // Reset state
-  //     setEventState({
-  //       event: '',
-  //       ratingEvent: '',
-  //       typeOfActivity: 'sightseeing', // Assuming you want to reset to default value
-  //       locationEvent: '',
-  //     });
-  //     setIsDialogOpen(false);
-  //     setEditingIndex(null); // Reset editing index
-  //   };
   const handleEventSubmit = (e) => {
     e.preventDefault();
     setItineraries((prevItineraries) => {
@@ -315,24 +313,6 @@ const Create = () => {
     // Remove `itineraries.city` from dependencies to prevent auto-closing when it changes
   }, [itineraries.name]);
   const [openEditor, setOpenEditor] = useState(false);
-  //   const handleEditItemClick = (index) => {
-  //     console.log(index);
-  //     const item = getSortedItineraries()[index];
-  //     console.log(item);
-  //     if (item.category === 'event') {
-  //       setEventState({ ...item });
-  //     } else if (item.category === 'hotel') {
-  //       setHotelState({ ...item });
-  //     } else if (item.category === 'restaurant') {
-  //       setResState({ ...item });
-  //     }
-
-  //     setOpenEditor(true);
-  //     // setSelectedCategory(item.category);
-  //     // setIsDialogOpen(true);
-
-  //     setEditingIndex(index); // Store the index of the item being edited
-  //   };
 
   const handleEditItemClick = (item) => {
     setEditingItem({ id: item.id, type: item.category }); // Assuming 'category' field holds 'Event', 'Restaurant', or 'Hotel'
@@ -408,24 +388,19 @@ const Create = () => {
   //   console.log(selectedCategory);
 
   //   THIS IS THE API FUNCTIONM
-  const saveItineraryToAPI = async () => {
-    console.log('Saved');
-    console.log('Iterineraries Data', itineraries);
-    try {
-      const response = await axios.post(
-        'http://localhost:3000/itineraries/create',
-        { data: itineraries },
-      );
-      console.log('Itinerary saved successfully:', response.data);
-      // Handle the response from the server, e.g., displaying a success message
-    } catch (error) {
-      console.error('Error saving itinerary:', error);
-      // Handle errors, e.g., displaying an error message
-    }
+
+  const toTitleCase = (text) => {
+    return text
+      .toLowerCase() // First, make the entire string lowercase.
+      .split(' ') // Split the string into an array of words.
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1)) // Capitalize the first letter of each word.
+      .join(' '); // Join the words back into a single string.
   };
+  const LoadingFallback = () => <div>Loading...</div>;
 
   return (
     <div className="flex h-screen overflow-scroll">
+      {popup && <SignUpReminder className="" setPopup={setPopup} />}
       {/* <ForYouLeft /> */}
       <div className="  flex flex-grow flex-col gap-2  px-8 py-8">
         {/* <h1 className="text-3xl font-bold">Create Itinerary</h1> */}
@@ -446,14 +421,18 @@ const Create = () => {
             <DialogTrigger asChild>
               <Button onClick={() => setIsCityOpen(true)}>Change City</Button>
             </DialogTrigger>
-            <ChooseCity city={itineraries.city} setCity={handleCityChange} />
+            <ChooseCity
+              city={itineraries.city}
+              setCity={handleCityChange}
+              toTitleCase={toTitleCase}
+            />
           </Dialog>
         </div>
-        <div className="flex">
-          <div className="w-10/12 ">
+        <div className="flex pb-20">
+          <div className="w-8/12 ">
             <div className="bg-card  rounded-xl border-2 px-5 py-6">
               <div className="text-4xl font-normal">
-                {itineraries.city} Trip
+                {toTitleCase(itineraries.city)} Trip
               </div>
               <div className="ml-4 mt-3 flex-col text-lg font-semibold">
                 Add To Your Itinerary
@@ -520,94 +499,109 @@ const Create = () => {
                 </ol>
                 <div className="-ml-[1rem] flex w-1/4 items-center justify-between ">
                   <div className="flex items-center gap-2 text-xl">
-                    <Dialog
-                      open={isDialogOpen}
-                      onOpenChange={setIsDialogOpen}
-                      // isOpen={isDialogOpen}
-                      // onDismiss={() => setIsDialogOpen(false)}
-                    >
-                      <DialogTrigger asChild>
-                        <button
-                          variant="outline"
-                          //   className="bg-red-400"
-                          onClick={() => {
-                            setIsDialogOpen(true);
-
-                            setEventState('');
-                            setResState('');
-                            setHotelState('');
-                            setEditingItem({ id: null, type: null });
-                          }}
+                    <Suspense fallback={<LoadingFallback />}>
+                      {isDialogOpen && (
+                        <Dialog
+                          open={isDialogOpen}
+                          onOpenChange={setIsDialogOpen}
+                          // isOpen={isDialogOpen}
+                          // onDismiss={() => setIsDialogOpen(false)}
                         >
-                          <CiCirclePlus size={40} className="cursor-pointer" />
-                        </button>
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-[425px]">
-                        <form onSubmit={handleAddItinerary}>
-                          {selectedCategory == 'Event' && (
-                            <>
-                              <DialogHeader>
-                                <DialogTitle>
-                                  {editingItem.id ? 'Edit' : ' Add event'}
-                                </DialogTitle>
-                                <DialogDescription>
-                                  Add event to your itinerary
-                                </DialogDescription>
-                              </DialogHeader>
-                              <Event
-                                handleChange={handleChange('Event')}
-                                eventState={eventState}
-                                setEventState={setEventState}
-                              />
-                              <Button onClick={handleEventSubmit}>
-                                {editingItem.id ? 'Edit' : ' Add To Itinerary'}
-                              </Button>
-                            </>
-                          )}
-                          {selectedCategory == 'Restaurant' && (
-                            <>
-                              <DialogHeader>
-                                <DialogTitle>
-                                  {editingItem.id ? 'Edit' : ' Add Restaurant'}
-                                </DialogTitle>
-                                <DialogDescription>
-                                  Add Restaurant to your itinerary
-                                </DialogDescription>
-                              </DialogHeader>
-                              <Restaurant
-                                handleChange={handleChange('Restaurant')}
-                                resState={resState}
-                                setResState={setResState}
-                              ></Restaurant>
-                              <Button onClick={handleRestaurantSubmit}>
-                                {editingItem.id ? 'Edit' : ' Add To Itinerary'}
-                              </Button>
-                            </>
-                          )}
+                          <DialogTrigger asChild>
+                            <button
+                              variant="outline"
+                              //   className="bg-red-400"
+                              onClick={() => {
+                                setIsDialogOpen(true);
 
-                          {selectedCategory == 'Hotel' && (
-                            <>
-                              <DialogHeader>
-                                <DialogTitle>
-                                  {editingItem.id ? 'Edit' : ' Add Hotel'}
-                                </DialogTitle>
-                                <DialogDescription>
-                                  Add Hotel to your itinerary
-                                </DialogDescription>
-                              </DialogHeader>
-                              <Hotel
-                                handleChange={handleChange('Hotel')}
-                                hotelState={hotelState}
-                                setHotelState={setHotelState}
-                              ></Hotel>
-                              <Button onClick={handleHotelSubmit}>
-                                {editingItem.id ? 'Edit' : ' Add To Itinerary'}
-                              </Button>
-                            </>
-                          )}
-                        </form>
-                      </DialogContent>
-                    </Dialog>
+                                setEventState('');
+                                setResState('');
+                                setHotelState('');
+                                setEditingItem({ id: null, type: null });
+                              }}
+                            >
+                              <CiCirclePlus
+                                size={40}
+                                className="cursor-pointer"
+                              />
+                            </button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[425px]">
+                            <form onSubmit={handleAddItinerary}>
+                              {selectedCategory == 'Event' && (
+                                <>
+                                  <DialogHeader>
+                                    <DialogTitle>
+                                      {editingItem.id ? 'Edit' : ' Add event'}
+                                    </DialogTitle>
+                                    <DialogDescription>
+                                      Add event to your itinerary
+                                    </DialogDescription>
+                                  </DialogHeader>
+                                  <Event
+                                    handleChange={handleChange('Event')}
+                                    eventState={eventState}
+                                    setEventState={setEventState}
+                                  />
+                                  <Button onClick={handleEventSubmit}>
+                                    {editingItem.id
+                                      ? 'Edit'
+                                      : ' Add To Itinerary'}
+                                  </Button>
+                                </>
+                              )}
+                              {selectedCategory == 'Restaurant' && (
+                                <>
+                                  <DialogHeader>
+                                    <DialogTitle>
+                                      {editingItem.id
+                                        ? 'Edit'
+                                        : ' Add Restaurant'}
+                                    </DialogTitle>
+                                    <DialogDescription>
+                                      Add Restaurant to your itinerary
+                                    </DialogDescription>
+                                  </DialogHeader>
+                                  <Restaurant
+                                    handleChange={handleChange('Restaurant')}
+                                    resState={resState}
+                                    setResState={setResState}
+                                  ></Restaurant>
+                                  <Button onClick={handleRestaurantSubmit}>
+                                    {editingItem.id
+                                      ? 'Edit'
+                                      : ' Add To Itinerary'}
+                                  </Button>
+                                </>
+                              )}
+
+                              {selectedCategory == 'Hotel' && (
+                                <>
+                                  <DialogHeader>
+                                    <DialogTitle>
+                                      {editingItem.id ? 'Edit' : ' Add Hotel'}
+                                    </DialogTitle>
+                                    <DialogDescription>
+                                      Add Hotel to your itinerary
+                                    </DialogDescription>
+                                  </DialogHeader>
+                                  <Hotel
+                                    handleChange={handleChange('Hotel')}
+                                    hotelState={hotelState}
+                                    setHotelState={setHotelState}
+                                  ></Hotel>
+                                  <Button onClick={handleHotelSubmit}>
+                                    {editingItem.id
+                                      ? 'Edit'
+                                      : ' Add To Itinerary'}
+                                  </Button>
+                                </>
+                              )}
+                            </form>
+                          </DialogContent>
+                        </Dialog>
+                      )}
+                    </Suspense>
 
                     <Select
                       value={selectedCategory} // Control the selected value
@@ -639,7 +633,15 @@ const Create = () => {
             </div>
             <ItineraryOverview itineraries={itineraries} />
           </div>
-          <div className="flex grow justify-center text-lg">asdf</div>
+          <div className="flex grow flex-col items-center  gap-10   text-lg">
+            <div className="bg-card w-[30rem] overflow-hidden rounded-xl border-2 shadow-sm">
+              {' '}
+              <SearchableMap searchAddress={itineraries.city} loading="lazy" />
+              <div className="p-5 text-xl font-semibold">
+                {toTitleCase(itineraries.city)}
+              </div>
+            </div>
+          </div>
         </div>
       </div>{' '}
     </div>

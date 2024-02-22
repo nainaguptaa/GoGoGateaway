@@ -26,28 +26,15 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ModeToggle } from './ModeToggle';
 import { useTheme } from '@/components/theme-provider';
-const Navbar = () => {
+const Navbar = ({ isMobile }) => {
   const { currentUser, user, logout } = useUserContext();
   const { theme } = useTheme();
   const navigate = useNavigate();
-  const [isMobile, setIsMobile] = useState(window.innerWidth < 640);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth < 640);
-    };
-
-    window.addEventListener('resize', handleResize);
-    // Call handleResize initially in case the initial window size is mobile
-    handleResize();
-
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
 
   if (isMobile) {
     return (
       <>
-        <div className="flex w-full items-center justify-between px-6 py-6">
+        <div className="flex w-full items-center justify-between  px-6 py-6">
           {' '}
           {/* <img
             src={theme == 'light' ? LogoOnly : LogoOnly}
@@ -56,13 +43,13 @@ const Navbar = () => {
             alt="logo"
           /> */}
           <GiHamburgerMenu size={35} />
-          <SearchBar />
+          <SearchBar isMobile={isMobile} />
         </div>
       </>
     );
   }
   return (
-    <div className="dark:bg-card fixed left-0 top-0 z-10 flex w-full items-center justify-between border-b-2 bg-white px-12 py-6">
+    <div className="dark:bg-card fixed left-0 top-0 z-20 flex w-full items-center justify-between border-b-2 bg-white px-12 py-6">
       <div className="flex items-center gap-8 ">
         <img
           src={theme == 'light' ? Logo : LogoDark}
