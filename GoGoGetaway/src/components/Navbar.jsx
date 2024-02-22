@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, lazy } from 'react';
 import { useUserContext } from '../context/userContext';
 import { useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar';
@@ -26,15 +26,18 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { ModeToggle } from './ModeToggle';
 import { useTheme } from '@/components/theme-provider';
+import MobileSidebar from './MobileSidebar';
 const Navbar = ({ isMobile }) => {
   const { currentUser, user, logout, signPopup, setSignPopup } =
     useUserContext();
   const { theme } = useTheme();
   const navigate = useNavigate();
   console.log(signPopup);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   if (isMobile) {
     return (
       <>
+        {/* <MobileSidebar /> */}
         <div className="fixed top-0 z-50 flex w-full items-center  justify-between bg-card px-6 py-6">
           {' '}
           {/* <img
@@ -43,9 +46,16 @@ const Navbar = ({ isMobile }) => {
             onClick={() => navigate('/foryou')}
             alt="logo"
           /> */}
-          <GiHamburgerMenu size={35} />
+          <GiHamburgerMenu
+            size={35}
+            onClick={() => setSidebarOpen((prev) => !prev)}
+          />
           <SearchBar isMobile={isMobile} />
         </div>
+        <MobileSidebar
+          isOpen={sidebarOpen}
+          closeSidebar={() => setSidebarOpen(false)}
+        />
       </>
     );
   }
