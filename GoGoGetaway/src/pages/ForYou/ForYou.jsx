@@ -3,6 +3,7 @@ import React, { useState, useEffect, lazy, Suspense } from 'react';
 import ForYouLeft from './ForYouLeft';
 
 import itinerariesDummy from '../../dummyData/dummyItinerary.json';
+import dumdum from '../../dummyData/dumdum.json';
 import { useNavigate } from 'react-router-dom';
 const ROW_HEIGHT = 100;
 
@@ -28,16 +29,48 @@ import {
 import { PiShareFat } from 'react-icons/pi';
 import ForYouLikes from './ForYouLikes';
 const ForYou = ({ isMobile }) => {
+  const [itineraries, setItineraries] = useState([]);
   const navigate = useNavigate();
   const [displayedPosts, setDisplayedPosts] = useState([]);
   // State to track the current page
   const [page, setPage] = useState(1);
   // Number of posts to display per "page"
   const postsPerPage = 5;
+  // Simulate fetching data from Firebase
+  // useEffect(() => {
+  //   // Set itineraries from itinerariesDummy
+  //   setItineraries(dumdum);
+  //   // Load initial posts
+  //   setDisplayedPosts(dumdum.slice(0, postsPerPage));
+  // }, []);
+
+  // Define the function to fetch itineraries
+  useEffect(() => {
+    const fetchItineraries = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/itineraries/all'); // Adjust the URL as needed
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+
+        console.log(data);
+        setItineraries(data);
+        setDisplayedPosts(data.slice(0, postsPerPage));
+      } catch (error) {
+        console.error('Failed to fetch itineraries:', error);
+      }
+    };
+    fetchItineraries();
+  }, [postsPerPage]);
 
   useEffect(() => {
-    // Load initial posts
-    setDisplayedPosts(itinerariesDummy.slice(0, postsPerPage));
+    const handleResize = () => {
+      setItemSize(getItemSize());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const handleScroll = (event) => {
@@ -93,15 +126,15 @@ const ForYou = ({ isMobile }) => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
+  // console.log(itineraries);
+  // console.log(itinerariesDummy);
+  // console.log(dumdum);
   const Row = ({ index, style }) => (
     <div style={style} className="mx:px-20 px-4 lg:px-14 lg:pt-8 ">
       <div className="flex h-full  items-end md:h-[48rem] md:items-center md:justify-center">
         <div
           className="flex cursor-pointer flex-col gap-2 overflow-hidden sm:h-[47rem] md:h-[46rem] md:w-[55rem] lg:w-[65rem] lg:rounded-2xl  lg:border-2 lg:bg-card lg:dark:bg-card 2xl:w-[75rem]"
-          onClick={() =>
-            navigate(`/itineraries?id=${itinerariesDummy[index].id}`)
-          }
+          onClick={() => navigate(`/itineraries?id=${itineraries[index].id}`)}
         >
           {/* <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"> */}
           {/* {itinerariesDummy[index].images.map((image, imgIndex) => (
@@ -113,7 +146,7 @@ const ForYou = ({ isMobile }) => {
               />
             ))} */}
           <img
-            src={itinerariesDummy[index].images[0]}
+            src={itineraries[index].hotel.imageURL}
             // alt={`Slide ${imgIndex}`}
             loading="lazy"
             className="z-10 h-[39rem]  object-cover md:h-[38rem] lg:h-[38rem] 2xl:max-h-[38rem]"
@@ -122,13 +155,10 @@ const ForYou = ({ isMobile }) => {
             <div className="flex flex-col">
               {' '}
               <div className="text-3xl font-bold">
-                {itinerariesDummy[index].title}
+                {itineraries[index].name}
               </div>
               <div className="text-xl font-semibold">
-                {itinerariesDummy[index].location}
-              </div>
-              <div className="mt-2 text-xl font-semibold text-gray-400">
-                {itinerariesDummy[index].tripLength} days
+                {itineraries[index].city}
               </div>
             </div>
             <div className="text-2xl font-bold">
@@ -137,7 +167,7 @@ const ForYou = ({ isMobile }) => {
                 currency: 'CAD',
                 minimumFractionDigits: 0,
                 maximumFractionDigits: 0,
-              }).format(itinerariesDummy[index].price)}{' '}
+              }).format(itineraries[index].totalPrice)}{' '}
               Total
             </div>
           </div>
@@ -145,7 +175,7 @@ const ForYou = ({ isMobile }) => {
         </div>
         <ForYouLikes
           isMobile={isMobile}
-          itinerariesDummy={itinerariesDummy}
+          itinerariesProp={itineraries}
           index={index}
         />
       </div>
@@ -163,7 +193,7 @@ const ForYou = ({ isMobile }) => {
         <List
           className="flex lg:gap-12 2xl:gap-24 "
           height={window.innerHeight} // Adjust based on your layout
-          itemCount={itinerariesDummy.length}
+          itemCount={itineraries.length}
           itemSize={itemSize} // Dynamically adjusted
           width={'100%'} // Adjust as necessary
         >

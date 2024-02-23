@@ -61,6 +61,8 @@ router.post("/create", async (req, res) => {
     // Construct the itinerary object
     const itinerary = {
       userId: data.userId,
+      likeCount: 0,
+      commentCount: 0,
       name: data.name,
       city: data.city,
       date: data.date,
@@ -94,6 +96,55 @@ router.post("/create", async (req, res) => {
 
 //  price: data.price, // Assuming price is part of the data
 //rating: parseFloat(data.rating), // Assuming rating is part of the data
+router.get("/all", async (req, res) => {
+  try {
+    const itinerariesSnapshot = await db.collection("itineraries").get();
+    const itineraries = itinerariesSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    console.log("\n\n", itineraries);
+    res.status(200).json(itineraries);
+  } catch (error) {
+    console.error("Error fetching all itineraries:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+// Increment the like count for a specific itinerary
+router.post("/increment-like/:id", async (req, res) => {
+  console.log(`Incrementing like for ID: ${req.params.id}`);
+  try {
+    const id = req.params.id;
+    const itineraryRef = db.collection("itineraries").doc(id);
+
+    // Atomically increment the like count
+    await itineraryRef.update({
+      likeCount: admin.firestore.FieldValue.increment(1),
+    });
+
+    res.status(200).json({ message: "Like count incremented successfully" });
+  } catch (error) {
+    console.error("Error incrementing like count:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.post("/decrement-like/:id", async (req, res) => {
+  try {
+    const id = req.params.id;
+    const itineraryRef = db.collection("itineraries").doc(id);
+
+    // Atomically decrement the like count
+    await itineraryRef.update({
+      likeCount: admin.firestore.FieldValue.increment(-1),
+    });
+
+    res.status(200).json({ message: "Like count decremented successfully" });
+  } catch (error) {
+    console.error("Error decrementing like count:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 router.get("/", async (req, res) => {
   try {
