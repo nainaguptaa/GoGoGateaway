@@ -1,11 +1,11 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import axios from 'axios';
-// import Event from './Event';
-// import Hotel from './Hotel';
-// import Restaurant from './Restaurant';
-const Event = lazy(() => import('./Event'));
-const Hotel = lazy(() => import('./Hotel'));
-const Restaurant = lazy(() => import('./Restaurant'));
+import Event from './Event';
+import Hotel from './Hotel';
+import Restaurant from './Restaurant';
+// const Event = lazy(() => import('./Event'));
+// const Hotel = lazy(() => import('./Hotel'));
+// const Restaurant = lazy(() => import('./Restaurant'));
 import { CiCirclePlus } from 'react-icons/ci';
 import { Button } from '@/components/ui/button';
 import { useLocation } from 'react-router-dom';
@@ -82,18 +82,17 @@ const Create = () => {
       console.log('not logged in');
       setPopup((prev) => !prev);
     }
-    console.log('Saved');
-    console.log('Iterineraries Data', itineraries);
     try {
-      //   const response = await axios.post(
-      //     'http://localhost:3000/itineraries/create',
-      //     { data: itineraries },
-      //   );
+      const response = await axios.post(
+        'http://localhost:8080/itineraries/create',
+        itineraries,
+      );
+      console.log('Success:', response.data);
       //   console.log('Itinerary saved successfully:', response.data);
-      //   // Handle the response from the server, e.g., displaying a success message
+      // Handle success scenario, e.g., showing a success message or updating state
     } catch (error) {
-      console.error('Error saving itinerary:', error);
-      // Handle errors, e.g., displaying an error message
+      console.error('Error posting itinerary:', error);
+      // Handle error scenario, e.g., showing an error message
     }
   };
   //   useEffect(() => {
@@ -505,109 +504,94 @@ const Create = () => {
                 </ol>
                 <div className="-ml-[1rem] flex w-1/4 items-center justify-between ">
                   <div className="flex items-center gap-2 text-xl">
-                    <Suspense fallback={<LoadingFallback />}>
-                      {isDialogOpen && (
-                        <Dialog
-                          open={isDialogOpen}
-                          onOpenChange={setIsDialogOpen}
-                          // isOpen={isDialogOpen}
-                          // onDismiss={() => setIsDialogOpen(false)}
+                    <Dialog
+                      open={isDialogOpen}
+                      onOpenChange={setIsDialogOpen}
+                      // isOpen={isDialogOpen}
+                      // onDismiss={() => setIsDialogOpen(false)}
+                    >
+                      <DialogTrigger asChild>
+                        <button
+                          variant="outline"
+                          //   className="bg-red-400"
+                          onClick={() => {
+                            setIsDialogOpen(true);
+
+                            setEventState('');
+                            setResState('');
+                            setHotelState('');
+                            setEditingItem({ id: null, type: null });
+                          }}
                         >
-                          <DialogTrigger asChild>
-                            <button
-                              variant="outline"
-                              //   className="bg-red-400"
-                              onClick={() => {
-                                setIsDialogOpen(true);
-
-                                setEventState('');
-                                setResState('');
-                                setHotelState('');
-                                setEditingItem({ id: null, type: null });
-                              }}
-                            >
-                              <CiCirclePlus
-                                size={40}
-                                className="cursor-pointer"
+                          <CiCirclePlus size={40} className="cursor-pointer" />
+                        </button>
+                      </DialogTrigger>
+                      <DialogContent className="sm:max-w-[425px]">
+                        <form onSubmit={handleAddItinerary}>
+                          {selectedCategory == 'Event' && (
+                            <>
+                              <DialogHeader>
+                                <DialogTitle>
+                                  {editingItem.id ? 'Edit' : ' Add event'}
+                                </DialogTitle>
+                                <DialogDescription>
+                                  Add event to your itinerary
+                                </DialogDescription>
+                              </DialogHeader>
+                              <Event
+                                handleChange={handleChange('Event')}
+                                eventState={eventState}
+                                setEventState={setEventState}
                               />
-                            </button>
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-[425px]">
-                            <form onSubmit={handleAddItinerary}>
-                              {selectedCategory == 'Event' && (
-                                <>
-                                  <DialogHeader>
-                                    <DialogTitle>
-                                      {editingItem.id ? 'Edit' : ' Add event'}
-                                    </DialogTitle>
-                                    <DialogDescription>
-                                      Add event to your itinerary
-                                    </DialogDescription>
-                                  </DialogHeader>
-                                  <Event
-                                    handleChange={handleChange('Event')}
-                                    eventState={eventState}
-                                    setEventState={setEventState}
-                                  />
-                                  <Button onClick={handleEventSubmit}>
-                                    {editingItem.id
-                                      ? 'Edit'
-                                      : ' Add To Itinerary'}
-                                  </Button>
-                                </>
-                              )}
-                              {selectedCategory == 'Restaurant' && (
-                                <>
-                                  <DialogHeader>
-                                    <DialogTitle>
-                                      {editingItem.id
-                                        ? 'Edit'
-                                        : ' Add Restaurant'}
-                                    </DialogTitle>
-                                    <DialogDescription>
-                                      Add Restaurant to your itinerary
-                                    </DialogDescription>
-                                  </DialogHeader>
-                                  <Restaurant
-                                    handleChange={handleChange('Restaurant')}
-                                    resState={resState}
-                                    setResState={setResState}
-                                  ></Restaurant>
-                                  <Button onClick={handleRestaurantSubmit}>
-                                    {editingItem.id
-                                      ? 'Edit'
-                                      : ' Add To Itinerary'}
-                                  </Button>
-                                </>
-                              )}
+                              <Button onClick={handleEventSubmit}>
+                                {editingItem.id ? 'Edit' : ' Add To Itinerary'}
+                              </Button>
+                            </>
+                          )}
+                          {selectedCategory == 'Restaurant' && (
+                            <>
+                              <DialogHeader>
+                                <DialogTitle>
+                                  {editingItem.id ? 'Edit' : ' Add Restaurant'}
+                                </DialogTitle>
+                                <DialogDescription>
+                                  Add Restaurant to your itinerary
+                                </DialogDescription>
+                              </DialogHeader>
+                              <Restaurant
+                                handleChange={handleChange('Restaurant')}
+                                resState={resState}
+                                setResState={setResState}
+                              ></Restaurant>
+                              <Button onClick={handleRestaurantSubmit}>
+                                {editingItem.id ? 'Edit' : ' Add To Itinerary'}
+                              </Button>
+                            </>
+                          )}
 
-                              {selectedCategory == 'Hotel' && (
-                                <>
-                                  <DialogHeader>
-                                    <DialogTitle>
-                                      {editingItem.id ? 'Edit' : ' Add Hotel'}
-                                    </DialogTitle>
-                                    <DialogDescription>
-                                      Add Hotel to your itinerary
-                                    </DialogDescription>
-                                  </DialogHeader>
-                                  <Hotel
-                                    handleChange={handleChange('Hotel')}
-                                    hotelState={hotelState}
-                                    setHotelState={setHotelState}
-                                  ></Hotel>
-                                  <Button onClick={handleHotelSubmit}>
-                                    {editingItem.id
-                                      ? 'Edit'
-                                      : ' Add To Itinerary'}
-                                  </Button>
-                                </>
-                              )}
-                            </form>
-                          </DialogContent>
-                        </Dialog>
-                      )}
-                    </Suspense>
+                          {selectedCategory == 'Hotel' && (
+                            <>
+                              <DialogHeader>
+                                <DialogTitle>
+                                  {editingItem.id ? 'Edit' : ' Add Hotel'}
+                                </DialogTitle>
+                                <DialogDescription>
+                                  Add Hotel to your itinerary
+                                </DialogDescription>
+                              </DialogHeader>
+                              <Hotel
+                                handleChange={handleChange('Hotel')}
+                                hotelState={hotelState}
+                                setHotelState={setHotelState}
+                              ></Hotel>
+                              <Button onClick={handleHotelSubmit}>
+                                {editingItem.id ? 'Edit' : ' Add To Itinerary'}
+                              </Button>
+                            </>
+                          )}
+                        </form>
+                      </DialogContent>
+                    </Dialog>
 
                     <Select
                       value={selectedCategory} // Control the selected value
