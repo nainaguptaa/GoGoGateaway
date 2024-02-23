@@ -10,6 +10,6 @@ export default defineConfig({
     },
   },
   build: {
-    outDir: 'GoGoGetaway',
+    outDir: 'dist',
   },
 });
