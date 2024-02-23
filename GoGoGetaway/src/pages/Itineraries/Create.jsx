@@ -1,4 +1,5 @@
 import React, { useState, useEffect, lazy, Suspense } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Event from './Event';
 import Hotel from './Hotel';
@@ -37,6 +38,7 @@ import SearchableMap from '@/components/SearchableMap';
 import { useUserContext } from '@/context/userContext';
 import SignUpReminder from '@/components/SignUpReminder';
 const Create = () => {
+  const navigate = useNavigate();
   const location = useLocation();
   const { currentUser, signPopup } = useUserContext();
   const [formData, setFormData] = useState({});
@@ -50,6 +52,7 @@ const Create = () => {
     ratingEvent: '',
     typeOfActivity: 'sightseeing', // Assuming a default value
     locationEvent: '',
+    priceEvent: 0,
   });
   const [hotelState, setHotelState] = useState({
     time: '',
@@ -58,6 +61,7 @@ const Create = () => {
     bookingURL: '',
     imageURL: '',
     locationHotel: '',
+    priceHotel: 0,
   });
   const [resState, setResState] = useState({
     time: '',
@@ -65,6 +69,7 @@ const Create = () => {
     ratingRestaurant: '',
     cuisine: '',
     locationRestaurant: '',
+    priceRestaurant: 0,
   });
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -75,19 +80,44 @@ const Create = () => {
     events: [],
     restaurant: [],
     hotel: null,
+    totalPrice: 0,
   });
-  console.log(popup, signPopup);
+  // After each add/update operation, call this function to update the totalPrice
+
   const saveItineraryToAPI = async () => {
+    console.log(itineraries);
     if (!currentUser) {
       console.log('not logged in');
       setPopup((prev) => !prev);
     }
+    // Calculate the total price from events, restaurants, and the hotel
+    const totalEventsPrice = itineraries.events.reduce(
+      (acc, curr) => acc + parseFloat(curr.priceEvent || 0),
+      0,
+    );
+    const totalRestaurantsPrice = itineraries.restaurant.reduce(
+      (acc, curr) => acc + parseFloat(curr.priceRestaurant || 0),
+      0,
+    );
+    const hotelPrice = parseFloat(itineraries.hotel?.priceHotel || 0); // Optional chaining in case hotel is null
+
+    // Sum up all the prices
+    const totalPrice = totalEventsPrice + totalRestaurantsPrice + hotelPrice;
+
+    // Include the totalPrice in the itineraries object
+    const itineraryData = {
+      ...itineraries,
+      userId: currentUser.id, // Add the currentUser.id
+      totalPrice, // Update the totalPrice with the calculated value
+    };
+
     try {
       const response = await axios.post(
         'http://localhost:8080/itineraries/create',
-        itineraries,
+        itineraryData,
       );
       console.log('Success:', response.data);
+      navigate('/my-trips');
       //   console.log('Itinerary saved successfully:', response.data);
       // Handle success scenario, e.g., showing a success message or updating state
     } catch (error) {
@@ -156,27 +186,47 @@ const Create = () => {
     e.preventDefault();
     setItineraries((prevItineraries) => {
       let updatedEvents;
+      let priceDifference = 0; // This will be used to adjust the totalPrice
+
       if (editingItem.id) {
-        // Edit mode: update the existing event
-        updatedEvents = prevItineraries.events.map((event) =>
-          event.id === editingItem.id ? { ...event, ...eventState } : event,
-        );
+        // Edit mode: update the existing event and calculate price difference
+        updatedEvents = prevItineraries.events.map((event) => {
+          console.log('calc', eventState.priceEvent, event.priceEvent);
+          if (event.id === editingItem.id) {
+            priceDifference =
+              parseFloat(eventState.priceEvent) - parseFloat(event.priceEvent);
+            return { ...event, ...eventState };
+          }
+          return event;
+        });
       } else {
-        // Add mode: append a new event
-        updatedEvents = [
-          ...prevItineraries.events,
-          { ...eventState, id: generateUniqueId() },
-        ];
+        // Add mode: append a new event and add its price to totalPrice
+        const newEvent = { ...eventState, id: generateUniqueId() };
+        updatedEvents = [...prevItineraries.events, newEvent];
+        priceDifference = parseFloat(newEvent.priceEvent); // Assuming newEvent.price exists
       }
-      const updatedItineraries = { ...prevItineraries, events: updatedEvents };
+      console.log('price difference', priceDifference);
+      // Ensure the price difference is a number; if not, set it to 0
+      if (isNaN(priceDifference)) priceDifference = 0;
+
+      const updatedTotalPrice = prevItineraries.totalPrice + priceDifference;
+
+      const updatedItineraries = {
+        ...prevItineraries,
+        events: updatedEvents,
+        totalPrice: updatedTotalPrice,
+      };
       sessionStorage.setItem('itineraries', JSON.stringify(updatedItineraries));
       return updatedItineraries;
     });
+
+    // Assuming you have a function to reset the event state and other states as before
     setEventState({
       event: '',
       ratingEvent: '',
       typeOfActivity: 'sightseeing', // Assuming you want to reset to default value
       locationEvent: '',
+      price: 0, // Reset price or ensure it's correctly reset elsewhere
     });
     setIsDialogOpen(false);
     setEditingItem({ id: null, type: null }); // Reset editing state
@@ -184,54 +234,86 @@ const Create = () => {
 
   const handleHotelSubmit = (e) => {
     e.preventDefault();
+    console.log(editingItem);
     setItineraries((prevItineraries) => {
-      // For hotel, since you can only have one, you directly replace it.
-      // If you want to support editing, check if an `editingItem` is set.
-      const updatedHotel =
-        editingItem.id && editingItem.type === 'hotel'
-          ? { ...hotelState, id: editingItem.id }
-          : { ...hotelState, id: generateUniqueId() };
+      let priceDifference = 0;
 
-      const updatedItineraries = { ...prevItineraries, hotel: updatedHotel };
+      const isEditingHotel = editingItem.id && editingItem.type === 'Hotel';
+      const oldPrice = isEditingHotel
+        ? parseFloat(prevItineraries.hotel?.priceHotel || 0)
+        : 0;
+      const newPrice = parseFloat(hotelState.priceHotel);
+      console.log(isEditingHotel);
+      console.log(oldPrice);
+      priceDifference = newPrice - oldPrice;
+
+      if (isNaN(priceDifference)) priceDifference = 0;
+
+      const updatedHotel = {
+        ...hotelState,
+        id: isEditingHotel ? editingItem.id : generateUniqueId(),
+      };
+
+      const updatedTotalPrice = prevItineraries.totalPrice + priceDifference;
+
+      const updatedItineraries = {
+        ...prevItineraries,
+        hotel: updatedHotel,
+        totalPrice: updatedTotalPrice,
+      };
+
       sessionStorage.setItem('itineraries', JSON.stringify(updatedItineraries));
       return updatedItineraries;
     });
+
     setHotelState({
       hotel: '',
       ratingHotel: '',
       bookingURL: '',
       imageURL: '',
       locationHotel: '',
+      priceHotel: 0,
     });
     setIsDialogOpen(false);
-    setEditingItem({ id: null, type: null }); // Reset editing state
+    setEditingItem({ id: null, type: null });
   };
 
   const handleRestaurantSubmit = (e) => {
     e.preventDefault();
+
     setItineraries((prevItineraries) => {
       let updatedRestaurants;
+      let priceDifference = 0; // This will be used to adjust the totalPrice
+
       if (editingItem.id) {
-        // Edit mode: update the existing restaurant
-        updatedRestaurants = prevItineraries.restaurant.map((restaurant) =>
-          restaurant.id === editingItem.id
-            ? { ...restaurant, ...resState }
-            : restaurant,
-        );
+        // Edit mode: update the existing event and calculate price difference
+        updatedRestaurants = prevItineraries.restaurant.map((restaurant) => {
+          if (restaurant.id === editingItem.id) {
+            priceDifference =
+              parseFloat(resState.priceRestaurant) -
+              parseFloat(restaurant.priceRestaurant);
+            return { ...restaurant, ...resState };
+          }
+          return restaurant;
+        });
       } else {
-        // Add mode: append a new restaurant
-        updatedRestaurants = [
-          ...prevItineraries.restaurant,
-          { ...resState, id: generateUniqueId() },
-        ];
+        // Add mode: append a new event and add its price to totalPrice
+        const newRestaurant = { ...resState, id: generateUniqueId() };
+        updatedRestaurants = [...prevItineraries.restaurant, newRestaurant];
+        priceDifference = parseFloat(newRestaurant.priceRestaurant); // Assuming newEvent.price exists
       }
+      if (isNaN(priceDifference)) priceDifference = 0;
+      const updatedTotalPrice = prevItineraries.totalPrice + priceDifference;
+
       const updatedItineraries = {
         ...prevItineraries,
         restaurant: updatedRestaurants,
+        totalPrice: updatedTotalPrice,
       };
       sessionStorage.setItem('itineraries', JSON.stringify(updatedItineraries));
       return updatedItineraries;
     });
+
     setResState({
       restaurant: '',
       ratingRestaurant: '',
@@ -342,25 +424,39 @@ const Create = () => {
 
     setItineraries((prevItineraries) => {
       let updatedList;
+      let priceToDeduct = 0;
       let updatedItineraries = {};
 
       if (itemType === 'Event') {
+        const item = prevItineraries.events.find((item) => item.id === itemId);
+        priceToDeduct = parseFloat(item?.priceEvent || 0);
         updatedList = prevItineraries.events.filter(
           (item) => item.id !== itemId,
         );
         updatedItineraries = { ...prevItineraries, events: updatedList };
       } else if (itemType === 'Restaurant') {
+        const item = prevItineraries.restaurant.find(
+          (item) => item.id === itemId,
+        );
+        priceToDeduct = parseFloat(item?.priceRestaurant || 0);
         updatedList = prevItineraries.restaurant.filter(
           (item) => item.id !== itemId,
         );
         updatedItineraries = { ...prevItineraries, restaurant: updatedList };
       } else if (itemType === 'Hotel') {
         // Assuming there can only be one hotel, setting it to null effectively "deletes" it
+        priceToDeduct = parseFloat(prevItineraries.hotel?.priceHotel || 0);
         updatedItineraries = { ...prevItineraries, hotel: null };
       } else {
         // If none of the types match, just return the previous state
         return prevItineraries;
       }
+
+      // Update the totalPrice by subtracting the price of the deleted item
+      const updatedTotalPrice = prevItineraries.totalPrice - priceToDeduct;
+
+      // Ensure the total price doesn't go below zero
+      updatedItineraries.totalPrice = Math.max(0, updatedTotalPrice);
 
       // Now, save the updated itineraries back to session storage
       sessionStorage.setItem('itineraries', JSON.stringify(updatedItineraries));
@@ -368,6 +464,7 @@ const Create = () => {
       return updatedItineraries;
     });
   };
+
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       // Set the confirmation message
@@ -440,7 +537,7 @@ const Create = () => {
                 {toTitleCase(itineraries.city)} Trip
               </div>
               <div className="ml-4 mt-3 flex-col text-lg font-semibold">
-                Add To Your Itinerary
+                Add To Your Itinerary -- {itineraries.totalPrice}
               </div>
 
               <div className="ml-7 mt-6 w-4/6">

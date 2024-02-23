@@ -60,6 +60,7 @@ router.post("/create", async (req, res) => {
 
     // Construct the itinerary object
     const itinerary = {
+      userId: data.userId,
       name: data.name,
       city: data.city,
       date: data.date,
@@ -75,8 +76,9 @@ router.post("/create", async (req, res) => {
         hotelID: db.doc(`/hotels/${hotelId}`),
         imageURL: data.hotel.imageURL || defaultImageURL,
       },
+      totalPrice: data.totalPrice,
     };
-
+    console.log(itinerary);
     // Add the itinerary to the 'itineraries' collection
     const itineraryRef = await db.collection("itineraries").add(itinerary);
 
