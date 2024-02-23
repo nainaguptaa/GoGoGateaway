@@ -1,5 +1,5 @@
 import React from 'react';
-import { useUserContext } from '../context/userContext';
+import { useUserContext } from '../../context/userContext';
 const Profile = () => {
   const { currentUser, logout } = useUserContext();
   return (

@@ -59,7 +59,7 @@ export default function ChooseCity({
     setSuggestions([]); // Clear suggestions
     console.log(2, suggestions);
     // Directly update the parent component's state with the new city
-    handleChange({
+    setCity({
       target: {
         value: cityName,
       },
@@ -85,7 +85,7 @@ export default function ChooseCity({
           autoComplete="off"
         />
         {suggestions.length > 1 && (
-          <ul className=" text-foreground dark:bg-card dark:text-primary absolute bottom-[-13rem] m-3 h-[16rem] w-11/12 list-none overflow-y-scroll rounded bg-gray-100 shadow-xl">
+          <ul className=" absolute bottom-[-13rem] m-3 h-[16rem] w-11/12 list-none overflow-y-scroll rounded bg-gray-100 text-foreground shadow-xl dark:bg-card dark:text-primary">
             {suggestions.map(([cityName, cityCode], index) => (
               <li
                 key={`${cityName}-${cityCode}-${index}`} // Updated key to ensure uniqueness

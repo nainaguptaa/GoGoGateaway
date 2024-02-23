@@ -2,7 +2,7 @@ import { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 // import Signup from './pages/Auth/Signup';
 import LandingPage from './pages/LandingPage/LandingPage';
-import Profile from './pages/Profile';
+import Profile from './pages/Profile/Profile';
 const Create = lazy(() => import('./pages/Itineraries/Create'));
 // import Create from './pages/Itineraries/Create';
 const SearchResults = lazy(() => import('./pages/SearchResults'));
@@ -19,6 +19,7 @@ const Itinerary = lazy(() => import('./pages/Itineraries/Itinerary'));
 import Test from './pages/Test';
 import BottomBar from './components/BottomBar';
 import Signup from './pages/Auth/Signup';
+import MyTrips from './pages/Profile/MyTrips';
 function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
@@ -68,6 +69,7 @@ function App() {
             <Route path="/create" element={<Create />} />
             <Route path="/test" element={<Test />} />
             <Route path="*" element={<Navigate to="/ " replace />} />
+            <Route path="/my-trips" element={<MyTrips />} />
           </Routes>
         </Suspense>
       </div>
