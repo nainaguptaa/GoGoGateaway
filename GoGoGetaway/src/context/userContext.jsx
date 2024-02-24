@@ -162,7 +162,13 @@ export const UserProvider = ({ children }) => {
     console.log(2);
     if (!querySnapshot.empty) {
       // Handle case where email already exists
-      console.error('Email already in exists.');
+      toast({
+        title: 'Error',
+        description: 'Email already exists.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
       return;
     }
     console.log(3);

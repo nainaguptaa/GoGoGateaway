@@ -20,6 +20,7 @@ import Test from './pages/Test';
 import BottomBar from './components/BottomBar';
 import Signup from './pages/Auth/Signup';
 import MyTrips from './pages/Profile/MyTrips';
+import { Toaster } from './components/ui/toaster';
 function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
 
@@ -78,6 +79,7 @@ function App() {
           <BottomBar />
         </div>
       )}
+      <Toaster />
     </>
   );
 }

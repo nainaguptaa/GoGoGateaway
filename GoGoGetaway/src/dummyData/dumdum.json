@@ -48,5 +48,37 @@
     },
     "totalPrice": 194,
     "userId": "W2G2CGCkI1bXL7dpKx3guPTaCd63"
+  },
+  {
+    "id": "ffn9zM7r58BC7IUDGidL",
+    "date": "2024-02-23T03:41:33.079Z",
+    "city": "Calgary",
+    "totalPrice": 224,
+    "name": "GoGoGetAways Trip to Calgary",
+    "restaurants": [{}, {}],
+    "hotel": {
+      "imageURL": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/09/be/b3/da/carriage-house-inn.jpg?w=1200&h=-1&s=1",
+      "hotelID": "[DocumentReference]"
+    },
+    "userId": "W2G2CGCkI1bXL7dpKx3guPTaCd63",
+    "events": [{}, {}],
+    "commentCount": 0,
+    "likeCount": 18
+  },
+  {
+    "id": "oCF8LkWR0zswKfTQunmM",
+    "date": "2024-02-23T14:29:00.866Z",
+    "city": "Fort Mcmurray",
+    "totalPrice": 12341786,
+    "name": "dieter trip to fort mac",
+    "restaurants": [{}],
+    "hotel": {
+      "imageURL": "https://globalnews.ca/wp-content/uploads/2020/04/fort-mcmurray-flood-tuesday-8.jpg?quality=85&strip=all",
+      "hotelID": "[DocumentReference]"
+    },
+    "likeCount": 0,
+    "userId": "W2G2CGCkI1bXL7dpKx3guPTaCd63",
+    "events": [{}],
+    "commentCount": 0
   }
 ]

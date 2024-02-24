@@ -4,6 +4,13 @@ import axios from 'axios';
 import Event from './Event';
 import Hotel from './Hotel';
 import Restaurant from './Restaurant';
+import { useToast } from '@/components/ui/use-toast';
+import { ToastAction } from '@/components/ui/toast';
+import {
+  handleEventSubmit,
+  handleRestaurantSubmit,
+  handleHotelSubmit,
+} from '@/helpers/submitCreateHandlers';
 // const Event = lazy(() => import('./Event'));
 // const Hotel = lazy(() => import('./Hotel'));
 // const Restaurant = lazy(() => import('./Restaurant'));
@@ -37,6 +44,7 @@ import ItineraryOverview from './ItineraryOverview';
 import SearchableMap from '@/components/SearchableMap';
 import { useUserContext } from '@/context/userContext';
 import SignUpReminder from '@/components/SignUpReminder';
+import Footer from '@/components/Footer';
 const Create = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -45,6 +53,7 @@ const Create = () => {
   const [editingIndex, setEditingIndex] = useState({ id: null, type: null });
   const [editingItem, setEditingItem] = useState({ id: null, type: null });
   const [popup, setPopup] = useState(false);
+  const { toast } = useToast();
   // Define handleChange function
   const [eventState, setEventState] = useState({
     time: '',
@@ -67,7 +76,7 @@ const Create = () => {
     time: '',
     restaurant: '',
     ratingRestaurant: '',
-    cuisine: '',
+    cuisine: 'Italian',
     locationRestaurant: '',
     priceRestaurant: 0,
   });
@@ -118,6 +127,7 @@ const Create = () => {
       );
       console.log('Success:', response.data);
       navigate('/my-trips');
+      sessionStorage.removeItem('itineraries');
       //   console.log('Itinerary saved successfully:', response.data);
       // Handle success scenario, e.g., showing a success message or updating state
     } catch (error) {
@@ -125,12 +135,6 @@ const Create = () => {
       // Handle error scenario, e.g., showing an error message
     }
   };
-  //   useEffect(() => {
-  //     const savedItineraries = sessionStorage.getItem('itineraries');
-  //     if (savedItineraries) {
-  //       setItineraries(JSON.parse(savedItineraries));
-  //     }
-  //   }, []);
 
   const handleChange = (type) => (e) => {
     const { name, value } = e.target;
@@ -182,146 +186,45 @@ const Create = () => {
     });
   };
 
-  const handleEventSubmit = (e) => {
+  const eventSubmit = (e) => {
     e.preventDefault();
-    setItineraries((prevItineraries) => {
-      let updatedEvents;
-      let priceDifference = 0; // This will be used to adjust the totalPrice
-
-      if (editingItem.id) {
-        // Edit mode: update the existing event and calculate price difference
-        updatedEvents = prevItineraries.events.map((event) => {
-          console.log('calc', eventState.priceEvent, event.priceEvent);
-          if (event.id === editingItem.id) {
-            priceDifference =
-              parseFloat(eventState.priceEvent) - parseFloat(event.priceEvent);
-            return { ...event, ...eventState };
-          }
-          return event;
-        });
-      } else {
-        // Add mode: append a new event and add its price to totalPrice
-        const newEvent = { ...eventState, id: generateUniqueId() };
-        updatedEvents = [...prevItineraries.events, newEvent];
-        priceDifference = parseFloat(newEvent.priceEvent); // Assuming newEvent.price exists
-      }
-      console.log('price difference', priceDifference);
-      // Ensure the price difference is a number; if not, set it to 0
-      if (isNaN(priceDifference)) priceDifference = 0;
-
-      const updatedTotalPrice = prevItineraries.totalPrice + priceDifference;
-
-      const updatedItineraries = {
-        ...prevItineraries,
-        events: updatedEvents,
-        totalPrice: updatedTotalPrice,
-      };
-      sessionStorage.setItem('itineraries', JSON.stringify(updatedItineraries));
-      return updatedItineraries;
-    });
-
-    // Assuming you have a function to reset the event state and other states as before
-    setEventState({
-      event: '',
-      ratingEvent: '',
-      typeOfActivity: 'sightseeing', // Assuming you want to reset to default value
-      locationEvent: '',
-      price: 0, // Reset price or ensure it's correctly reset elsewhere
-    });
-    setIsDialogOpen(false);
-    setEditingItem({ id: null, type: null }); // Reset editing state
+    handleEventSubmit(
+      eventState,
+      itineraries,
+      setItineraries,
+      setIsDialogOpen,
+      setEventState,
+      editingItem,
+      setEditingItem,
+      toast,
+    );
   };
 
-  const handleHotelSubmit = (e) => {
+  const restaurantSubmit = (e) => {
     e.preventDefault();
-    console.log(editingItem);
-    setItineraries((prevItineraries) => {
-      let priceDifference = 0;
-
-      const isEditingHotel = editingItem.id && editingItem.type === 'Hotel';
-      const oldPrice = isEditingHotel
-        ? parseFloat(prevItineraries.hotel?.priceHotel || 0)
-        : 0;
-      const newPrice = parseFloat(hotelState.priceHotel);
-      console.log(isEditingHotel);
-      console.log(oldPrice);
-      priceDifference = newPrice - oldPrice;
-
-      if (isNaN(priceDifference)) priceDifference = 0;
-
-      const updatedHotel = {
-        ...hotelState,
-        id: isEditingHotel ? editingItem.id : generateUniqueId(),
-      };
-
-      const updatedTotalPrice = prevItineraries.totalPrice + priceDifference;
-
-      const updatedItineraries = {
-        ...prevItineraries,
-        hotel: updatedHotel,
-        totalPrice: updatedTotalPrice,
-      };
-
-      sessionStorage.setItem('itineraries', JSON.stringify(updatedItineraries));
-      return updatedItineraries;
-    });
-
-    setHotelState({
-      hotel: '',
-      ratingHotel: '',
-      bookingURL: '',
-      imageURL: '',
-      locationHotel: '',
-      priceHotel: 0,
-    });
-    setIsDialogOpen(false);
-    setEditingItem({ id: null, type: null });
+    handleRestaurantSubmit(
+      resState,
+      itineraries,
+      setItineraries,
+      setIsDialogOpen,
+      setResState,
+      editingItem,
+      setEditingItem,
+      toast,
+    );
   };
-
-  const handleRestaurantSubmit = (e) => {
+  const hotelSubmit = (e) => {
     e.preventDefault();
-
-    setItineraries((prevItineraries) => {
-      let updatedRestaurants;
-      let priceDifference = 0; // This will be used to adjust the totalPrice
-
-      if (editingItem.id) {
-        // Edit mode: update the existing event and calculate price difference
-        updatedRestaurants = prevItineraries.restaurant.map((restaurant) => {
-          if (restaurant.id === editingItem.id) {
-            priceDifference =
-              parseFloat(resState.priceRestaurant) -
-              parseFloat(restaurant.priceRestaurant);
-            return { ...restaurant, ...resState };
-          }
-          return restaurant;
-        });
-      } else {
-        // Add mode: append a new event and add its price to totalPrice
-        const newRestaurant = { ...resState, id: generateUniqueId() };
-        updatedRestaurants = [...prevItineraries.restaurant, newRestaurant];
-        priceDifference = parseFloat(newRestaurant.priceRestaurant); // Assuming newEvent.price exists
-      }
-      if (isNaN(priceDifference)) priceDifference = 0;
-      const updatedTotalPrice = prevItineraries.totalPrice + priceDifference;
-
-      const updatedItineraries = {
-        ...prevItineraries,
-        restaurant: updatedRestaurants,
-        totalPrice: updatedTotalPrice,
-      };
-      sessionStorage.setItem('itineraries', JSON.stringify(updatedItineraries));
-      return updatedItineraries;
-    });
-
-    setResState({
-      restaurant: '',
-      ratingRestaurant: '',
-      cuisine: '',
-      locationRestaurant: '',
-    });
-    setIsDialogOpen(false);
-    setEditingItem({ id: null, type: null }); // Reset editing state
+    handleHotelSubmit(
+      hotelState,
+      itineraries,
+      setItineraries,
+      setIsDialogOpen,
+      setHotelState,
+      editingItem,
+      setEditingItem,
+      toast,
+    );
   };
 
   const getSortedItineraries = () => {
@@ -411,9 +314,7 @@ const Create = () => {
     // setIsDialogOpen(true);
     // setSelectedCategory(item.category); // Make sure the dialog opens with the correct category selected
   };
-  function generateUniqueId() {
-    return `id_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-  }
+
   const handleDeleteItem = (itemId, itemType) => {
     const isConfirmed = window.confirm(
       'Are you sure you want to delete this item?',
@@ -495,12 +396,12 @@ const Create = () => {
   const LoadingFallback = () => <div>Loading...</div>;
 
   return (
-    <div className="flex h-screen overflow-scroll">
+    <div className=" flex h-screen flex-col">
       {popup && <SignUpReminder className="" setPopup={setPopup} />}
       {/* <ForYouLeft /> */}
-      <div className="  flex flex-grow flex-col gap-2  px-8 py-8">
+      <div className="  flex h-[200rem] flex-grow flex-col  gap-2   ">
         {/* <h1 className="text-3xl font-bold">Create Itinerary</h1> */}
-        <div className="sticky flex items-center gap-4 border-b-2 bg-card p-3 ">
+        <div className="sticky top-0 flex items-center gap-4 border-b-2 bg-card p-3 ">
           <Input
             type="text"
             value={itineraries.name}
@@ -530,7 +431,7 @@ const Create = () => {
             Save Itinerary
           </Button>
         </div>
-        <div className="flex pb-20">
+        <div className="flex   px-8 pb-64">
           <div className="w-8/12 ">
             <div className="rounded-xl  border-2 bg-card px-5 py-6">
               <div className="text-4xl font-normal">
@@ -640,7 +541,7 @@ const Create = () => {
                                 eventState={eventState}
                                 setEventState={setEventState}
                               />
-                              <Button onClick={handleEventSubmit}>
+                              <Button onClick={eventSubmit}>
                                 {editingItem.id ? 'Edit' : ' Add To Itinerary'}
                               </Button>
                             </>
@@ -660,7 +561,7 @@ const Create = () => {
                                 resState={resState}
                                 setResState={setResState}
                               ></Restaurant>
-                              <Button onClick={handleRestaurantSubmit}>
+                              <Button onClick={restaurantSubmit}>
                                 {editingItem.id ? 'Edit' : ' Add To Itinerary'}
                               </Button>
                             </>
@@ -681,7 +582,7 @@ const Create = () => {
                                 hotelState={hotelState}
                                 setHotelState={setHotelState}
                               ></Hotel>
-                              <Button onClick={handleHotelSubmit}>
+                              <Button onClick={hotelSubmit}>
                                 {editingItem.id ? 'Edit' : ' Add To Itinerary'}
                               </Button>
                             </>
@@ -724,6 +625,7 @@ const Create = () => {
             </div>
           </div>
         </div>
+        <Footer />
       </div>{' '}
     </div>
   );
