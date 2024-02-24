@@ -10,6 +10,7 @@ import { CiLogout } from 'react-icons/ci';
 import Logo from '../assets/LogosFive/logo-transparent-svg.svg';
 import LogoDark from '../assets/LogosFour/logo-transparent-svg.svg';
 import LogoOnly from '../assets/LogosFour/logo-only.svg';
+import { RxDashboard } from 'react-icons/rx';
 import { FaHome } from 'react-icons/fa';
 import {
   Popover,
@@ -128,6 +129,13 @@ const Navbar = ({ isMobile }) => {
                 >
                   <IoPersonOutline size={25} />
                   <div>Profile</div>
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className="flex items-center gap-2"
+                  onClick={() => navigate('/my-trips')}
+                >
+                  <RxDashboard size={25} />
+                  <div>My Trips</div>
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="flex items-center gap-2"

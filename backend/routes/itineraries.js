@@ -41,6 +41,9 @@ router.post("/create", async (req, res) => {
         .set({
           ...restaurant,
           ratingRestaurant: parseFloat(restaurant.ratingRestaurant),
+          priceRestaurant: parseFloat(restaurant.priceRestaurant), // Ensure this is a number
+          imageURL: restaurant.imageURL || defaultImageURL, // Apply a default image URL if none is provided
+          // No need to repeat the setting of fields already contained in ...restaurant
         })
     );
 
@@ -68,19 +71,31 @@ router.post("/create", async (req, res) => {
       date: data.date,
       events: data.events.map((event) => ({
         eventID: db.doc(`/events/${event.id}`),
+        time: event.time,
+        typeOfActivity: event.typeOfActivity,
+        locationEvent: event.locationEvent,
+        priceEvent: parseFloat(event.priceEvent),
         imageURL: event.imageURL || defaultImageURL,
       })),
       restaurants: data.restaurant.map((restaurant) => ({
         restaurantID: db.doc(`/restaurants/${restaurant.id}`),
-        imageURL: defaultImageURL, // Assuming a default image for restaurants
+        time: restaurant.time,
+        cuisine: restaurant.cuisine,
+        locationRestaurant: restaurant.locationRestaurant,
+        priceRestaurant: parseFloat(restaurant.priceRestaurant),
+        imageURL: restaurant.imageURL || defaultImageURL,
       })),
       hotel: {
         hotelID: db.doc(`/hotels/${hotelId}`),
+        time: data.hotel.time,
+        locationHotel: data.hotel.locationHotel,
+        priceHotel: parseFloat(data.hotel.priceHotel),
+        bookingURL: data.hotel.bookingURL,
         imageURL: data.hotel.imageURL || defaultImageURL,
       },
       totalPrice: data.totalPrice,
     };
-    console.log(itinerary);
+    console.log("\n\n itinerary \n", itinerary);
     // Add the itinerary to the 'itineraries' collection
     const itineraryRef = await db.collection("itineraries").add(itinerary);
 
