@@ -17,7 +17,7 @@ var citiesRouter = require("./routes/cities");
 var hotelsRouter = require("./routes/hotels");
 var restaurantsRouter = require("./routes/restaurants");
 var itinerariesRouter = require("./routes/itineraries");
-
+var cloudinaryUploadRouter = require("./routes/cloudinaryUpload");
 var app = express();
 const port = 8080 || 3000; // Use the PORT environment variable or default to 3000
 app.listen(port, () => {
@@ -42,7 +42,7 @@ app.use("/cities", citiesRouter);
 app.use("/hotels", hotelsRouter);
 app.use("/restaurants", restaurantsRouter);
 app.use("/itineraries", itinerariesRouter);
-
+app.use("/cloudinaryUpload", cloudinaryUploadRouter);
 const db = admin.firestore();
 
 // catch 404 and forward to error handler

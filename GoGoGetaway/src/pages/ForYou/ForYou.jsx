@@ -59,6 +59,7 @@ const ForYou = ({ isMobile }) => {
         setDisplayedPosts(data.slice(0, postsPerPage));
       } catch (error) {
         console.error('Failed to fetch itineraries:', error);
+        setItineraries(itinerariesDummy);
       }
     };
     fetchItineraries();
@@ -146,7 +147,7 @@ const ForYou = ({ isMobile }) => {
               />
             ))} */}
           <img
-            src={itineraries[index].hotel.imageURL}
+            src={itineraries[index].images[0]}
             // alt={`Slide ${imgIndex}`}
             loading="lazy"
             className="z-10 h-[39rem]  object-cover md:h-[38rem] lg:h-[38rem] 2xl:max-h-[38rem]"

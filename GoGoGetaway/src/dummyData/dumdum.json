@@ -1,84 +1,44 @@
-[
-  {
-    "city": "Calgary",
-    "name": "Calgay Trip",
-    "likeCount": 0,
-    "commentCount": 0,
-    "date": "2024-02-23T02:44:17.053Z",
-    "events": [
-      {
-        "time": "07:44",
-        "event": "Scooter Downtown",
-        "ratingEvent": "3",
-        "typeOfActivity": "outdoors",
-        "locationEvent": "Downtown Calgary",
-        "priceEvent": "20",
-        "id": "id_1708656298755_0bwc06cep"
-      },
-      {
-        "time": "14:45",
-        "event": "Laser Tag",
-        "ratingEvent": "4",
-        "typeOfActivity": "shopping",
-        "locationEvent": "Calgary NE",
-        "priceEvent": "27",
-        "id": "id_1708656327473_32cjpccgz"
-      }
-    ],
-    "restaurant": [
-      {
-        "time": "12:45",
-        "restaurant": "Fahad",
-        "ratingRestaurant": "5",
-        "cuisine": "indian",
-        "locationRestaurant": "NE",
-        "priceRestaurant": "23",
-        "id": "id_1708656344213_aawbmjbsi"
-      }
-    ],
-    "hotel": {
-      "time": "22:45",
-      "hotel": "Hotel Calgary",
-      "ratingHotel": "4",
-      "imageURL": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/1c/e5/5d/23/exterior.jpg?w=1200&h=-1&s=1",
-      "bookingURL": "https://www.tripadvisor.ca/Hotels-g154913-Calgary_Alberta-Hotels.html",
-      "locationHotel": "downtown",
-      "priceHotel": "124",
-      "id": "id_1708656378322_en8s4mm7v"
+{
+  "date": "2024-02-24T16:51:04.127Z",
+  "images": [
+    "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795259/your_folder_name/w59ai3zc9ypdxjwoh4rb.webp",
+    "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795259/your_folder_name/l1kbwrna8vxojfo8fzgz.jpg",
+    "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795259/your_folder_name/iqvxt7gvwicdhvhp7utt.png",
+    "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795259/your_folder_name/nqbdqcqtama74lquisgo.jpg"
+  ],
+  "city": "Calgary",
+  "totalPrice": 199,
+  "name": "Dummy CalgaryItinear",
+  "restaurants": [
+    {
+      "locationRestaurant": "12",
+      "cuisine": "mexican",
+      "time": "10:52",
+      "restaurantID": "[DocumentReference]",
+      "priceRestaurant": 23
+    }
+  ],
+  "hotel": {
+    "bookingURL": "12",
+    "priceHotel": 124,
+    "hotelID": {
+      "_firestore": "[Firestore]",
+      "_path": "[ResourcePath]",
+      "_converter": "[Object]"
     },
-    "totalPrice": 194,
-    "userId": "W2G2CGCkI1bXL7dpKx3guPTaCd63"
+    "time": "23:53",
+    "locationHotel": "123"
   },
-  {
-    "id": "ffn9zM7r58BC7IUDGidL",
-    "date": "2024-02-23T03:41:33.079Z",
-    "city": "Calgary",
-    "totalPrice": 224,
-    "name": "GoGoGetAways Trip to Calgary",
-    "restaurants": [{}, {}],
-    "hotel": {
-      "imageURL": "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/09/be/b3/da/carriage-house-inn.jpg?w=1200&h=-1&s=1",
-      "hotelID": "[DocumentReference]"
-    },
-    "userId": "W2G2CGCkI1bXL7dpKx3guPTaCd63",
-    "events": [{}, {}],
-    "commentCount": 0,
-    "likeCount": 18
-  },
-  {
-    "id": "oCF8LkWR0zswKfTQunmM",
-    "date": "2024-02-23T14:29:00.866Z",
-    "city": "Fort Mcmurray",
-    "totalPrice": 12341786,
-    "name": "dieter trip to fort mac",
-    "restaurants": [{}],
-    "hotel": {
-      "imageURL": "https://globalnews.ca/wp-content/uploads/2020/04/fort-mcmurray-flood-tuesday-8.jpg?quality=85&strip=all",
-      "hotelID": "[DocumentReference]"
-    },
-    "likeCount": 0,
-    "userId": "W2G2CGCkI1bXL7dpKx3guPTaCd63",
-    "events": [{}],
-    "commentCount": 0
-  }
-]
+  "likeCount": 0,
+  "userId": "W2G2CGCkI1bXL7dpKx3guPTaCd63",
+  "events": [
+    {
+      "eventID": "[DocumentReference]",
+      "typeOfActivity": "sightseeing",
+      "locationEvent": "d",
+      "time": "10:52",
+      "priceEvent": 52
+    }
+  ],
+  "commentCount": 0
+}

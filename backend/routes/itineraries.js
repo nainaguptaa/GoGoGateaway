@@ -29,7 +29,7 @@ router.post("/create", async (req, res) => {
         .set({
           ...event,
           ratingEvent: parseFloat(event.ratingEvent),
-          imageURL: event.imageURL || defaultImageURL,
+          // imageURL: event.imageURL || defaultImageURL,
         })
     );
 
@@ -42,7 +42,7 @@ router.post("/create", async (req, res) => {
           ...restaurant,
           ratingRestaurant: parseFloat(restaurant.ratingRestaurant),
           priceRestaurant: parseFloat(restaurant.priceRestaurant), // Ensure this is a number
-          imageURL: restaurant.imageURL || defaultImageURL, // Apply a default image URL if none is provided
+          // imageURL: restaurant.imageURL || defaultImageURL, // Apply a default image URL if none is provided
           // No need to repeat the setting of fields already contained in ...restaurant
         })
     );
@@ -55,7 +55,7 @@ router.post("/create", async (req, res) => {
       .set({
         ...data.hotel,
         ratingHotel: parseFloat(data.hotel.ratingHotel),
-        imageURL: data.hotel.imageURL || defaultImageURL,
+        // imageURL: data.hotel.imageURL || defaultImageURL,
       });
 
     // Wait for all events and restaurants to be added
@@ -75,7 +75,7 @@ router.post("/create", async (req, res) => {
         typeOfActivity: event.typeOfActivity,
         locationEvent: event.locationEvent,
         priceEvent: parseFloat(event.priceEvent),
-        imageURL: event.imageURL || defaultImageURL,
+        // imageURL: event.imageURL || defaultImageURL,
       })),
       restaurants: data.restaurant.map((restaurant) => ({
         restaurantID: db.doc(`/restaurants/${restaurant.id}`),
@@ -83,7 +83,7 @@ router.post("/create", async (req, res) => {
         cuisine: restaurant.cuisine,
         locationRestaurant: restaurant.locationRestaurant,
         priceRestaurant: parseFloat(restaurant.priceRestaurant),
-        imageURL: restaurant.imageURL || defaultImageURL,
+        // imageURL: restaurant.imageURL || defaultImageURL,
       })),
       hotel: {
         hotelID: db.doc(`/hotels/${hotelId}`),
@@ -91,8 +91,9 @@ router.post("/create", async (req, res) => {
         locationHotel: data.hotel.locationHotel,
         priceHotel: parseFloat(data.hotel.priceHotel),
         bookingURL: data.hotel.bookingURL,
-        imageURL: data.hotel.imageURL || defaultImageURL,
+        // imageURL: data.hotel.imageURL || defaultImageURL,
       },
+      images: data.images || [],
       totalPrice: data.totalPrice,
     };
     console.log("\n\n itinerary \n", itinerary);

@@ -57,6 +57,7 @@ export const handleEventSubmit = async (
     ...eventState,
     typeOfActivity: eventState.typeOfActivity || 'sightseeing', // Default to 'sightseeing' if undefined
   };
+
   setItineraries((prevItineraries) => {
     let updatedEvents;
     let priceDifference = 0; // This will be used to adjust the totalPrice
@@ -215,7 +216,7 @@ export const handleHotelSubmit = async (
     'hotel',
     'ratingHotel',
     'bookingURL',
-    'imageURL',
+
     'locationHotel',
     'priceHotel',
   ];
@@ -232,8 +233,7 @@ export const handleHotelSubmit = async (
           return 'Rating';
         case 'bookingURL':
           return 'Booking URL';
-        case 'imageURL':
-          return 'Image URL';
+
         case 'locationHotel':
           return 'Location';
         case 'priceHotel':
@@ -287,7 +287,7 @@ export const handleHotelSubmit = async (
     hotel: '',
     ratingHotel: '',
     bookingURL: '',
-    imageURL: '',
+
     locationHotel: '',
     priceHotel: 0,
   });
