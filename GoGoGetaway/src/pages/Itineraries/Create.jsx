@@ -68,7 +68,7 @@ const Create = () => {
     hotel: '',
     ratingHotel: '',
     bookingURL: '',
-    imageURL: '',
+
     locationHotel: '',
     priceHotel: 0,
   });
@@ -90,15 +90,22 @@ const Create = () => {
     restaurant: [],
     hotel: null,
     totalPrice: 0,
+    images: [],
   });
   // After each add/update operation, call this function to update the totalPrice
+  const [selectedImages, setSelectedImages] = useState([]);
 
+  const handleFileChange = (event) => {
+    setSelectedImages([...event.target.files]);
+  };
   const saveItineraryToAPI = async () => {
     console.log(itineraries);
     if (!currentUser) {
       console.log('not logged in');
       setPopup((prev) => !prev);
+      return; // Exit the function if not logged in
     }
+
     // Calculate the total price from events, restaurants, and the hotel
     const totalEventsPrice = itineraries.events.reduce(
       (acc, curr) => acc + parseFloat(curr.priceEvent || 0),
@@ -108,31 +115,54 @@ const Create = () => {
       (acc, curr) => acc + parseFloat(curr.priceRestaurant || 0),
       0,
     );
-    const hotelPrice = parseFloat(itineraries.hotel?.priceHotel || 0); // Optional chaining in case hotel is null
+    const hotelPrice = parseFloat(itineraries.hotel?.priceHotel || 0);
 
-    // Sum up all the prices
     const totalPrice = totalEventsPrice + totalRestaurantsPrice + hotelPrice;
 
-    // Include the totalPrice in the itineraries object
-    const itineraryData = {
-      ...itineraries,
-      userId: currentUser.id, // Add the currentUser.id
-      totalPrice, // Update the totalPrice with the calculated value
-    };
+    const uploadImages = async () => {
+      const formData = new FormData();
+      selectedImages.forEach((image) => {
+        formData.append('files', image);
+      });
 
+      try {
+        console.log('all image uplaod(');
+        const response = await axios.post(
+          'http://localhost:8080/cloudinaryUpload/image',
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        );
+        return response.data.results.map((result) => result.url); // Return an array of image URLs
+      } catch (error) {
+        console.error('Upload error', error);
+        throw new Error('Failed to upload images');
+      }
+    };
     try {
+      // Upload images first and wait for the URLs
+      const imageUrls = await uploadImages();
+      // Append image URLs to the itinerary data
+      const itineraryDataWithImages = {
+        ...itineraries,
+        images: imageUrls, // Add the image URLs to the itinerary data
+        userId: currentUser.id,
+        totalPrice, // Assume this function calculates the total price
+      };
+
+      // Then, submit the complete itinerary data including image URLs
       const response = await axios.post(
         'http://localhost:8080/itineraries/create',
-        itineraryData,
+        itineraryDataWithImages,
       );
-      console.log('Success:', response.data);
+      console.log('Itinerary saved successfully:', response.data);
       navigate('/my-trips');
       sessionStorage.removeItem('itineraries');
-      //   console.log('Itinerary saved successfully:', response.data);
-      // Handle success scenario, e.g., showing a success message or updating state
     } catch (error) {
-      console.error('Error posting itinerary:', error);
-      // Handle error scenario, e.g., showing an error message
+      console.error('Error:', error);
     }
   };
 
@@ -394,7 +424,12 @@ const Create = () => {
       .join(' '); // Join the words back into a single string.
   };
   const LoadingFallback = () => <div>Loading...</div>;
-
+  const handleUploadSuccess = (imageUrls) => {
+    setItineraries((prevState) => ({
+      ...prevState,
+      images: [...prevState.images, ...imageUrls], // Append new image URLs to the existing array
+    }));
+  };
   return (
     <div className=" flex h-screen flex-col">
       {popup && <SignUpReminder className="" setPopup={setPopup} />}
@@ -612,6 +647,7 @@ const Create = () => {
                   </div>
                 </div>
               </div>
+              <input type="file" multiple onChange={handleFileChange} />
             </div>
             <ItineraryOverview itineraries={itineraries} />
           </div>

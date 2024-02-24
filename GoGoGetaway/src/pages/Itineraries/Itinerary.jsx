@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import dumdum from '../../dummyData/dumdum.json';
 // import itinerary from '../../dummyData/dumdum.json';
-// import itinerariesDummy from '../../dummyData/dummyItinerary.json';
+import itinerariesDummy from '../../dummyData/dummyItinerary.json';
 import axios from 'axios';
 export default function Itinerary() {
   const location = useLocation();
@@ -22,6 +23,12 @@ export default function Itinerary() {
         );
         setItinerary(response.data);
       } catch (error) {
+        const matchedItinerary = itinerariesDummy.find(
+          (itin) => itin.id === id,
+        );
+        if (matchedItinerary) {
+          setItinerary(matchedItinerary);
+        }
         console.error('Error fetching itinerary:', error);
         // Handle error or set some state to show an error message
       }
@@ -43,49 +50,112 @@ export default function Itinerary() {
   });
   return (
     <>
-      {' '}
-      <div className="px-32 pt-5">
-        <h2>{itinerary.name}</h2>
-        <p>Visit to: {itinerary.city}</p>
-        <p>Total Price: ${itinerary.totalPrice}</p>
-        {itinerary.hotel && itinerary.hotel.imageURL && (
-          <div>
-            <h3>Hotel:</h3>
-            <img
-              src={itinerary.hotel.imageURL}
-              alt="Hotel"
-              className="object-cover"
-              style={{ width: '100%', maxHeight: '400px' }}
-            />
+      <div className="px-40 py-8">
+        <div className="text-4xl font-bold">Name: {itinerary.name}</div>
+        <div className="p-4">
+          <h1 className="mb-4 text-xl font-bold">Itinerary Details</h1>
+          <div classname="text-xl">sdfg</div>
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold">General Information</h2>
+            <p>
+              <strong>Date:</strong> {new Date(itinerary.date).toLocaleString()}
+            </p>
+            <p>
+              <strong>City:</strong> {itinerary.city}
+            </p>
+            <p>
+              <strong>Total Price:</strong> ${itinerary.totalPrice}
+            </p>
+
+            <p>
+              <strong>Like Count:</strong> {itinerary.likeCount}
+            </p>
+            <p>
+              <strong>Comment Count:</strong> {itinerary.commentCount}
+            </p>
           </div>
-        )}
-        {itinerary.restaurants && itinerary.restaurants.length > 0 && (
-          <div>
-            <h3>Restaurants:</h3>
+
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold">Images</h2>
+            <div className="flex space-x-2">
+              {itinerary.images.map((image, index) => (
+                <img
+                  key={index}
+                  src={image}
+                  alt="Itinerary Image"
+                  className="h-56 w-56 object-cover"
+                />
+              ))}
+            </div>
+          </div>
+
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold">Restaurants</h2>
             {itinerary.restaurants.map((restaurant, index) => (
-              <div key={index}>
-                {restaurant.imageURL && (
-                  <img
-                    src={restaurant.imageURL}
-                    alt={`Restaurant ${index + 1}`}
-                    style={{ width: '100%', maxHeight: '200px' }}
-                  />
-                  {/* <div className="text-lg">{restaurant.</div> */}
-                )}
+              <div key={index} className="mb-2">
+                <p>
+                  <strong>Location:</strong> {restaurant.locationRestaurant}
+                </p>
+                <p>
+                  <strong>Cuisine:</strong> {restaurant.cuisine}
+                </p>
+                <p>
+                  <strong>Time:</strong> {restaurant.time}
+                </p>
+                <p>
+                  <strong>Price:</strong> ${restaurant.priceRestaurant}
+                </p>
+                {/* Displaying placeholder for restaurantID */}
+                <p>
+                  <strong>Restaurant ID:</strong> Placeholder for ID
+                </p>
               </div>
             ))}
           </div>
-        )}
-        {/* <p>Date: {formattedDate}</p>
-       
-        <p>Like Count: {itinerary.likeCount}</p>
-        <p>Comment Count: {itinerary.commentCount}</p>
-       
-        <div>
-          <h3>Restaurants:</h3>
-        </div> */}
-        <div>
-          <h3>Events:</h3>
+
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold">Hotel</h2>
+            <p>
+              <strong>Booking URL:</strong> {itinerary.hotel.bookingURL}
+            </p>
+            <p>
+              <strong>Price:</strong> ${itinerary.hotel.priceHotel}
+            </p>
+            {/* Displaying placeholder for hotelID */}
+            <p>
+              <strong>Hotel ID:</strong> Placeholder for ID
+            </p>
+            <p>
+              <strong>Time:</strong> {itinerary.hotel.time}
+            </p>
+            <p>
+              <strong>Location:</strong> {itinerary.hotel.locationHotel}
+            </p>
+          </div>
+
+          <div className="mb-4">
+            <h2 className="text-lg font-semibold">Events</h2>
+            {itinerary.events.map((event, index) => (
+              <div key={index} className="mb-2">
+                <p>
+                  <strong>Type of Activity:</strong> {event.typeOfActivity}
+                </p>
+                <p>
+                  <strong>Location:</strong> {event.locationEvent}
+                </p>
+                <p>
+                  <strong>Time:</strong> {event.time}
+                </p>
+                <p>
+                  <strong>Price:</strong> ${event.priceEvent}
+                </p>
+                {/* Displaying placeholder for eventID */}
+                <p>
+                  <strong>Event ID:</strong> Placeholder for ID
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>

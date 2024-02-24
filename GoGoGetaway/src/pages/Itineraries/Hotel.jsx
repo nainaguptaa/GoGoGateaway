@@ -76,24 +76,6 @@ const Hotel = ({ handleChange, hotelState, setHotelState }) => {
 
       <div className="mb-3">
         <label
-          htmlFor="imageURL"
-          className="mb-1 block text-sm font-medium text-gray-700 md:text-lg"
-        >
-          Image URL
-        </label>
-        <input
-          type="text"
-          id="imageURL"
-          name="imageURL"
-          placeholder="Image URL"
-          className="block h-12 w-full rounded-md border-gray-300 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-          value={hotelState.imageURL}
-          onChange={handleChange}
-        />
-      </div>
-
-      <div className="mb-3">
-        <label
           htmlFor="location"
           className="mb-1 block text-sm font-medium text-gray-700 md:text-lg"
         >
