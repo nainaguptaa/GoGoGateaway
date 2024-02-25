@@ -28,7 +28,7 @@ import {
 import { ModeToggle } from './ModeToggle';
 import { useTheme } from '@/components/theme-provider';
 import MobileSidebar from './MobileSidebar';
-const Navbar = ({ isMobile }) => {
+const Navbar = ({ isMobile, iconSize }) => {
   const { currentUser, user, logout, signPopup, setSignPopup } =
     useUserContext();
   const { theme } = useTheme();
@@ -39,7 +39,7 @@ const Navbar = ({ isMobile }) => {
     return (
       <>
         {/* <MobileSidebar /> */}
-        <div className="fixed top-0 z-50 flex w-full items-center  justify-between bg-card px-6 py-6">
+        <div className="fixed top-0 z-50 flex w-full items-center  justify-between bg-card px-6 py-4">
           {' '}
           {/* <img
             src={theme == 'light' ? LogoOnly : LogoOnly}
@@ -48,10 +48,10 @@ const Navbar = ({ isMobile }) => {
             alt="logo"
           /> */}
           <GiHamburgerMenu
-            size={35}
+            size={iconSize}
             onClick={() => setSidebarOpen((prev) => !prev)}
           />
-          <SearchBar isMobile={isMobile} />
+          <SearchBar isMobile={isMobile} iconSize={iconSize} />
         </div>
         <MobileSidebar
           isOpen={sidebarOpen}
@@ -79,12 +79,11 @@ const Navbar = ({ isMobile }) => {
       <div className="font-poppins flex items-center justify-evenly  gap-4">
         <button
           onClick={() => navigate('/create')}
-          className="flex items-center justify-center gap-2 rounded-xl bg-cyan-500 px-4 py-2 font-semibold text-white"
+          className=" btn gap-1 border-amber-500 text-amber-500"
         >
           <div className="text-lg">Create</div>
-          <div className="text-lg font-bold">+</div>
+          <div className="text-xl font-bold">+</div>
         </button>
-        <ModeToggle />
         {/* <nav>
           <ul className="flex list-none space-x-8">
             <li>
@@ -150,13 +149,14 @@ const Navbar = ({ isMobile }) => {
         ) : (
           <>
             <button
-              className="btn cursor-pointer bg-blue-400 text-lg text-white"
+              className="btn-fill bg-teal-400 text-lg dark:bg-teal-500 "
               onClick={() => setSignPopup(true)}
             >
               Sign Up
             </button>
           </>
-        )}
+        )}{' '}
+        <ModeToggle />
       </div>
     </div>
   );

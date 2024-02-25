@@ -35,6 +35,29 @@ function App() {
 
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+  const [iconSize, setIconSize] = useState(35); // Default size
+
+  // Function to update the icon size based on the window width
+  const updateIconSize = () => {
+    if (window.innerWidth < 375) {
+      // Example breakpoint for 'sm' screen
+      setIconSize(20); // Smaller size for small screens
+    } else if (window.innerWidth >= 640 && window.innerWidth < 1024) {
+      // 'md' to 'lg'
+      setIconSize(40); // Medium size for medium screens
+    } else {
+      setIconSize(35); // Default size for larger screens
+    }
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', updateIconSize);
+    // Set initial size on component mount
+    updateIconSize();
+
+    // Cleanup event listener on component unmount
+    return () => window.removeEventListener('resize', updateIconSize);
+  }, []);
 
   const { loadingAuthState, signPopup } = useUserContext();
   if (loadingAuthState) {
@@ -51,7 +74,7 @@ function App() {
   return (
     <>
       {signPopup && <Signup />}
-      <Navbar isMobile={isMobile} />
+      <Navbar isMobile={isMobile} iconSize={iconSize} />
       <div className=" lg:pt-[6.25rem] ">
         {/* <ForYouLeft className="" />{' '} */}
         <Suspense fallback={<Loading />}>
@@ -60,7 +83,10 @@ function App() {
             {/* <Route path="/signup" element={<Signup />} /> */}
             <Route path="/profile" element={<Profile />} />
             <Route path="/search" element={<SearchResults />} />
-            <Route path="/foryou" element={<ForYou isMobile={isMobile} />} />
+            <Route
+              path="/foryou"
+              element={<ForYou isMobile={isMobile} iconSize={iconSize} />}
+            />
             <Route path="/search" element={<SearchResults />} />
             <Route
               path="/following"
@@ -76,7 +102,7 @@ function App() {
       </div>
       {isMobile && (
         <div className="fixed bottom-0 w-full">
-          <BottomBar />
+          <BottomBar iconSize={iconSize} />
         </div>
       )}
       <Toaster />
