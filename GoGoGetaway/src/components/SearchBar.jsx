@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { CiLocationOn } from 'react-icons/ci';
 import { FaSearch } from 'react-icons/fa';
 import { Input } from '@/components/ui/input';
-const SearchBar = ({ isMobile }) => {
+const SearchBar = ({ isMobile, iconSize }) => {
   const [search, setSearch] = useState(''); // Initialize state
   const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ const SearchBar = ({ isMobile }) => {
     return (
       <>
         {' '}
-        <FaSearch size={30} />
+        <FaSearch size={iconSize} />
       </>
     );
   }

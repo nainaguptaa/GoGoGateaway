@@ -7,7 +7,7 @@ import {
   FaBroadcastTower,
   FaUserAlt,
 } from 'react-icons/fa'; // Import icons from react-icons
-export default function ForYouLeft() {
+export default function ForYouLeft({ iconSize }) {
   const [active, setActive] = useState('For You');
   const navigationLinks = [
     { name: 'For You', path: '/foryou', icon: <FaHome size={20} /> },
@@ -31,7 +31,7 @@ export default function ForYouLeft() {
             to={link.path}
             className={({ isActive }) =>
               isActive
-                ? 'flex items-center gap-4 p-5 text-xl font-bold text-cyan-500 no-underline transition duration-100 hover:bg-gray-400  hover:text-white hover:dark:bg-gray-700'
+                ? 'flex items-center gap-4 p-5 text-xl font-bold text-teal-400 no-underline transition duration-100 hover:bg-gray-400  hover:text-white hover:dark:bg-gray-700'
                 : 'ease duration-400 hover:white flex items-center gap-4 p-5 text-xl font-bold  no-underline transition hover:bg-gray-400  hover:text-white hover:dark:bg-gray-700'
             }
             // This function dynamically sets the class based on the active state

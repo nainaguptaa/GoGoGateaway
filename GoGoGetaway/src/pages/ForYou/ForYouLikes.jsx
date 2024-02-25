@@ -8,7 +8,12 @@ import {
 } from 'react-icons/fa';
 import axios from 'axios'; // Make sure to install axios with npm or yarn
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa6';
-export default function ForYouLikes({ isMobile, itinerariesProp, index }) {
+export default function ForYouLikes({
+  isMobile,
+  itinerariesProp,
+  index,
+  iconSize,
+}) {
   const [itineraries, setItineraries] = useState(
     itinerariesProp.map((itinerary) => ({
       ...itinerary,
@@ -48,13 +53,13 @@ export default function ForYouLikes({ isMobile, itinerariesProp, index }) {
       <div className="flex flex-col items-center gap-2">
         {itineraries[index].liked ? (
           <FaHeart
-            size={30}
+            size={iconSize}
             className="ease cursor-pointer text-rose-500 transition duration-200 hover:text-rose-500"
             onClick={() => handleLikeButton(itineraries[index].id, index)}
           />
         ) : (
           <FaRegHeart
-            size={30}
+            size={iconSize}
             className="ease cursor-pointer text-rose-500 transition duration-200 hover:text-rose-500"
             onClick={() => handleLikeButton(itineraries[index].id, index)}
           />
@@ -63,18 +68,18 @@ export default function ForYouLikes({ isMobile, itinerariesProp, index }) {
         <div className=" font-bold">{itineraries[index].likeCount}</div>
       </div>
       <div className="flex flex-col items-center gap-2">
-        <FaRegCommentAlt size={30} />
+        <FaRegCommentAlt size={iconSize} />
 
         <div className=" font-bold">{itineraries[index].commentCount}</div>
       </div>
       <div className="flex flex-col items-center gap-2">
-        <FaRegBookmark size={30} />
+        <FaRegBookmark size={iconSize} />
         {/* <div className="text-lg font-bold">
           {itinerariesDummy[index].likes}
         </div> */}
       </div>
       <div className="flex flex-col items-center gap-2">
-        <FaShare size={30} />
+        <FaShare size={iconSize} />
         <div className=" font-bold">Share</div>
       </div>
     </div>

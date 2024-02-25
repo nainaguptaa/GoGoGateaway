@@ -28,7 +28,7 @@ import {
 } from '@/components/ui/carousel';
 import { PiShareFat } from 'react-icons/pi';
 import ForYouLikes from './ForYouLikes';
-const ForYou = ({ isMobile }) => {
+const ForYou = ({ isMobile, iconSize }) => {
   const [itineraries, setItineraries] = useState([]);
   const navigate = useNavigate();
   const [displayedPosts, setDisplayedPosts] = useState([]);
@@ -146,12 +146,16 @@ const ForYou = ({ isMobile }) => {
                 className="h-32 w-full object-cover md:h-48 lg:h-64" // Adjust height as needed
               />
             ))} */}
-          <img
-            src={itineraries[index].images[0]}
-            // alt={`Slide ${imgIndex}`}
-            loading="lazy"
-            className="z-10 h-[39rem]  object-cover md:h-[38rem] lg:h-[38rem] 2xl:max-h-[38rem]"
-          />
+          <div className="h-[39rem] bg-red-300 sm:h-[39rem] sm:w-full md:h-[38rem]  lg:h-[38rem] 2xl:max-h-[38rem]">
+            {' '}
+            <img
+              src={itineraries[index].images[0]}
+              // alt={`Slide ${imgIndex}`}
+              loading="lazy"
+              className="z-10  h-full  w-full object-cover"
+            />
+          </div>
+
           <div className="flex justify-between px-4 pb-3">
             <div className="flex flex-col">
               {' '}
@@ -178,6 +182,7 @@ const ForYou = ({ isMobile }) => {
           isMobile={isMobile}
           itinerariesProp={itineraries}
           index={index}
+          iconSize={iconSize}
         />
       </div>
     </div>

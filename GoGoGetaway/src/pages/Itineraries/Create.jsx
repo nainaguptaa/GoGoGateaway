@@ -106,6 +106,56 @@ const Create = () => {
       return; // Exit the function if not logged in
     }
 
+    const requiredFields = [
+      'city',
+      'name',
+      'date',
+      // Assuming events, restaurants, and hotel information are also required, adjust as needed
+      'events',
+      'restaurant',
+      'hotel',
+    ];
+
+    const missingFieldNames = requiredFields
+      .filter(
+        (field) =>
+          !itineraries[field] ||
+          (Array.isArray(itineraries[field]) &&
+            itineraries[field].length === 0),
+      )
+      .map((field) => {
+        // Map field names to a more user-friendly format
+        switch (field) {
+          case 'city':
+            return 'City';
+          case 'name':
+            return 'Itinerary Name';
+          case 'date':
+            return 'Date';
+          case 'events':
+            return 'Events';
+          case 'restaurant':
+            return 'Restaurants';
+          case 'hotel':
+            return 'Hotel';
+          default:
+            return field.charAt(0).toUpperCase() + field.slice(1); // Capitalize the first letter
+        }
+      });
+    if (selectedImages.length === 0) {
+      missingFieldNames.push('Selected Images');
+    }
+    // Check if there are any missing fields and notify the user
+    if (missingFieldNames.length > 0) {
+      const missingFieldsMsg = missingFieldNames.join(', ');
+
+      toast({
+        variant: 'destructive',
+        title: 'Missing Information',
+        description: `Please fill in the following fields: ${missingFieldsMsg}.`,
+      });
+      return; // Exit the function early if there are missing fields
+    }
     // Calculate the total price from events, restaurants, and the hotel
     const totalEventsPrice = itineraries.events.reduce(
       (acc, curr) => acc + parseFloat(curr.priceEvent || 0),
@@ -461,13 +511,13 @@ const Create = () => {
           </Dialog>
           <Button
             onClick={saveItineraryToAPI}
-            className="rounded bg-blue-500 px-4 py-6 font-bold text-white hover:bg-blue-700"
+            className="btn-fill bg-amber-500  font-bold text-white hover:bg-blue-700"
           >
             Save Itinerary
           </Button>
         </div>
         <div className="flex   px-8 pb-64">
-          <div className="w-8/12 ">
+          <div className="w-9/12 ">
             <div className="rounded-xl  border-2 bg-card px-5 py-6">
               <div className="text-4xl font-normal">
                 {toTitleCase(itineraries.city)} Trip
@@ -647,7 +697,42 @@ const Create = () => {
                   </div>
                 </div>
               </div>
-              <input type="file" multiple onChange={handleFileChange} />
+              <div className="mt-5 text-lg font-semibold">Upload Images</div>
+              <div class="mt-4 rounded-lg border-2 border-dashed border-gray-300 px-4 py-3 shadow-sm">
+                <label class="block h-full w-full cursor-pointer">
+                  <input
+                    type="file"
+                    multiple
+                    class="hidden"
+                    onChange={handleFileChange}
+                  />
+                  <div class="flex h-full flex-col items-center justify-center">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      class="h-8 w-8 text-gray-400"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                      strokeWidth="2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4-4m0 0l-4 4m4-4v12"
+                      />
+                    </svg>
+                    <p class="mt-1 text-sm text-gray-600">
+                      Drag and drop files here, or click to select files
+                    </p>
+                    {selectedImages.length > 0 && (
+                      <p class="mt-2 text-sm font-semibold text-cyan-500">
+                        {selectedImages.length} file
+                        {selectedImages.length > 1 ? 's' : ''} selected
+                      </p>
+                    )}
+                  </div>
+                </label>
+              </div>
             </div>
             <ItineraryOverview itineraries={itineraries} />
           </div>
