@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import dumdum from '../../dummyData/dumdum.json';
+import ItineraryComments from './ItineraryComments';
 // import itinerary from '../../dummyData/dumdum.json';
 import itinerariesDummy from '../../dummyData/dummyItinerary.json';
 import axios from 'axios';
@@ -9,12 +10,22 @@ export default function Itinerary() {
   const [itinerary, setItinerary] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
   const [events, setEvents] = useState([]);
+  const [showComments, setShowComments] = useState(false); 
+
+  // Function to toggle comments visibility
+  const toggleComments = () => {
+    setShowComments(!showComments);
+  };
+
 
   useEffect(() => {
     const fetchItinerary = async () => {
       const queryParams = new URLSearchParams(location.search);
+      
       const id = queryParams.get('id');
       console.log(id);
+       
+
 
       try {
         // Update the URL to point to your backend API endpoint
@@ -73,6 +84,11 @@ export default function Itinerary() {
             <p>
               <strong>Comment Count:</strong> {itinerary.commentCount}
             </p>
+            <button onClick={toggleComments} className="comment-button">
+              {showComments ? 'Hide Comments' : 'Show Comments'}
+            </button>
+            {showComments && <ItineraryComments itineraryId={itinerary.id} />}
+
           </div>
 
           <div className="mb-4">

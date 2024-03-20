@@ -234,5 +234,69 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+router.post("/:id/comments", async (req, res) => {
+  try {
+    const { id } = req.params; // Itinerary ID
+    const { userId, text } = req.body; // Comment details from request body
 
+    if (!userId || !text) {
+      return res.status(400).json({ error: "Missing comment details" });
+    }
+
+    const comment = {
+      userId,
+      text,
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+    };
+
+    // Add the comment to the 'comments' subcollection of the itinerary
+    await db.collection("itineraries").doc(id).collection("comments").add(comment);
+
+    res.status(201).json({ message: "Comment added successfully" });
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+router.post("/:id/comments", async (req, res) => {
+  try {
+    const { id } = req.params; // Itinerary ID
+    const { userId, text } = req.body; // Comment details from request body
+
+    if (!userId || !text) {
+      return res.status(400).json({ error: "Missing comment details" });
+    }
+
+    const comment = {
+      userId,
+      text,
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      itineraryRef: db.doc(`itineraries/${id}`) // Add a reference to the itinerary
+    };
+
+    // Add the comment to the 'comments' collection instead of as a subcollection
+    await db.collection("comments").add(comment);
+
+    res.status(201).json({ message: "Comment added successfully" });
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+router.get("/:id/comments", async (req, res) => {
+  try {
+    const { id } = req.params; // Itinerary ID
+
+    const commentsSnapshot = await db.collection("comments")
+      .where("itineraryRef", "==", db.doc(`itineraries/${id}`))
+      .orderBy("timestamp", "desc")
+      .get();
+    const comments = commentsSnapshot.docs.map(doc => doc.data());
+
+    res.status(200).json(comments);
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 module.exports = router;
