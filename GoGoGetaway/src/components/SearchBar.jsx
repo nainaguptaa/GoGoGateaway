@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CiLocationOn } from 'react-icons/ci';
 import { FaSearch } from 'react-icons/fa';
 import { Input } from '@/components/ui/input';
-const SearchBar = () => {
+const SearchBar = ({ isMobile, iconSize }) => {
   const [search, setSearch] = useState(''); // Initialize state
   const navigate = useNavigate();
+
   const handleChange = (event) => {
     setSearch(event.target.value); // Update state on change
   };
@@ -13,6 +14,14 @@ const SearchBar = () => {
     event.preventDefault(); // Prevent the default form submission behavior
     navigate(`/search?q=${encodeURIComponent(search)}`); // Use navigate to change the URL
   };
+  if (isMobile) {
+    return (
+      <>
+        {' '}
+        <FaSearch size={iconSize} />
+      </>
+    );
+  }
   return (
     // <div className="flex w-full justify-center ">
     <form

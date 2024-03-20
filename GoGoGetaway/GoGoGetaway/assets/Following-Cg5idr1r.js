@@ -1,0 +1,1 @@
+import{j as s,W as r}from"./index-BQ7jisNw.js";function a({isMobile:e}){return s.jsx("div",{className:"",children:s.jsx("div",{className:"flex h-screen",children:!e&&s.jsx(r,{})})})}export{a as default};

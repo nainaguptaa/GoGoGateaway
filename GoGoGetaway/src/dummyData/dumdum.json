@@ -1,0 +1,44 @@
+{
+  "date": "2024-02-24T16:51:04.127Z",
+  "images": [
+    "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795259/your_folder_name/w59ai3zc9ypdxjwoh4rb.webp",
+    "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795259/your_folder_name/l1kbwrna8vxojfo8fzgz.jpg",
+    "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795259/your_folder_name/iqvxt7gvwicdhvhp7utt.png",
+    "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795259/your_folder_name/nqbdqcqtama74lquisgo.jpg"
+  ],
+  "city": "Calgary",
+  "totalPrice": 199,
+  "name": "Dummy CalgaryItinear",
+  "restaurants": [
+    {
+      "locationRestaurant": "12",
+      "cuisine": "mexican",
+      "time": "10:52",
+      "restaurantID": "[DocumentReference]",
+      "priceRestaurant": 23
+    }
+  ],
+  "hotel": {
+    "bookingURL": "12",
+    "priceHotel": 124,
+    "hotelID": {
+      "_firestore": "[Firestore]",
+      "_path": "[ResourcePath]",
+      "_converter": "[Object]"
+    },
+    "time": "23:53",
+    "locationHotel": "123"
+  },
+  "likeCount": 0,
+  "userId": "W2G2CGCkI1bXL7dpKx3guPTaCd63",
+  "events": [
+    {
+      "eventID": "[DocumentReference]",
+      "typeOfActivity": "sightseeing",
+      "locationEvent": "d",
+      "time": "10:52",
+      "priceEvent": 52
+    }
+  ],
+  "commentCount": 0
+}

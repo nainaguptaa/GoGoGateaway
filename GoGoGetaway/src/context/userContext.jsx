@@ -41,7 +41,9 @@ export const UserProvider = ({ children }) => {
   const [loadingAuthState, setLoadingAuthState] = useState(true); // State to track loading of auth state
   const navigate = useNavigate(); // Hook for navigating between routes
   const [isNewGoogleUser, setIsNewGoogleUser] = useState(false);
-
+  const [signPopup, setSignPopup] = useState(false);
+  const [error, setError] = useState(null);
+  /* if a user signs in through google, and their google account is a new user,  it will add to the firebase database*/
   async function addNewGoogleUser(result) {
     console.log(result);
     const addUserData = {
@@ -61,6 +63,7 @@ export const UserProvider = ({ children }) => {
     await setDoc(userDocRef, addUserData);
   }
 
+  /* Same as addNewGoogleUser, but for email and password input */
   async function addNewEmailUser(result) {
     console.log(result);
     console.log('adding new');
@@ -117,13 +120,16 @@ export const UserProvider = ({ children }) => {
       } else {
         // navigate('/dashboard');
       }
-      navigate('/');
+      // navigate('/');
+      // now we are just using a poppup, so instead we just set popup to false
+      setSignPopup(false);
     } catch (error) {
       console.log('error');
       console.log(error.message);
     }
   };
 
+  // function for logout
   const logout = async () => {
     // Show a confirmation dialog
     const confirmLogout = window.confirm('Are you sure you want to log out?');
@@ -139,7 +145,7 @@ export const UserProvider = ({ children }) => {
       } catch (error) {
         console.error('Error signing out: ', error);
       }
-      navigate('/');
+      navigate('/foryou');
     } else {
       // User clicked 'Cancel', so do nothing
       console.log('Logout canceled');
@@ -156,7 +162,13 @@ export const UserProvider = ({ children }) => {
     console.log(2);
     if (!querySnapshot.empty) {
       // Handle case where email already exists
-      console.error('Email already in exists.');
+      toast({
+        title: 'Error',
+        description: 'Email already exists.',
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      });
       return;
     }
     console.log(3);
@@ -185,7 +197,8 @@ export const UserProvider = ({ children }) => {
         const errorMessage = error.message;
         // ..
       });
-    navigate('/');
+    // navigate('/');
+    setSignPopup(false); //close signup popup
   };
 
   const emailSignIn = async (email, password) => {
@@ -205,9 +218,13 @@ export const UserProvider = ({ children }) => {
       // Re-throw the error to be caught by the caller
       throw error;
     }
-    navigate('/');
+    // navigate('/');
+    // close popup
+    setSignPopup(false);
   };
 
+  // useEffect hook to monitor authentication state changes.
+  // When an auth state change is detected, it performs checks and sets the details of user to 'user'
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
       try {
@@ -264,6 +281,8 @@ export const UserProvider = ({ children }) => {
     emailSignUp,
     emailSignIn,
     updateUser,
+    signPopup,
+    setSignPopup,
   };
 
   // Provider component wrapping children with the user context

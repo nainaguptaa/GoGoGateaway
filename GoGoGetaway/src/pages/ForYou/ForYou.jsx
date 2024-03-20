@@ -1,9 +1,12 @@
 import Navbar from '@/components/Navbar';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, lazy, Suspense } from 'react';
 import ForYouLeft from './ForYouLeft';
+
 import itinerariesDummy from '../../dummyData/dummyItinerary.json';
+import dumdum from '../../dummyData/dumdum.json';
 import { useNavigate } from 'react-router-dom';
 const ROW_HEIGHT = 100;
+
 import { FixedSizeList as List } from 'react-window';
 import {
   FaRegHeart,
@@ -12,6 +15,7 @@ import {
   FaRegCommentAlt,
   FaCommentAlt,
 } from 'react-icons/fa';
+
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa6';
 const BUFFER = 5;
 import { Card, CardContent } from '@/components/ui/card';
@@ -23,17 +27,51 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { PiShareFat } from 'react-icons/pi';
-const ForYou = () => {
+import ForYouLikes from './ForYouLikes';
+const ForYou = ({ isMobile, iconSize }) => {
+  const [itineraries, setItineraries] = useState([]);
   const navigate = useNavigate();
   const [displayedPosts, setDisplayedPosts] = useState([]);
   // State to track the current page
   const [page, setPage] = useState(1);
   // Number of posts to display per "page"
   const postsPerPage = 5;
+  // Simulate fetching data from Firebase
+  // useEffect(() => {
+  //   // Set itineraries from itinerariesDummy
+  //   setItineraries(dumdum);
+  //   // Load initial posts
+  //   setDisplayedPosts(dumdum.slice(0, postsPerPage));
+  // }, []);
+
+  // Define the function to fetch itineraries
+  useEffect(() => {
+    const fetchItineraries = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/itineraries/all'); // Adjust the URL as needed
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+
+        console.log(data);
+        setItineraries(data);
+        setDisplayedPosts(data.slice(0, postsPerPage));
+      } catch (error) {
+        console.error('Failed to fetch itineraries:', error);
+        setItineraries(itinerariesDummy);
+      }
+    };
+    fetchItineraries();
+  }, [postsPerPage]);
 
   useEffect(() => {
-    // Load initial posts
-    setDisplayedPosts(itinerariesDummy.slice(0, postsPerPage));
+    const handleResize = () => {
+      setItemSize(getItemSize());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
   }, []);
 
   const handleScroll = (event) => {
@@ -60,80 +98,109 @@ const ForYou = () => {
     return daysAgo;
   };
 
+  const getItemSize = () => {
+    const screenWidth = window.innerWidth;
+
+    if (screenWidth >= 1536) {
+      // for very large screens, e.g., 2k displays
+      return 950; // or any size suitable for large screens
+    } else if (screenWidth >= 1280) {
+      // for desktops
+      return 800; // or any size suitable for medium screens
+    } else if (screenWidth >= 1024) {
+      return 850;
+    } else if (screenWidth >= 768) {
+      return 800;
+    } else {
+      // for tablets and mobiles
+      return 780; // or any size suitable for small screens
+    }
+  };
+  const [itemSize, setItemSize] = useState(getItemSize());
+
+  // Adjust the itemSize on window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setItemSize(getItemSize());
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+  // console.log(itineraries);
+  // console.log(itinerariesDummy);
+  // console.log(dumdum);
   const Row = ({ index, style }) => (
-    <div style={style} className=" px-20 pt-12">
-      <div className="dark:bg-card bg-card flex w-[65rem] flex-col rounded-[5rem] border-2 border-orange-300 px-6 pb-20 pt-12 shadow-lg dark:border-amber-500">
-        <div className="mb-2 flex items-center gap-3 ">
-          <div className="flex h-14 w-14 items-center justify-center rounded-full border-2 bg-blue-200 text-lg font-semibold text-white dark:border-cyan-500">
-            s
-          </div>
-          <div className="flex flex-col">
-            <div
-              className="cursor-pointer text-4xl font-semibold"
-              onClick={() =>
-                navigate(
-                  `/itineraries?q=${encodeURIComponent(itinerariesDummy[index].title)}&id=${itinerariesDummy[index].id}`,
-                )
-              }
-            >
-              {itinerariesDummy[index].title}
-            </div>
-            <div className="flex items-center gap-4">
-              <div className="font-lg text-xl">
-                {itinerariesDummy[index].user}
-              </div>
-              <div className="text-md font-lg items-center text-gray-500">
-                {`${calculateDaysAgo(itinerariesDummy[index].posted)} days ago`}
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="flex items-end gap-3">
-          <img
-            src={itinerariesDummy[index].images[0]}
-            // alt={`Slide ${imgIndex}`}
-            className="z-10 max-h-[32rem] w-[55rem] max-w-[60rem] object-cover"
-          />
-          <div className="ml-4 flex flex-col gap-6">
-            <div className="flex flex-col items-center gap-2">
-              <FaHeart
-                size={30}
-                className="ease cursor-pointer text-rose-500 transition duration-200 hover:text-rose-500"
+    <div style={style} className="mx:px-20 px-4 lg:px-14 lg:pt-8 ">
+      <div className="flex h-full  items-end md:h-[48rem] md:items-center md:justify-center">
+        <div
+          className="flex cursor-pointer flex-col gap-2 overflow-hidden sm:h-[47rem] md:h-[46rem] md:w-[55rem] lg:w-[65rem] lg:rounded-2xl  lg:border-2 lg:bg-card lg:dark:bg-card 2xl:w-[75rem]"
+          onClick={() => navigate(`/itineraries?id=${itineraries[index].id}`)}
+        >
+          {/* <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"> */}
+          {/* {itinerariesDummy[index].images.map((image, imgIndex) => (
+              <img
+                key={imgIndex}
+                src={image}
+                alt={`Image ${imgIndex}`}
+                className="h-32 w-full object-cover md:h-48 lg:h-64" // Adjust height as needed
               />
-              <div className="text-lg font-bold">
-                {itinerariesDummy[index].likes}
+            ))} */}
+          <div className="h-[39rem] bg-red-300 sm:h-[39rem] sm:w-full md:h-[38rem]  lg:h-[38rem] 2xl:max-h-[38rem]">
+            {' '}
+            <img
+              src={itineraries[index].images[0]}
+              // alt={`Slide ${imgIndex}`}
+              loading="lazy"
+              className="z-10  h-full  w-full object-cover"
+            />
+          </div>
+
+          <div className="flex justify-between px-4 pb-3">
+            <div className="flex flex-col">
+              {' '}
+              <div className="text-3xl font-bold">
+                {itineraries[index].name}
+              </div>
+              <div className="text-xl font-semibold">
+                {itineraries[index].city}
               </div>
             </div>
-            <div className="flex flex-col items-center gap-2">
-              <FaRegCommentAlt size={30} />
-              <div className="text-lg font-bold">
-                {itinerariesDummy[index].comments}
-              </div>
-            </div>
-            {/* <div className="flex flex-col items-center gap-2">
-              <FaRegBookmark size={30} />
-              <div className="text-lg font-bold">
-                {itinerariesDummy[index].likes}
-              </div>
-            </div> */}
-            <div className="flex flex-col items-center gap-2">
-              <PiShareFat size={30} />
-              <div className="text-lg font-bold">Share</div>
+            <div className="text-2xl font-bold">
+              {new Intl.NumberFormat('en-CA', {
+                style: 'currency',
+                currency: 'CAD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+              }).format(itineraries[index].totalPrice)}{' '}
+              Total
             </div>
           </div>
+          {/* </div> */}
         </div>
+        <ForYouLikes
+          isMobile={isMobile}
+          itinerariesProp={itineraries}
+          index={index}
+          iconSize={iconSize}
+        />
       </div>
     </div>
   );
+
+  // if (isMobile) {
+  //   return <>sdf</>;
+  // }
+  // console.log(isMobile);
   return (
     <div className="flex h-screen">
-      <ForYouLeft />
-      <div className="ml-64 flex flex-grow gap-2 overflow-hidden">
+      {!isMobile && <ForYouLeft />}
+      <div className="flex flex-grow gap-2 overflow-hidden  lg:ml-[14rem] xl:ml-64">
         <List
-          className="flex gap-2"
+          className="flex lg:gap-12 2xl:gap-24 "
           height={window.innerHeight} // Adjust based on your layout
-          itemCount={itinerariesDummy.length}
-          itemSize={750} // Adjust based on the average height of your posts
+          itemCount={itineraries.length}
+          itemSize={itemSize} // Dynamically adjusted
           width={'100%'} // Adjust as necessary
         >
           {/* <div className="flex flex-colgap-2"></div> */}
