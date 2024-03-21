@@ -117,7 +117,7 @@ const Navbar = ({ isMobile, iconSize }) => {
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
                   className="flex items-center gap-2"
-                  onClick={() => navigate('/')}
+                  onClick={() => navigate('/foryou')}
                 >
                   <FaHome size={25} />
                   <div>Home</div>
