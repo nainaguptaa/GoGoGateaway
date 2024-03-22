@@ -79,7 +79,7 @@ const Profile = () => {
           />
         </div>
         <div className="flex justify-center mt-10"> 
-        <button onClick={() => logout()} className='border border-blue-600 rounded-lg px-6 py-2 text-blue-600'>Logout</button>
+        <button onClick={() => logout()} className='border border-blue-600 rounded-lg px-60 py-2 text-white bg-teal-500'>Logout</button>
       </div>
       </div>
   );
