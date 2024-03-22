@@ -26,7 +26,7 @@ const Profile = () => {
 
   return (
     <div>
-      <h1 className="font-bold text-3xl mt-10 ml-4">Personal Details</h1> 
+      <h1 className="font-bold text-3xl mt-10 ml-4">Personal Account Details</h1> 
       <div className="flex">
         <h6 className="font-bold mr-10 mt-20 ml-4">Name</h6>
         <div className="flex flex-col mr-5">
@@ -79,7 +79,7 @@ const Profile = () => {
           placeholder="MM/DD/YYYY" // Set placeholder text
         />
       </div>
-      <div className="flex justify-center mt-3"> 
+      <div className="flex justify-center"> 
         <button onClick={() => logout()} className='border border-blue-600 rounded-lg px-60 py-2 text-white bg-teal-500'>Logout</button>
       </div>
     </div>
@@ -87,3 +87,4 @@ const Profile = () => {
 };
 
 export default Profile;
+
