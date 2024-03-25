@@ -33,13 +33,15 @@
     "react-dom": "^18.2.0",
     "react-icons": "^5.0.1",
     "react-leaflet": "^4.2.1",
+    "react-loader-spinner": "^6.1.6",
     "react-photo-album": "^2.3.1",
     "react-router-dom": "^6.22.0",
     "react-simple-typewriter": "^5.0.1",
     "react-window": "^1.8.10",
     "tailwind-merge": "^2.2.1",
     "tailwindcss-animate": "^1.0.7",
-    "typewriter-effect": "^2.21.0"
+    "typewriter-effect": "^2.21.0",
+    "vaul": "^0.9.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.19",

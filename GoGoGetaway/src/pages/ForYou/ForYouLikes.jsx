@@ -5,9 +5,25 @@ import {
   FaShare,
   FaRegCommentAlt,
   FaCommentAlt,
+  FaTimes,
 } from 'react-icons/fa';
 import axios from 'axios'; // Make sure to install axios with npm or yarn
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa6';
+import { Input } from '@/components/ui/input';
+import { set } from 'date-fns';
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer"
+import { Button } from '@/components/ui/button';
+import { useUserContext } from '@/context/userContext';
+import Comment from './Comment';
 export default function ForYouLikes({
   isMobile,
   itinerariesProp,
@@ -22,6 +38,10 @@ export default function ForYouLikes({
   );
 
   const [liked, setLiked] = useState(false);
+  const [comment, setComment] = useState('');
+  const [comments, setComments] = useState(false);
+  const { currentUser } = useUserContext();
+
   const handleLikeButton = async (itineraryId, index) => {
     const itinerary = itineraries[index];
     const newLikedState = !itinerary.liked; // Toggle the liked state
@@ -48,6 +68,62 @@ export default function ForYouLikes({
     }
   };
 
+  const openComments = async (itineraryId) => {
+    setComment('')
+    try {
+      // Fetch comments for the itinerary
+      const response = await fetch(`http://localhost:8080/itineraries/${itineraryId}/comments`);
+      if (!response.ok) {
+        throw new Error('Failed to fetch comments');
+      }
+      const comments = await response.json();
+      setComments(comments);
+    } catch (error) {
+      console.error('Error opening comments:', error);
+      // Handle error appropriately, such as displaying an error message
+    }
+  };
+
+  const submitComment = async (itineraryId, comment) => {
+    // add the comment to the comments array
+    try {
+      // Send the comment to the server
+      const response = await fetch(`http://localhost:8080/itineraries/${itineraryId}/comments`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ text: comment, userId: currentUser.id }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to submit comment');
+      }
+
+      // Extract the newly added comment from the response
+      const newComment = await response.json();
+
+      // Update the comments state to include the newly added comment
+      setComments((prevComments) => [...prevComments, newComment]);
+
+      console.log('Comment submitted successfully');
+
+
+      //Get itenerary for itineraryId
+      const itinerary = itineraries.find((itinerary) => itinerary.id === itineraryId);
+      //Increment comment count
+      itinerary.commentCount++;
+      
+      setItineraries([...itineraries]);
+
+      setComment('');
+    } catch (error) {
+      console.error('Error submitting comment:', error);
+      // Handle error appropriately, such as displaying an error message
+    }
+  }
+
+
   return (
     <div className="h-70 absolute bottom-40 right-6 z-10 mb-12 flex flex-col gap-6 rounded-xl  bg-white/60 px-2 py-4 text-sm sm:mb-8 sm:ml-4 sm:text-lg lg:static lg:right-16 lg:bg-transparent">
       <div className="flex flex-col items-center gap-2">
@@ -68,8 +144,39 @@ export default function ForYouLikes({
         <div className=" font-bold">{itineraries[index].likeCount}</div>
       </div>
       <div className="flex flex-col items-center gap-2">
-        <FaRegCommentAlt size={iconSize} />
-
+        {
+          <Drawer>
+            <DrawerTrigger>
+              <FaRegCommentAlt size={iconSize}
+                onClick={() => openComments(itineraries[index].id)}
+              />
+            </DrawerTrigger>
+            <DrawerContent className="h-4/6 lg:w-1/2 lg:justify-self-center">
+              <DrawerHeader className="flex items-center gap-4">
+                <DrawerClose className='text-xl'><FaTimes /></DrawerClose>
+                <DrawerTitle className="text-3xl justify-self-center">Comments</DrawerTitle>
+              </DrawerHeader>
+              <div className='grid grid-cols-1 gap-y-6 p-4 overflow-scroll'>
+                {comments ? (
+                  comments.map((comment, index) => (
+                    <Comment key={index} comment={comment} />
+                  ))
+                ) : (
+                  <div>Loading comments...</div>
+                )}
+              </div>
+              <DrawerFooter className="flex flex-row items-center">
+                <Input className="border-slate-500"
+                  placeholder="Comment"
+                  value={comment}
+                  onChange={(e) => setComment(e.target.value)}
+                />
+                <Button className="h-full w-1/4"
+                  onClick={() => submitComment(itineraries[index].id, comment)}
+                >Comment</Button>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer>}
         <div className=" font-bold">{itineraries[index].commentCount}</div>
       </div>
       <div className="flex flex-col items-center gap-2">

@@ -101,9 +101,7 @@ router.post("/create", async (req, res) => {
     const itineraryRef = await db.collection("itineraries").add(itinerary);
 
     console.log("Itinerary created successfully with ID:", itineraryRef.id);
-    res
-      .status(201)
-      .json({ message: "Itinerary created successfully", id: itineraryRef.id });
+    res.status(201).json({ message: "Itinerary created successfully", id: itineraryRef.id });
   } catch (error) {
     console.error("Error creating itinerary:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -126,6 +124,7 @@ router.get("/all", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 // Increment the like count for a specific itinerary
 router.post("/increment-like/:id", async (req, res) => {
   console.log(`Incrementing like for ID: ${req.params.id}`);
@@ -161,19 +160,19 @@ router.post("/decrement-like/:id", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
+//Search for itineraries that include a specific location
 router.get("/", async (req, res) => {
   try {
-    const { location } = req.query;
+    const { city } = req.query;
 
-    if (!location) {
-      return res.status(400).json({ error: "Location parameter is required" });
+    if (!city) {
+      return res.status(400).json({ error: "City parameter is required" });
     }
 
-    // Query itineraries that include the specified location
+    // Query itineraries that include the specified city
     const itinerariesSnapshot = await db
       .collection("itineraries")
-      .where("locations", "array-contains", location)
+      .where("city", "==", city)
       .get();
     const itineraries = itinerariesSnapshot.docs.map((doc) => ({
       id: doc.id,
@@ -181,7 +180,6 @@ router.get("/", async (req, res) => {
     }));
 
     res.json(itineraries);
-    console.log(itineraries);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -228,11 +226,103 @@ router.get("/:id", async (req, res) => {
 
     // Respond with the fetched itinerary data
     res.json(itineraryData);
-    console.log("Itinerary data:", itineraryData);
   } catch (error) {
     console.error("Error fetching itinerary data:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
 
+router.post("/:id/comments", async (req, res) => {
+  try {
+    const { id } = req.params; // Itinerary ID
+    const { userId, text } = req.body; // Comment details from request body
+
+    if (!userId || !text) {
+      return res.status(400).json({ error: "Missing comment details" });
+    }
+
+    const comment = {
+      userId,
+      text,
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      itineraryRef: db.doc(`itineraries/${id}`), // Add a reference to the itinerary
+      likeCount: 0,
+    };
+
+    const commentRef = await db.collection("comments").add(comment);
+    console.log("Comment added successfully with ID:", commentRef.id);
+
+    // Update comment count in the corresponding itinerary
+    const itineraryRef = db.collection("itineraries").doc(id);
+    await itineraryRef.update({
+      commentCount: admin.firestore.FieldValue.increment(1) // Increment comment count by 1
+    });
+
+    // Fetch the newly added comment from the database
+    const newCommentSnapshot = await commentRef.get();
+    const newCommentData = newCommentSnapshot.data();
+
+    // Return the newly added comment in the response
+    res.status(201).json(newCommentData);
+  } catch (error) {
+    console.error("Error adding comment:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.post("/comments/:commentId/like/increment", async (req, res) => {
+  try {
+    const { commentId } = req.params; //comment ID
+    const commentRef = db.collection("comments").doc(commentId);
+
+    // Atomically increment the like count
+    await commentRef.update({
+      likeCount: admin.firestore.FieldValue.increment(1),
+    });
+
+    res.status(200).json({ message: "Like count incremented successfully" });
+  } catch (error) {
+    console.error("Error incrementing like count:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.post("/comments/:commentId/like/decrement", async (req, res) => {
+  try {
+    const { commentId } = req.params; // comment ID
+    const commentRef = db.collection("comments").doc(commentId);
+
+    // Atomically decrement the like count
+    await commentRef.update({
+      likeCount: admin.firestore.FieldValue.increment(-1),
+    });
+
+    res.status(200).json({ message: "Like count decremented successfully" });
+  } catch (error) {
+    console.error("Error decrementing like count:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
+router.get("/:id/comments", async (req, res) => {
+  // #TODO: Add fetching users and add it to the comments array
+  try {
+    const { id } = req.params; // Itinerary ID
+    const commentsSnapshot = await db
+      .collection("comments")
+      .where("itineraryRef", "==", db.doc(`itineraries/${id}`))
+      .orderBy("likeCount", "desc")
+      .get();
+    const comments = commentsSnapshot.docs.map((doc) => {
+      const commentData = doc.data();
+      commentData.id = doc.ref.id; // Add commentRef to commentData
+      return commentData;
+    });
+    res.status(200).json(comments);
+  } catch (error) {
+    console.error("Error fetching comments:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 module.exports = router;
+//test

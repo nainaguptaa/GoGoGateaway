@@ -3,6 +3,7 @@ import { useUserContext } from '../context/userContext';
 import { CgProfile } from 'react-icons/cg';
 const ProfilePicture = () => {
   const { user, currentUser } = useUserContext();
+  console.log(user);
   const isGoogleUser = currentUser.googleUser;
   const [imageError, setImageError] = useState(false); // State to track image loading error
   // Extract the first letter of currentUser's email if needed

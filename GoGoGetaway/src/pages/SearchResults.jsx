@@ -1,81 +1,55 @@
-import Navbar from '@/components/Navbar';
 import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import ForYouLeft from './ForYou/ForYouLeft';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
-  const query = searchParams.get('q'); // Get the search query from the URL
+  let query = searchParams.get('q');
+  // Capitalize the first letter of the query
+  query = query.charAt(0).toUpperCase() + query.slice(1);
+
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
 
-  // // Mock an async search function
-  // const search = async (query) => {
-  //   setLoading(true);
-  //   // Here you would typically make an API call with the query
-  //   // For demonstration, we'll just filter an array of mock items
-  //   const mockItems = [
-  //     { id: 1, name: 'Funny Cat Video' },
-  //     { id: 2, name: 'Hilarious Dog Compilation' },
-  //     { id: 3, name: 'Amazing Nature Clips' },
-  //   ];
-  //   const filteredItems = mockItems.filter((item) =>
-  //     item.name.toLowerCase().includes(query.toLowerCase()),
-  //   );
-
-  //   setTimeout(() => {
-  //     setResults(filteredItems);
-  //     setLoading(false);
-  //   }, 500); // Simulate network delay
-  // };
-
-  // Function to fetch data using Axios
   const fetchData = async () => {
     try {
       setLoading(true);
-      // Make a GET request to the desired URL
-      const response = await axios.get(`http://localhost:3000/itineraries/?location=${query}`);
-      // Set the data received from the API to the state
+      const response = await axios.get(`http://localhost:8080/itineraries/?city=${query}`);
       setResults(response.data);
-      console.log(response.data);
     } finally {
-      // Update loading state regardless of success or failure
       setLoading(false);
     }
   };
 
-  // Effect hook to perform search when the query changes
   useEffect(() => {
-    // Use axios to make an API call to the backend
     fetchData();
   }, [query]);
+
   return (
-    <div>
-      <div className="">
-        <div className="flex h-screen">
-          <ForYouLeft className="" />
-          <div className="ml-64 flex flex-grow gap-2 overflow-hidden">
-            <h2>Search Results for: {query}</h2>
-            {loading ? (
-              <p>Loading...</p>
-            ) : (
-              <ul>
-                {results.map((itinerary) => (
-                  <div key={itinerary.id} className="itinerary">
-                    <h3>Price: ${itinerary.price}</h3>
-                    <p>Rating: {itinerary.rating}</p>
-                    <div>
-                      <img src={itinerary.hotel.imageURL} alt="Hotel" style={{ width: '100px', height: '100px' }} />
-                    </div>
-                    <p>Locations: {itinerary.locations.join(', ')}</p>
-                  </div>
-                ))}
-              </ul>
-            )}
+    <div className="flex flex-col h-screen justify-start items-center pt-2">
+      <h2 className="font-serif text-3xl font-light text-white-800 mb-4">Search Results for: {query}</h2>
+      {loading ? (
+        <p className="text-lg text-blue-500">Loading...</p>
+      ) : results.length > 0 ? (
+        <div className="w-full max-w-6xl">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {results.map((itinerary) => (
+              <div key={itinerary.id} className="cursor-pointer rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden" onClick={() => navigate(`/itineraries?id=${itinerary.id}`)}>
+                <img src={itinerary.images[0]} alt="Itinerary" className="h-56 w-full object-cover" />
+                <div className="p-4 bg-white">
+                  <h3 className="text-xl font-light text-gray-900">{itinerary.name}</h3>
+                  <p className="text-gray-600">{itinerary.city}</p>
+                  <p className="font-light text-gray-800">Total Price: ${itinerary.totalPrice}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-      </div>
+      ) : (
+        <p className="text-lg text-red-500">No search results found for {query}</p>
+      )}
     </div>
   );
 };
