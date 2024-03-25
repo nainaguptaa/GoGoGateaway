@@ -101,9 +101,7 @@ router.post("/create", async (req, res) => {
     const itineraryRef = await db.collection("itineraries").add(itinerary);
 
     console.log("Itinerary created successfully with ID:", itineraryRef.id);
-    res
-      .status(201)
-      .json({ message: "Itinerary created successfully", id: itineraryRef.id });
+    res.status(201).json({ message: "Itinerary created successfully", id: itineraryRef.id });
   } catch (error) {
     console.error("Error creating itinerary:", error);
     res.status(500).json({ error: "Internal Server Error" });

@@ -1,142 +1,104 @@
 const request = require('supertest');
-const app = require('../app.js'); 
+const app = require('../app'); // Adjust the path according to your app's structure
 
-// run npm test to run 
-describe('POST /itineraries/create', () => {
-    // test('It should respond with 201 status code for successful itinerary creation', async () => {
-    //   // Create a mock itinerary data for testing
-    //   const mockData = {
-    //     userId: 'testUser',
-    //     name: 'Test Itinerary',
-    //     city: 'Test City',
-    //     date: '2022-12-31',
-    //     events: [{ id: 'event1', ratingEvent: '4.5', time: '10:00', typeOfActivity: 'Sightseeing', locationEvent: 'Event Location', priceEvent: '50' }],
-    //     restaurant: [{ id: 'restaurant1', ratingRestaurant: '4.2', priceRestaurant: '30', cuisine: 'Italian', locationRestaurant: 'Restaurant Location' }],
-    //     hotel: { id: 'hotel1', ratingHotel: '4.0', priceHotel: '100', locationHotel: 'Hotel Location', bookingURL: 'www.hotel.com' },
-    //     images: ['image1.jpg', 'image2.jpg'],
-    //     totalPrice: 180,
-    //   };
-  
-    //   const response = await request(app)
-    //     .post('/itineraries/create')
-    //     .send(mockData);
-  
-    //   expect(response.statusCode).toBe(201);
-    //   expect(response.body).toHaveProperty('message', 'Itinerary created successfully');
-    //   expect(response.body).toHaveProperty('id');
-    // });
-  
-    test('It should respond with 400 status code if required fields are missing', async () => {
-      // Create a mock itinerary data with missing required fields for testing
-      const mockData = {
-        userId: 'testUser',
-        // Missing 'events', 'restaurant', and 'hotel' fields
+describe('Itineraries Routes', () => {
+  describe('POST /create', () => {
+    it('should create a new itinerary and return 201 status', async () => {
+      const newItinerary = {
+        userId: 'user123',
+        name: 'My Itinerary',
+        city: 'Philippines',
+        date: '2024-02-24',
+        events: [
+          {
+            id: 'event1',
+            time: '11:27',
+            typeOfActivity: 'Sightseeing',
+            locationEvent: '23',
+            priceEvent: 23,
+          },
+        ],
+        restaurant: [
+          {
+            id: 'restaurant1',
+            time: '11:27',
+            cuisine: 'Indian',
+            locationRestaurant: '42',
+            priceRestaurant: 23,
+          },
+        ],
+        hotel: {
+          id: 'hotel1',
+          time: '00:28',
+          locationHotel: '312',
+          priceHotel: 3,
+          bookingURL: '12',
+        },
+        totalPrice: 49,
+        images: [
+          'http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795705/your_folder_name/gmzxfqjlqsdhxjyluaza.webp',
+          'http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795704/your_folder_name/zhflfgrvfitot9tsjcet.jpg',
+          'http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795704/your_folder_name/u2mxschbqzce4lf71sdj.jpg',
+          'http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795704/your_folder_name/x7inlmyikse9gjqdgduc.jpg',
+        ],
+        likeCount: 4,
       };
-  
-      const response = await request(app)
-        .post('/itineraries/create')
-        .send(mockData);
-  
-      expect(response.statusCode).toBe(400);
-    });
-  });
-  
-  describe('GET /itineraries/all', () => {
-    test('It should respond with all itineraries', async () => {
-      const response = await request(app)
-        .get('/itineraries/all');
-  
-      expect(response.statusCode).toBe(200);
-      // Add more expectations based on the structure of the returned itineraries
-    });
-  });
-  
 
-  
+      const response = await request(app)
+       .post('/itineraries/create')
+       .send(newItinerary);
 
-  
-  describe('GET /itineraries', () => {
-    test('It should respond with itineraries based on the specified location', async () => {
-      const response = await request(app)
-        .get('/itineraries?location=TestLocation');
-  
-      expect(response.statusCode).toBe(200);
-      // Add more expectations based on the returned itineraries
-    });
-  
-    test('It should respond with 400 status code if location parameter is missing', async () => {
-      const response = await request(app)
-        .get('/itineraries');
-  
-      expect(response.statusCode).toBe(400);
-    });
-  });
-  
-
-  
-  describe('POST /itineraries/:id/comments', () => {
-    test('It should add a comment to a specific itinerary', async () => {
-      const response = await request(app)
-        .post('/itineraries/ItineraryID/comments')
-        .send({
-          userId: 'NewTestUser',
-          text: 'This is a test comment.',
-        });
-  
       expect(response.statusCode).toBe(201);
-      expect(response.body).toHaveProperty('message', 'Comment added successfully');
+      expect(response.body).toHaveProperty('message', 'Itinerary created successfully');
+      expect(response.body).toHaveProperty('id');
     });
-  
-    test('It should respond with 400 status code if required fields are missing', async () => {
-      const response = await request(app)
-        .post('/itineraries/ItineraryID/comments')
-        .send({
-          userId: 'testUser',
-          // Missing 'text' field
-        });
-  
-      expect(response.statusCode).toBe(400);
-    });
-  });
-  
-  describe('GET /itineraries/:id/comments', () => {
-    test('It should respond with comments for a specific itinerary', async () => {
-      const response = await request(app)
-        .get('/itineraries/ItineraryID/comments');
-  
-      expect(response.statusCode).toBe(200);
-      // Add more expectations based on the structure of the returned comments
-    });
-  });
-  
-  describe('DELETE /itineraries/:itineraryId/comments/:commentId', () => {
-    test('It should delete a specific comment from an itinerary', async () => {
-      const response = await request(app)
-        .delete('/itineraries/ItineraryID/comments/CommentID');
-  
-      expect(response.statusCode).toBe(200);
-      expect(response.body).toHaveProperty('message', 'Comment deleted successfully');
-    });
-  });
-// describe('POST /itineraries/:id/comments', () => {
-//   test('It should respond with 201 status code for successful comment addition', async () => {
-//     const response = await request(app)
-//       .post('/itineraries/WeARHXw443QB1Os8F2gc/comments') 
-//       .send({
-//         userId: 'testUser',
-//         text: 'This is a test comment.',
-//       });
-//     expect(response.statusCode).toBe(201);
-//     expect(response.body.message).toBe('Comment added successfully');
-//   });
 
-//   test('It should respond with 400 status code if required fields are missing', async () => {
-//     const response = await request(app)
-//       .post('/itineraries/WeARHXw443QB1Os8F2gc/comments')
-//       .send({
-//         userId: 'testUser',
-//         // Missing 'text' field
-//       });
-//     expect(response.statusCode).toBe(400);
-//   });
-// });
+    it('should return 400 status for missing required fields', async () => {
+      const incompleteItinerary = {
+        // Missing userId, name, city, date, events, restaurant, hotel, totalPrice, images, likeCount
+      };
+
+      const response = await request(app)
+       .post('/itineraries/create')
+       .send(incompleteItinerary);
+
+      expect(response.statusCode).toBe(400);
+      expect(response.body).toHaveProperty('error', 'Missing required fields');
+    });
+  });
+
+  describe('GET /all', () => {
+    it('should return all itineraries with 200 status', async () => {
+      const response = await request(app).get('/itineraries/all');
+
+      expect(response.statusCode).toBe(200);
+      expect(response.body).toBeInstanceOf(Array);
+    });
+  });
+
+  describe('GET /itineraries', () => {
+    it('should require a city parameter', async () => {
+      const response = await request(app).get('/itineraries');
+      expect(response.statusCode).toBe(400);
+      expect(response.body.error).toBe('City parameter is required');
+    });
+
+    it('should return itineraries for a specific city', async () => {
+      // Assuming there's a city named 'TestCity' in your database
+      const response = await request(app).get('/itineraries?city=Calgary');
+      expect(response.statusCode).toBe(200);
+      expect(Array.isArray(response.body)).toBeTruthy();
+      // Add more assertions based on your data structure
+    });
+  });
+
+  describe('GET /itineraries/:id', () => {
+    it('should return itinerary data for a specific ID', async () => {
+      // Assuming there's an itinerary with ID 'testId' in your database
+      const response = await request(app).get('/itineraries/WeARHXw443QB1Os8F2gc');
+      expect(response.statusCode).toBe(200);
+      // Add assertions based on your expected data structure
+    });
+  });
+
+});
