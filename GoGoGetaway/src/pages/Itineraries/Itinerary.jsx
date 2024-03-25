@@ -67,7 +67,7 @@ export default function Itinerary() {
           <h1 className="mb-4 text-xl font-bold">Itinerary Details</h1>
           <div classname="text-xl">sdfg</div>
           <div className="mb-4">
-            <h2 className="text-lg font-semibold">General Information</h2>
+            <h2 className="text-lg font-semibold">General Information AHHH</h2>
             <p>
               <strong>Date:</strong> {new Date(itinerary.date).toLocaleString()}
             </p>
