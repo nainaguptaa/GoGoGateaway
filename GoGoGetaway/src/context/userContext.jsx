@@ -172,27 +172,20 @@ export const UserProvider = ({ children }) => {
       console.log('Logout canceled');
     }
   };
+
   const emailSignUp = async (userDetails) => {
-    console.log('signup');
     console.log(userDetails);
     // Check if email already exists in Firestore
     const usersRef = collection(db, 'users');
     const querySnapshot = await getDocs(
       query(usersRef, where('email', '==', userDetails.email)),
     );
-    console.log(2);
+
     if (!querySnapshot.empty) {
       // Handle case where email already exists
-      toast({
-        title: 'Error',
-        description: 'Email already exists.',
-        status: 'error',
-        duration: 9000,
-        isClosable: true,
-      });
+      console.error('Email already in exists.');
       return;
     }
-    console.log(3);
     createUserWithEmailAndPassword(
       auth,
       userDetails.email,
@@ -200,10 +193,9 @@ export const UserProvider = ({ children }) => {
     )
       .then((userCredential) => {
         // Signed up
-        console.log(4);
         const user = userCredential.user;
         const userId = user.uid;
-        console.log(user);
+
         // You can now use the userId for further operations, like adding the user to your database
         console.log(3);
         const data = {
@@ -211,17 +203,30 @@ export const UserProvider = ({ children }) => {
           userId: userId,
         };
         addNewEmailUser(data);
+        navigate('/welcome');
+        // ...
       })
       .catch((error) => {
-        console.log(error.message);
         const errorCode = error.code;
         const errorMessage = error.message;
         // ..
       });
-    // navigate('/');
-    setSignPopup(false); //close signup popup
+    setSignPopup(false);
   };
+  const emailCheck = async (userDetails) => {
+    // Check if email already exists in Firestore
+    const usersRef = collection(db, 'users');
+    const querySnapshot = await getDocs(
+      query(usersRef, where('email', '==', userDetails.email)),
+    );
 
+    if (!querySnapshot.empty) {
+      // Handle case where email already exists
+      const error = new Error('Email already exists.');
+      error.customMessage = 'Email Already Exists'; // Custom property to carry a user-friendly message
+      throw error; // This will cause the promise to be rejected
+    }
+  };
   const emailSignIn = async (email, password) => {
     console.log('signing in');
     try {
@@ -232,15 +237,14 @@ export const UserProvider = ({ children }) => {
       );
       // Signed in
       const user = userCredential.user;
-
+      navigate('/welcome');
       // ... other logic here
     } catch (error) {
-      console.error('Error during sign-in:', error);
+      console.error('Error during sign-in:', error.message);
+      console.error(error.code);
       // Re-throw the error to be caught by the caller
       throw error;
     }
-    // navigate('/');
-    // close popup
     setSignPopup(false);
   };
 
@@ -305,6 +309,7 @@ export const UserProvider = ({ children }) => {
     updateUser,
     signPopup,
     setSignPopup,
+    emailCheck,
   };
 
   // Provider component wrapping children with the user context
