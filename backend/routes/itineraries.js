@@ -165,16 +165,16 @@ router.post("/decrement-like/:id", async (req, res) => {
 //Search for itineraries that include a specific location
 router.get("/", async (req, res) => {
   try {
-    const { location } = req.query;
+    const { city } = req.query;
 
-    if (!location) {
-      return res.status(400).json({ error: "Location parameter is required" });
+    if (!city) {
+      return res.status(400).json({ error: "City parameter is required" });
     }
 
-    // Query itineraries that include the specified location
+    // Query itineraries that include the specified city
     const itinerariesSnapshot = await db
       .collection("itineraries")
-      .where("locations", "array-contains", location)
+      .where("city", "==", city)
       .get();
     const itineraries = itinerariesSnapshot.docs.map((doc) => ({
       id: doc.id,
