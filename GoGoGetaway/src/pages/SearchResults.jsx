@@ -35,7 +35,7 @@ const SearchResults = () => {
     try {
       setLoading(true);
       // Make a GET request to the desired URL
-      const response = await axios.get(`http://localhost:3000/itineraries/?location=${query}`);
+      const response = await axios.get(`http://localhost:8080/itineraries/?city=${query}`);
       // Set the data received from the API to the state
       setResults(response.data);
       console.log(response.data);
@@ -61,16 +61,26 @@ const SearchResults = () => {
               <p>Loading...</p>
             ) : (
               <ul>
-                {results.map((itinerary) => (
+              {results.map((itinerary) => {
+                // Correctly extract locations from events, restaurants, and the hotel
+                const eventLocations = itinerary.events.map(event => event.locationEvent).join(', ');
+                const restaurantLocations = itinerary.restaurants.map(restaurant => restaurant.locationRestaurant).join(', ');
+                const hotelLocation = itinerary.hotel.locationHotel;
+
+                // Combine all locations into a single string, ensuring to only include non-empty values
+                const allLocations = [eventLocations, restaurantLocations, hotelLocation].filter(location => location).join(', ');
+
+                return (
                   <div key={itinerary.id} className="itinerary">
-                    <h3>Price: ${itinerary.price}</h3>
-                    <p>Rating: {itinerary.rating}</p>
+                    <h3>Price: ${itinerary.totalPrice}</h3>
+                    <p>Rating: N/A</p> {/* Adjust this placeholder as needed */}
                     <div>
-                      <img src={itinerary.hotel.imageURL} alt="Hotel" style={{ width: '100px', height: '100px' }} />
+                      <img src={itinerary.hotel.imageURL || 'defaultImageURL'} alt="Hotel" style={{ width: '100px', height: '100px' }} />
                     </div>
-                    <p>Locations: {itinerary.locations.join(', ')}</p>
+                    <p>Locations: {allLocations || 'N/A'}</p>
                   </div>
-                ))}
+                );
+              })}
               </ul>
             )}
           </div>
