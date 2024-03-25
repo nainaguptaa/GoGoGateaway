@@ -85,7 +85,7 @@ export default function ForYouLikes({
   };
 
   const submitComment = async (itineraryId, comment) => {
-
+    // add the comment to the comments array
     try {
       // Send the comment to the server
       const response = await fetch(`http://localhost:8080/itineraries/${itineraryId}/comments`, {
@@ -95,15 +95,34 @@ export default function ForYouLikes({
         },
         body: JSON.stringify({ text: comment, userId: currentUser.id }),
       });
+
       if (!response.ok) {
         throw new Error('Failed to submit comment');
       }
+
+      // Extract the newly added comment from the response
+      const newComment = await response.json();
+
+      // Update the comments state to include the newly added comment
+      setComments((prevComments) => [...prevComments, newComment]);
+
       console.log('Comment submitted successfully');
+
+
+      //Get itenerary for itineraryId
+      const itinerary = itineraries.find((itinerary) => itinerary.id === itineraryId);
+      //Increment comment count
+      itinerary.commentCount++;
+      
+      setItineraries([...itineraries]);
+
+      setComment('');
     } catch (error) {
       console.error('Error submitting comment:', error);
       // Handle error appropriately, such as displaying an error message
     }
   }
+
 
   return (
     <div className="h-70 absolute bottom-40 right-6 z-10 mb-12 flex flex-col gap-6 rounded-xl  bg-white/60 px-2 py-4 text-sm sm:mb-8 sm:ml-4 sm:text-lg lg:static lg:right-16 lg:bg-transparent">
@@ -137,13 +156,15 @@ export default function ForYouLikes({
                 <DrawerClose className='text-xl'><FaTimes /></DrawerClose>
                 <DrawerTitle className="text-3xl justify-self-center">Comments</DrawerTitle>
               </DrawerHeader>
-              {comments ? (
-                comments.map((comment, index) => (
-                  <Comment key={index} comment={comment} />
-                ))
-              ) : (
-                <div>Loading comments...</div>
-              )}
+              <div className='grid grid-cols-1 gap-y-6 p-4 overflow-scroll'>
+                {comments ? (
+                  comments.map((comment, index) => (
+                    <Comment key={index} comment={comment} />
+                  ))
+                ) : (
+                  <div>Loading comments...</div>
+                )}
+              </div>
               <DrawerFooter className="flex flex-row items-center">
                 <Input className="border-slate-500"
                   placeholder="Comment"
