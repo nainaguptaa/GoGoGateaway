@@ -45,12 +45,13 @@ export const UserProvider = ({ children }) => {
   const [error, setError] = useState(null);
   /* if a user signs in through google, and their google account is a new user,  it will add to the firebase database*/
   async function addNewGoogleUser(result) {
-    console.log(result);
+    // Assuming result.user contains photoURL after Google sign-in
+    const photoURL = result.user.photoURL || ''; // Fallback to empty string if undefined
     const addUserData = {
       username: result.user.email.split('@')[0],
       id: result.user.uid,
       email: result.user.email,
-      photoURL: '',
+      photoURL: photoURL, // Use the photoURL from Google
       loggedIn: true,
       firstName: '',
       lastName: '',
@@ -104,6 +105,7 @@ export const UserProvider = ({ children }) => {
     setLoadingAuthState(true);
     try {
       const result = await signInWithPopup(auth, provider);
+      addOrUpdateGoogleUser(result);
       const userData = getAdditionalUserInfo(result);
       // Check if the user is signing in for the first time
       if (userData && userData.isNewUser) {
@@ -129,6 +131,25 @@ export const UserProvider = ({ children }) => {
     }
   };
 
+  async function addOrUpdateGoogleUser(result) {
+    const userDataFromGoogle = {
+      username: result.user.email.split('@')[0],
+      id: result.user.uid,
+      email: result.user.email,
+      photoURL: result.user.photoURL || '', // Capture the photoURL from Google sign-in
+      loggedIn: true,
+      firstName: result.user.displayName?.split(' ')[0] || '', // Optional: Capture first name from displayName
+      lastName: result.user.displayName?.split(' ').slice(1).join(' ') || '', // Optional: Capture last name from displayName
+      googleUser: true,
+      // Include any other user fields you want to capture or update
+    };
+
+    const userDocRef = doc(db, 'users', result.user.uid);
+
+    // Use setDoc with { merge: true } to update the existing document or create a new one without overwriting other fields
+    await setDoc(userDocRef, userDataFromGoogle, { merge: true });
+  }
+
   // function for logout
   const logout = async () => {
     // Show a confirmation dialog
@@ -151,27 +172,20 @@ export const UserProvider = ({ children }) => {
       console.log('Logout canceled');
     }
   };
+
   const emailSignUp = async (userDetails) => {
-    console.log('signup');
     console.log(userDetails);
     // Check if email already exists in Firestore
     const usersRef = collection(db, 'users');
     const querySnapshot = await getDocs(
       query(usersRef, where('email', '==', userDetails.email)),
     );
-    console.log(2);
+
     if (!querySnapshot.empty) {
       // Handle case where email already exists
-      toast({
-        title: 'Error',
-        description: 'Email already exists.',
-        status: 'error',
-        duration: 9000,
-        isClosable: true,
-      });
+      console.error('Email already in exists.');
       return;
     }
-    console.log(3);
     createUserWithEmailAndPassword(
       auth,
       userDetails.email,
@@ -179,10 +193,9 @@ export const UserProvider = ({ children }) => {
     )
       .then((userCredential) => {
         // Signed up
-        console.log(4);
         const user = userCredential.user;
         const userId = user.uid;
-        console.log(user);
+
         // You can now use the userId for further operations, like adding the user to your database
         console.log(3);
         const data = {
@@ -190,17 +203,30 @@ export const UserProvider = ({ children }) => {
           userId: userId,
         };
         addNewEmailUser(data);
+        navigate('/welcome');
+        // ...
       })
       .catch((error) => {
-        console.log(error.message);
         const errorCode = error.code;
         const errorMessage = error.message;
         // ..
       });
-    // navigate('/');
-    setSignPopup(false); //close signup popup
+    setSignPopup(false);
   };
+  const emailCheck = async (userDetails) => {
+    // Check if email already exists in Firestore
+    const usersRef = collection(db, 'users');
+    const querySnapshot = await getDocs(
+      query(usersRef, where('email', '==', userDetails.email)),
+    );
 
+    if (!querySnapshot.empty) {
+      // Handle case where email already exists
+      const error = new Error('Email already exists.');
+      error.customMessage = 'Email Already Exists'; // Custom property to carry a user-friendly message
+      throw error; // This will cause the promise to be rejected
+    }
+  };
   const emailSignIn = async (email, password) => {
     console.log('signing in');
     try {
@@ -211,15 +237,14 @@ export const UserProvider = ({ children }) => {
       );
       // Signed in
       const user = userCredential.user;
-
+      navigate('/welcome');
       // ... other logic here
     } catch (error) {
-      console.error('Error during sign-in:', error);
+      console.error('Error during sign-in:', error.message);
+      console.error(error.code);
       // Re-throw the error to be caught by the caller
       throw error;
     }
-    // navigate('/');
-    // close popup
     setSignPopup(false);
   };
 
@@ -227,18 +252,20 @@ export const UserProvider = ({ children }) => {
   // When an auth state change is detected, it performs checks and sets the details of user to 'user'
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (authUser) => {
+      setLoadingAuthState(true); // Indicate that loading of auth state has begun
       try {
-        setLoadingAuthState(true);
         if (authUser) {
-          setUser(authUser);
-          const userDocRef = doc(db, 'users', authUser.uid);
-          const userDoc = await getDoc(userDocRef);
+          // User is signed in
+          setUser(authUser); // Set the global user state to the authenticated user
+          const userDocRef = doc(db, 'users', authUser.uid); // Reference to the Firestore document
+          const docSnapshot = await getDoc(userDocRef); // Fetch the document
 
-          if (userDoc.exists()) {
-            // Set the user data from Firestore
-            setCurrentUser(userDoc.data());
+          // Check if the Firestore document exists
+          if (docSnapshot.exists()) {
+            // Document exists, set currentUser to the document data
+            setCurrentUser(docSnapshot.data());
           } else {
-            // User is authenticated but not in Firestore (should handle this case)
+            // Document does not exist, handle this case (e.g., user authenticated but not in Firestore)
             setCurrentUser(null);
           }
         } else {
@@ -248,14 +275,13 @@ export const UserProvider = ({ children }) => {
       } catch (err) {
         console.error('Error during authentication state change:', err);
       } finally {
-        setTimeout(() => {
-          setLoadingAuthState(false);
-        }, 100); // 1000 milliseconds delay
+        setLoadingAuthState(false); // Indicate that loading of auth state is complete
       }
     });
 
+    // Cleanup function to unsubscribe from the auth state listener when the component unmounts
     return () => unsubscribe();
-  }, []);
+  }, []); // Empty dependency array means this effect runs once on mount
 
   const updateUser = async (updatedUserDetails) => {
     if (!user) {
@@ -283,6 +309,7 @@ export const UserProvider = ({ children }) => {
     updateUser,
     signPopup,
     setSignPopup,
+    emailCheck,
   };
 
   // Provider component wrapping children with the user context
