@@ -97,6 +97,7 @@ function App() {
             <Route path="/test" element={<Test />} />
             <Route path="*" element={<Navigate to="/ " replace />} />
             <Route path="/my-trips" element={<MyTrips />} />
+            <Route path="/user/:username" element={<MyTrips />} />
           </Routes>
         </Suspense>
       </div>
