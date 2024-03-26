@@ -6,7 +6,6 @@ import { Input } from '@/components/ui/input';
 const SearchBar = ({ isMobile, iconSize }) => {
   const [search, setSearch] = useState(''); // Initialize state
   const navigate = useNavigate();
-
   const handleChange = (event) => {
     setSearch(event.target.value); // Update state on change
   };

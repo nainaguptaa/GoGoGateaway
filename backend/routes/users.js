@@ -63,4 +63,35 @@ router.post("/:userId/save-itinerary", async (req, res) => {
   }
 });
 
+router.post("/:userId/add-to-liked", async (req, res) => {
+  const userId = req.params.userId; // Retrieve the user ID from the URL parameters
+  const itineraryId = req.body.itineraryId; // Assuming the itinerary ID is sent in the request body
+
+  if (!itineraryId) {
+    return res.status(400).json({ error: "Missing itinerary ID" });
+  }
+
+  try {
+    // Reference to the user's document in the 'users' collection
+    const userRef = db.collection("users").doc(userId);
+    const doc = await userRef.get();
+
+    if (!doc.exists) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Check if the itineraryId already exists in the savedItineraries array
+
+    // Atomically add the itinerary ID to the 'savedItineraries' array field in the user's document
+    await userRef.update({
+      likedItineraries: admin.firestore.FieldValue.arrayUnion(itineraryId),
+    });
+
+    res.status(200).json({ message: "Itinerary liked successfully" });
+  } catch (error) {
+    console.error("Error saving itinerary:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 module.exports = router;
