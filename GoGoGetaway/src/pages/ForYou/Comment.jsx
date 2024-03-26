@@ -1,11 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 import { CgProfile } from 'react-icons/cg';
-import {
-  FaRegHeart,
-  FaHeart,
-} from 'react-icons/fa';
+import { FaRegHeart, FaHeart } from 'react-icons/fa';
 const Comment = ({ comment }) => {
-
   const [userData, setUserData] = useState(null);
   const [imageError, setImageError] = useState(false);
   const handleImageError = () => {
@@ -18,15 +14,17 @@ const Comment = ({ comment }) => {
     const fetchUserData = async () => {
       try {
         // Perform a fetch operation to get user data based on comment.userId
-        const response = await fetch(`http://localhost:3000/users/${comment.userId}`);
+        const response = await fetch(
+          `http://localhost:3000/users/${comment.userId}`,
+        );
         if (!response.ok) {
-          throw new Error("Failed to fetch user data");
+          throw new Error('Failed to fetch user data');
         }
         const userData = await response.json();
 
         setUserData(userData);
       } catch (error) {
-        console.error("Error fetching user data:", error);
+        console.error('Error fetching user data:', error);
       }
     };
 
@@ -59,9 +57,8 @@ const Comment = ({ comment }) => {
 
   const handleLikeButton = async (commentID) => {
     // Implement like functionality
-    console.log("Like button clicked for itinerary ID:", commentID);
+    console.log('Like button clicked for itinerary ID:', commentID);
     setLiked(!liked);
-
 
     // add the comment to the comments array
     try {
@@ -69,60 +66,61 @@ const Comment = ({ comment }) => {
         //Increment like count
         comment.likeCount++;
         // Send the comment to the server
-        const response = await fetch(`http://localhost:8080/itineraries/comments/${commentID}/like/increment`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+        const response = await fetch(
+          `http://localhost:8080/itineraries/comments/${commentID}/like/increment`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
           },
-        });
+        );
 
         if (!response.ok) {
           throw new Error('Failed to like comment');
         }
-      }
-      else {
+      } else {
         //Decrement like count
         comment.likeCount--;
 
         // Send the comment to the server
-        const response = await fetch(`http://localhost:8080/itineraries/comments/${commentID}/like/decrement`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+        const response = await fetch(
+          `http://localhost:8080/itineraries/comments/${commentID}/like/decrement`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
           },
-        });
+        );
 
         if (!response.ok) {
           throw new Error('Failed to unlike comment');
         }
       }
-
     } catch (error) {
       console.error('Error liking comment:', error);
       // Handle error appropriately, such as displaying an error message
     }
-  }
+  };
 
   return (
-
-    <div className="flex flex-col gap-2">
-      <div className="flex w-full justify-between items-start">
-        <div className="flex flex-1 gap-2">
-          {!imageError ?
+    <div className="flex flex-col gap-2 ">
+      <div className="flex w-full items-start justify-between ">
+        <div className="flex w-11/12 flex-1 gap-2 ">
+          {!imageError ? (
             <img
               src={userData?.photoURL}
               onError={handleImageError}
               alt="Profile"
-              className="w-12 rounded-full"
+              className="w-12 rounded-full "
             />
-            :
-            <CgProfile className="h-10 w-10" />
-          }
-          <div className="flex gap-2">
-            <h1 className="font-bold">
-              {userData && userData.username}
-            </h1>
-            <p className="break-words">
+          ) : (
+            <CgProfile className="h-10 w-10 " />
+          )}
+          <div className="flex min-w-0 flex-1 gap-2 pr-4 ">
+            <h1 className="font-bold">{userData && userData.username}</h1>
+            <p className="overflow-hidden text-ellipsis break-all">
               {comment.text}
             </p>
           </div>
@@ -139,16 +137,11 @@ const Comment = ({ comment }) => {
           />
         )}
       </div>
-      <div className="flex gap-2 text-xs text-gray-400 px-2">
-        <p>
-          {timeAgo(comment.timestamp)}
-        </p>
-        <p>
-          {comment?.likeCount} likes
-        </p>
+      <div className="flex gap-2 px-2 text-xs text-gray-400">
+        <p>{timeAgo(comment.timestamp)}</p>
+        <p>{comment?.likeCount} likes</p>
       </div>
     </div>
-
   );
 };
 
