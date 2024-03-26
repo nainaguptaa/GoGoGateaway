@@ -7,6 +7,9 @@ import {
   FaCommentAlt,
   FaTimes,
 } from 'react-icons/fa';
+import { GoPlus } from "react-icons/go";
+import { IoMdCheckmark } from "react-icons/io";
+import { CgProfile } from 'react-icons/cg';
 import axios from 'axios'; // Make sure to install axios with npm or yarn
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa6';
 import { Input } from '@/components/ui/input';
@@ -41,6 +44,8 @@ export default function ForYouLikes({
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(false);
   const { currentUser } = useUserContext();
+  const [following, setFollowing] = useState(false);
+  const [animate, setAnimate] = useState(false);
 
   const handleLikeButton = async (itineraryId, index) => {
     const itinerary = itineraries[index];
@@ -113,7 +118,7 @@ export default function ForYouLikes({
       const itinerary = itineraries.find((itinerary) => itinerary.id === itineraryId);
       //Increment comment count
       itinerary.commentCount++;
-      
+
       setItineraries([...itineraries]);
 
       setComment('');
@@ -123,9 +128,68 @@ export default function ForYouLikes({
     }
   }
 
+  const handleFollowButton = async (userId) => {
+    try {
+      if (following) {
+        // Unfollow logic
+        const response = await fetch(`http://localhost:8080/users/unfollow/${userId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ currentUser: currentUser.id }),
+        });
+        if (!response.ok) {
+          throw new Error('Failed to unfollow user');
+        }
+        console.log('User unfollowed successfully');
+      } else {
+        // Follow logic
+        const response = await fetch(`http://localhost:8080/users/follow/${userId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ currentUser: currentUser.id }),
+        });
+        if (!response.ok) {
+          throw new Error('Failed to follow user');
+        }
+        console.log('User followed successfully');
+      }
+
+      // Toggle following state
+      setFollowing(!following);
+      // Trigger animation
+      setAnimate(true);
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle error appropriately, such as displaying an error message
+    }
+  };
 
   return (
     <div className="h-70 absolute bottom-40 right-6 z-10 mb-12 flex flex-col gap-6 rounded-xl  bg-white/60 px-2 py-4 text-sm sm:mb-8 sm:ml-4 sm:text-lg lg:static lg:right-16 lg:bg-transparent">
+      <div className='flex flex-col items-center relative '>
+        {itineraries[index]?.userPhoto ? (
+          <img
+            src={itineraries[index]?.userPhoto}
+            alt="Profile"
+            className="w-12 mb-1 rounded-full"
+          />
+        ) : (
+          <CgProfile className="h-12 w-12 mb-1" />
+        )}
+        <Button
+          className={`absolute -bottom-0.5 max-w-5 h-5 px-1 bg-rose-400 hover:bg-rose-500 text-white rounded-full text-justify transition-all duration-300 ease-in-out ${following ? 'animate-bounce-2' : animate ? 'animate-shake' : ''
+            }`}
+          onClick={() => handleFollowButton(itineraries[index].userId)}
+        >
+          {following ? <IoMdCheckmark /> : <GoPlus />}
+        </Button>
+
+      </div>
+
       <div className="flex flex-col items-center gap-2">
         {itineraries[index].liked ? (
           <FaHeart
@@ -136,7 +200,7 @@ export default function ForYouLikes({
         ) : (
           <FaRegHeart
             size={iconSize}
-            className="ease cursor-pointer text-rose-500 transition duration-200 hover:text-rose-500"
+            className="ease cursor-pointer text-black transition duration-200 hover:text-rose-500"
             onClick={() => handleLikeButton(itineraries[index].id, index)}
           />
         )}
@@ -185,10 +249,10 @@ export default function ForYouLikes({
           {itinerariesDummy[index].likes}
         </div> */}
       </div>
-      <div className="flex flex-col items-center gap-2">
+      {/* <div className="flex flex-col items-center gap-2">
         <FaShare size={iconSize} />
         <div className=" font-bold">Share</div>
-      </div>
+      </div> */}
     </div>
   );
 }
