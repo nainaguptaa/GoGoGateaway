@@ -131,7 +131,7 @@ const Navbar = ({ isMobile, iconSize }) => {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className="flex items-center gap-2"
-                  onClick={() => navigate('/my-trips')}
+                  onClick={() => navigate(`/user/${currentUser.username}`)}
                 >
                   <RxDashboard size={25} />
                   <div>My Trips</div>
