@@ -64,6 +64,7 @@ router.post("/create", async (req, res) => {
     // Construct the itinerary object
     const itinerary = {
       userId: data.userId,
+      userPhoto: data.photoURL,
       likeCount: 0,
       commentCount: 0,
       name: data.name,
