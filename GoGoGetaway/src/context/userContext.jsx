@@ -43,6 +43,11 @@ export const UserProvider = ({ children }) => {
   const [isNewGoogleUser, setIsNewGoogleUser] = useState(false);
   const [signPopup, setSignPopup] = useState(false);
   const [error, setError] = useState(null);
+
+  const updateCurrentUser = (updatedUserDetails) => {
+    setCurrentUser(updatedUserDetails);
+  };
+
   /* if a user signs in through google, and their google account is a new user,  it will add to the firebase database*/
   async function addNewGoogleUser(result) {
     // Assuming result.user contains photoURL after Google sign-in
@@ -317,6 +322,7 @@ export const UserProvider = ({ children }) => {
     signPopup,
     setSignPopup,
     emailCheck,
+    updateCurrentUser,
   };
 
   // Provider component wrapping children with the user context
