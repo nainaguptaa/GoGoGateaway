@@ -64,6 +64,7 @@ router.post("/create", async (req, res) => {
     // Construct the itinerary object
     const itinerary = {
       userId: data.userId,
+      userPhoto: data.photoURL,
       likeCount: 0,
       commentCount: 0,
       name: data.name,
@@ -75,6 +76,8 @@ router.post("/create", async (req, res) => {
         typeOfActivity: event.typeOfActivity,
         locationEvent: event.locationEvent,
         priceEvent: parseFloat(event.priceEvent),
+        rating: event.ratingEvent,
+        event: event.event,
         // imageURL: event.imageURL || defaultImageURL,
       })),
       restaurants: data.restaurant.map((restaurant) => ({
@@ -83,9 +86,13 @@ router.post("/create", async (req, res) => {
         cuisine: restaurant.cuisine,
         locationRestaurant: restaurant.locationRestaurant,
         priceRestaurant: parseFloat(restaurant.priceRestaurant),
+        restaurant: restaurant.restaurant,
+        rating: restaurant.ratingRestaurant,
         // imageURL: restaurant.imageURL || defaultImageURL,
       })),
       hotel: {
+        hotel: data.hotel.hotel,
+        rating: data.hotel.ratingHotel,
         hotelID: db.doc(`/hotels/${hotelId}`),
         time: data.hotel.time,
         locationHotel: data.hotel.locationHotel,
@@ -101,7 +108,9 @@ router.post("/create", async (req, res) => {
     const itineraryRef = await db.collection("itineraries").add(itinerary);
 
     console.log("Itinerary created successfully with ID:", itineraryRef.id);
-    res.status(201).json({ message: "Itinerary created successfully", id: itineraryRef.id });
+    res
+      .status(201)
+      .json({ message: "Itinerary created successfully", id: itineraryRef.id });
   } catch (error) {
     console.error("Error creating itinerary:", error);
     res.status(500).json({ error: "Internal Server Error" });
@@ -255,7 +264,7 @@ router.post("/:id/comments", async (req, res) => {
     // Update comment count in the corresponding itinerary
     const itineraryRef = db.collection("itineraries").doc(id);
     await itineraryRef.update({
-      commentCount: admin.firestore.FieldValue.increment(1) // Increment comment count by 1
+      commentCount: admin.firestore.FieldValue.increment(1), // Increment comment count by 1
     });
 
     // Fetch the newly added comment from the database

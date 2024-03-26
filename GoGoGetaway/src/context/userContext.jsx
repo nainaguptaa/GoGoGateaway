@@ -108,6 +108,7 @@ export const UserProvider = ({ children }) => {
   // Function to handle Google sign-in
   const googleSignIn = async () => {
     setLoadingAuthState(true);
+    console.log('google');
     try {
       const result = await signInWithPopup(auth, provider);
       addOrUpdateGoogleUser(result);
@@ -131,8 +132,14 @@ export const UserProvider = ({ children }) => {
       // now we are just using a poppup, so instead we just set popup to false
       setSignPopup(false);
     } catch (error) {
-      console.log('error');
-      console.log(error.message);
+      console.log('Authentication error:', error);
+      if (error.code === 'auth/popup-blocked') {
+        alert(
+          'Popup blocked by the browser, please allow popups for this site and try again.',
+        );
+      } else {
+        alert('An error occurred during sign-in, please try again.');
+      }
     }
   };
 

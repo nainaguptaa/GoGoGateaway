@@ -23,7 +23,7 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer"
+} from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { useUserContext } from '@/context/userContext';
 import Comment from './Comment';
@@ -39,7 +39,7 @@ export default function ForYouLikes({
       liked: false, // Initialize all itineraries as not liked
     })),
   );
-
+  console.log(itineraries);
   const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(false);
@@ -49,9 +49,10 @@ export default function ForYouLikes({
 
   const handleLikeButton = async (itineraryId, index) => {
     const itinerary = itineraries[index];
+    console.log(itineraryId);
     const newLikedState = !itinerary.liked; // Toggle the liked state
     const likeChange = newLikedState ? 1 : -1; // Increment if liking, decrement if unliking
-
+    const userId = currentUser.id;
     // Optimistically update the UI
     const newItineraries = [...itineraries];
     newItineraries[index] = {
@@ -67,6 +68,11 @@ export default function ForYouLikes({
         ? `http://localhost:8080/itineraries/increment-like/${itineraryId}`
         : `http://localhost:8080/itineraries/decrement-like/${itineraryId}`; // Assume you have a decrement-like endpoint
       await axios.post(endpoint);
+
+      const addToLikedEndpoint = `http://localhost:8080/users/${userId}/add-to-liked`;
+      await axios.post(addToLikedEndpoint, {
+        itineraryId: itineraryId,
+      });
     } catch (error) {
       console.error('Error updating like count:', error);
       // Optionally, revert the optimistic update here
@@ -74,10 +80,12 @@ export default function ForYouLikes({
   };
 
   const openComments = async (itineraryId) => {
-    setComment('')
+    setComment('');
     try {
       // Fetch comments for the itinerary
-      const response = await fetch(`http://localhost:8080/itineraries/${itineraryId}/comments`);
+      const response = await fetch(
+        `http://localhost:8080/itineraries/${itineraryId}/comments`,
+      );
       if (!response.ok) {
         throw new Error('Failed to fetch comments');
       }
@@ -93,13 +101,16 @@ export default function ForYouLikes({
     // add the comment to the comments array
     try {
       // Send the comment to the server
-      const response = await fetch(`http://localhost:8080/itineraries/${itineraryId}/comments`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await fetch(
+        `http://localhost:8080/itineraries/${itineraryId}/comments`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ text: comment, userId: currentUser.id }),
         },
-        body: JSON.stringify({ text: comment, userId: currentUser.id }),
-      });
+      );
 
       if (!response.ok) {
         throw new Error('Failed to submit comment');
@@ -113,9 +124,10 @@ export default function ForYouLikes({
 
       console.log('Comment submitted successfully');
 
-
       //Get itenerary for itineraryId
-      const itinerary = itineraries.find((itinerary) => itinerary.id === itineraryId);
+      const itinerary = itineraries.find(
+        (itinerary) => itinerary.id === itineraryId,
+      );
       //Increment comment count
       itinerary.commentCount++;
 
@@ -126,6 +138,7 @@ export default function ForYouLikes({
       console.error('Error submitting comment:', error);
       // Handle error appropriately, such as displaying an error message
     }
+
   }
 
   const handleFollowButton = async (userId) => {
@@ -180,6 +193,7 @@ export default function ForYouLikes({
       console.error('Error:', error);
       // Handle error appropriately, such as displaying an error message
     }
+
   };
 
   return (
@@ -205,6 +219,10 @@ export default function ForYouLikes({
       </div>
 
       <div className="flex flex-col items-center gap-2">
+        <img
+          src={itineraries[index].userPhoto}
+          className="mb-5 w-[4rem] rounded-full"
+        />
         {itineraries[index].liked ? (
           <FaHeart
             size={iconSize}
@@ -225,16 +243,21 @@ export default function ForYouLikes({
         {
           <Drawer>
             <DrawerTrigger>
-              <FaRegCommentAlt size={iconSize}
+              <FaRegCommentAlt
+                size={iconSize}
                 onClick={() => openComments(itineraries[index].id)}
               />
             </DrawerTrigger>
             <DrawerContent className="h-4/6 lg:w-1/2 lg:justify-self-center">
               <DrawerHeader className="flex items-center gap-4">
-                <DrawerClose className='text-xl'><FaTimes /></DrawerClose>
-                <DrawerTitle className="text-3xl justify-self-center">Comments</DrawerTitle>
+                <DrawerClose className="text-xl">
+                  <FaTimes />
+                </DrawerClose>
+                <DrawerTitle className="justify-self-center text-3xl">
+                  Comments
+                </DrawerTitle>
               </DrawerHeader>
-              <div className='grid grid-cols-1 gap-y-6 p-4 overflow-scroll'>
+              <div className="grid grid-cols-1 gap-y-6 overflow-scroll p-4">
                 {comments ? (
                   comments.map((comment, index) => (
                     <Comment key={index} comment={comment} />
@@ -244,21 +267,27 @@ export default function ForYouLikes({
                 )}
               </div>
               <DrawerFooter className="flex flex-row items-center">
-                <Input className="border-slate-500"
+                <Input
+                  className="border-slate-500"
                   placeholder="Comment"
                   value={comment}
                   onChange={(e) => setComment(e.target.value)}
                 />
-                <Button className="h-full w-1/4"
+                <Button
+                  className="h-full w-1/4"
                   onClick={() => submitComment(itineraries[index].id, comment)}
-                >Comment</Button>
+                >
+                  Comment
+                </Button>
               </DrawerFooter>
             </DrawerContent>
-          </Drawer>}
+          </Drawer>
+        }
         <div className=" font-bold">{itineraries[index].commentCount}</div>
       </div>
-      <div className="flex flex-col items-center gap-2">
+      {/* <div className="flex flex-col items-center gap-2">
         <FaRegBookmark size={iconSize} />
+
         {/* <div className="text-lg font-bold">
           {itinerariesDummy[index].likes}
         </div> */}
@@ -266,6 +295,7 @@ export default function ForYouLikes({
       {/* <div className="flex flex-col items-center gap-2">
         <FaShare size={iconSize} />
         <div className=" font-bold">Share</div>
+
       </div> */}
     </div>
   );
