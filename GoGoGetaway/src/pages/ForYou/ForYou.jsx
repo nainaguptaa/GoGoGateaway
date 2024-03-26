@@ -27,7 +27,8 @@ import {
   CarouselPrevious,
 } from '@/components/ui/carousel';
 import { PiShareFat } from 'react-icons/pi';
-import ForYouLikes from './ForYouLikes';
+import ForYouLikes from '../../components/ItineraryList/ForYouLikes';
+import ItineraryList from '@/components/ItineraryList/ItineraryList';
 const ForYou = ({ isMobile, iconSize }) => {
   const [itineraries, setItineraries] = useState([]);
   const navigate = useNavigate();
@@ -127,86 +128,16 @@ const ForYou = ({ isMobile, iconSize }) => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  // console.log(itineraries);
-  // console.log(itinerariesDummy);
-  // console.log(dumdum);
-  const Row = ({ index, style }) => (
-    <div style={style} className="mx:px-20 px-4 lg:px-14 lg:pt-8 ">
-      <div className="flex h-full  items-end md:h-[48rem] md:items-center md:justify-center">
-        <div
-          className="flex cursor-pointer flex-col gap-2 overflow-hidden sm:h-[47rem] md:h-[46rem] md:w-[55rem] lg:w-[65rem] lg:rounded-2xl  lg:border-2 lg:bg-card lg:dark:bg-card 2xl:w-[75rem]"
-          onClick={() => navigate(`/itineraries?id=${itineraries[index].id}`)}
-        >
-          {/* <div className="grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-4"> */}
-          {/* {itinerariesDummy[index].images.map((image, imgIndex) => (
-              <img
-                key={imgIndex}
-                src={image}
-                alt={`Image ${imgIndex}`}
-                className="h-32 w-full object-cover md:h-48 lg:h-64" // Adjust height as needed
-              />
-            ))} */}
-          <div className="h-[39rem] bg-red-300 sm:h-[39rem] sm:w-full md:h-[38rem]  lg:h-[38rem] 2xl:max-h-[38rem]">
-            {' '}
-            <img
-              src={itineraries[index].images[0]}
-              // alt={`Slide ${imgIndex}`}
-              loading="lazy"
-              className="z-10  h-full  w-full object-cover"
-            />
-          </div>
 
-          <div className="flex justify-between px-4 pb-3">
-            <div className="flex flex-col">
-              {' '}
-              <div className="text-3xl font-bold">
-                {itineraries[index].name}
-              </div>
-              <div className="text-xl font-semibold">
-                {itineraries[index].city}
-              </div>
-            </div>
-            <div className="text-2xl font-bold">
-              {new Intl.NumberFormat('en-CA', {
-                style: 'currency',
-                currency: 'CAD',
-                minimumFractionDigits: 0,
-                maximumFractionDigits: 0,
-              }).format(itineraries[index].totalPrice)}{' '}
-              Total
-            </div>
-          </div>
-          {/* </div> */}
-        </div>
-        <ForYouLikes
-          isMobile={isMobile}
-          itinerariesProp={itineraries}
-          index={index}
-          iconSize={iconSize}
-        />
-      </div>
-    </div>
-  );
-
-  // if (isMobile) {
-  //   return <>sdf</>;
-  // }
-  // console.log(isMobile);
   return (
     <div className="flex h-screen">
       {!isMobile && <ForYouLeft />}
-      <div className="flex flex-grow gap-2 overflow-hidden  lg:ml-[14rem] xl:ml-64">
-        <List
-          className="flex lg:gap-12 2xl:gap-24 "
-          height={window.innerHeight} // Adjust based on your layout
-          itemCount={itineraries.length}
-          itemSize={itemSize} // Dynamically adjusted
-          width={'100%'} // Adjust as necessary
-        >
-          {/* <div className="flex flex-colgap-2"></div> */}
-          {Row}
-        </List>
-      </div>
+      <ItineraryList
+        itineraries={itineraries}
+        isMobile={isMobile}
+        iconSize={iconSize}
+        itemSize={itemSize}
+      />
     </div>
   );
 };
