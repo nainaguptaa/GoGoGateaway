@@ -33,7 +33,14 @@
       {
         "eventID": "[DocumentReference]",
         "typeOfActivity": "sightseeing",
-        "locationEvent": "d",
+        "locationEvent": "Location 1",
+        "time": "10:52",
+        "priceEvent": 52
+      },
+      {
+        "eventID": "[DocumentReference]",
+        "typeOfActivity": "sightseeing",
+        "locationEvent": "Location 2",
         "time": "10:52",
         "priceEvent": 52
       }

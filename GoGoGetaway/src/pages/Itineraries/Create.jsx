@@ -94,7 +94,37 @@ const Create = () => {
   });
   // After each add/update operation, call this function to update the totalPrice
   const [selectedImages, setSelectedImages] = useState([]);
+  const [isDragging, setIsDragging] = useState(false); // New state to track drag status
 
+  const handleDragEnter = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true); // Set is dragging state to true
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    if (!isDragging) {
+      setIsDragging(true);
+    }
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false); // Set is dragging state to false
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false); // Reset drag status
+    const files = e.dataTransfer.files; // Access files
+    if (files && files.length > 0) {
+      setSelectedImages([...files]); // Update state with dropped files
+    }
+  };
   const handleFileChange = (event) => {
     setSelectedImages([...event.target.files]);
   };
@@ -698,7 +728,17 @@ const Create = () => {
                 </div>
               </div>
               <div className="mt-5 text-lg font-semibold">Upload Images</div>
-              <div class="mt-4 rounded-lg border-2 border-dashed border-gray-300 px-4 py-3 shadow-sm">
+              <div
+                className={`mt-4 rounded-lg border-2 ${
+                  isDragging
+                    ? 'border-blue-500 bg-blue-100'
+                    : 'border-dashed border-gray-300'
+                } px-4 py-3 shadow-sm`}
+                onDragOver={handleDragOver}
+                onDragEnter={handleDragEnter}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+              >
                 <label class="block h-full w-full cursor-pointer">
                   <input
                     type="file"
