@@ -37,14 +37,6 @@ const ForYou = ({ isMobile, iconSize }) => {
   const [page, setPage] = useState(1);
   // Number of posts to display per "page"
   const postsPerPage = 5;
-  // Simulate fetching data from Firebase
-  // useEffect(() => {
-  //   // Set itineraries from itinerariesDummy
-  //   setItineraries(dumdum);
-  //   // Load initial posts
-  //   setDisplayedPosts(dumdum.slice(0, postsPerPage));
-  // }, []);
-
   // Define the function to fetch itineraries
   useEffect(() => {
     const fetchItineraries = async () => {
@@ -55,7 +47,6 @@ const ForYou = ({ isMobile, iconSize }) => {
         }
         const data = await response.json();
 
-        console.log(data);
         setItineraries(data);
         setDisplayedPosts(data.slice(0, postsPerPage));
       } catch (error) {
@@ -74,30 +65,6 @@ const ForYou = ({ isMobile, iconSize }) => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-  const handleScroll = (event) => {
-    const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
-
-    // Check if we've scrolled to the bottom of the content
-    if (scrollTop + clientHeight >= scrollHeight - 5) {
-      // 5px threshold to trigger before exactly reaching the bottom
-      // Calculate the next page and update the state if there are more posts to show
-      const nextPage = page + 1;
-      const nextPosts = itinerariesDummy.slice(0, nextPage * postsPerPage);
-
-      if (nextPosts.length > displayedPosts.length) {
-        setDisplayedPosts(nextPosts);
-        setPage(nextPage);
-      }
-    }
-  };
-  const calculateDaysAgo = (postedDate) => {
-    const posted = new Date(postedDate);
-    const now = new Date();
-    const difference = now - posted; // Difference in milliseconds
-    const daysAgo = Math.floor(difference / (1000 * 60 * 60 * 24));
-    return daysAgo;
-  };
 
   const getItemSize = () => {
     const screenWidth = window.innerWidth;
@@ -128,7 +95,6 @@ const ForYou = ({ isMobile, iconSize }) => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
   return (
     <div className="flex h-screen">
       {!isMobile && <ForYouLeft />}

@@ -90,7 +90,7 @@ function App() {
             <Route path="/search" element={<SearchResults />} />
             <Route
               path="/following"
-              element={<Following isMobile={isMobile} />}
+              element={<Following isMobile={isMobile} iconSize={iconSize} />}
             />
             <Route path="/itineraries" element={<Itinerary />} />{' '}
             <Route path="/create" element={<Create />} />

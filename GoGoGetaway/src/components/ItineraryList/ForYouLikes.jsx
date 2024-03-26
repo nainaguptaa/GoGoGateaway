@@ -39,7 +39,6 @@ export default function ForYouLikes({
       liked: false, // Initialize all itineraries as not liked
     })),
   );
-  console.log(itineraries);
   const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(false);
