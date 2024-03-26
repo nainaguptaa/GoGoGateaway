@@ -116,6 +116,63 @@ router.post("/create", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+router.post('/users/:userId/remove-saved-itinerary', async (req, res) => {
+  const { userId } = req.params; // Extract userId from URL parameters
+  const { itineraryId } = req.body; // Extract itineraryId from request body
+
+  try {
+    // Reference to the user's document in the 'users' collection
+    const userRef = db.collection('users').doc(userId);
+    // Fetch the document to check if the user exists
+    const userDoc = await userRef.get();
+
+    if (!userDoc.exists) {
+      // If the user document does not exist, return a 404 error
+      console.log(`User not found with ID: ${userId}`);
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Atomically remove the itinerary ID from the 'savedItineraries' array field
+    await userRef.update({
+      savedItineraries: admin.firestore.FieldValue.arrayRemove(itineraryId)
+    });
+
+    console.log(`Itinerary ID ${itineraryId} removed from user ID ${userId}'s saved itineraries`);
+    res.json({ message: 'Itinerary removed successfully from saved itineraries' });
+  } catch (error) {
+    console.error(`Error removing saved itinerary for user ID ${userId}: ${error.message}`);
+    res.status(500).json({ message: error.message || "Error Occurred while removing itinerary from saved itineraries" });
+  }
+});
+router.post("/users/:userId/save-itinerary", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { itineraryId } = req.body;
+
+    if (!itineraryId) {
+      return res.status(400).json({ error: "Missing itinerary ID" });
+    }
+
+    // Reference to the user's document in the 'users' collection
+    const userRef = db.collection("users").doc(userId);
+    const userDoc = await userRef.get();
+
+    if (!userDoc.exists) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Atomically add the itinerary ID to the 'savedItineraries' array field in the user's document
+    await userRef.update({
+      savedItineraries: admin.firestore.FieldValue.arrayUnion(itineraryId),
+    });
+
+    res.status(200).json({ message: "Itinerary saved successfully" });
+  } catch (error) {
+    console.error("Error saving itinerary:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 //  price: data.price, // Assuming price is part of the data
 //rating: parseFloat(data.rating), // Assuming rating is part of the data
@@ -245,13 +302,19 @@ router.get("/:id", async (req, res) => {
     // Fetch data from Firestore
     const itineraryRef = db.collection("itineraries").doc(id);
     const itinerarySnapshot = await itineraryRef.get();
-    const itineraryData = itinerarySnapshot.data();
+    if (!itinerarySnapshot.exists) {
+      return res.status(404).json({ error: "Itinerary not found" });
+    }
+    let itineraryData = itinerarySnapshot.data();
+
+    // Add the id to the itineraryData
+    itineraryData = { id, ...itineraryData };
 
     // Replace hotel reference with actual hotel data
     if (itineraryData.hotel && itineraryData.hotel.hotelid) {
       const hotelRef = itineraryData.hotel.hotelid;
       const hotelSnapshot = await hotelRef.get();
-      itineraryData.hotel = hotelSnapshot.data();
+      itineraryData.hotel = { ...itineraryData.hotel, ...hotelSnapshot.data() };
     }
 
     // Replace event references with actual event data
@@ -259,20 +322,18 @@ router.get("/:id", async (req, res) => {
       const eventPromises = itineraryData.event.map(async (event) => {
         const eventRef = event.eventID;
         const eventSnapshot = await eventRef.get();
-        return eventSnapshot.data();
+        return { ...event, ...eventSnapshot.data() };
       });
       itineraryData.event = await Promise.all(eventPromises);
     }
 
     // Replace restaurant references with actual restaurant data
     if (itineraryData.restaurant && itineraryData.restaurant.length > 0) {
-      const restaurantPromises = itineraryData.restaurant.map(
-        async (restaurant) => {
-          const restaurantRef = restaurant.restaurantID;
-          const restaurantSnapshot = await restaurantRef.get();
-          return restaurantSnapshot.data();
-        }
-      );
+      const restaurantPromises = itineraryData.restaurant.map(async (restaurant) => {
+        const restaurantRef = restaurant.restaurantID;
+        const restaurantSnapshot = await restaurantRef.get();
+        return { ...restaurant, ...restaurantSnapshot.data() };
+      });
       itineraryData.restaurant = await Promise.all(restaurantPromises);
     }
 
@@ -283,7 +344,6 @@ router.get("/:id", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
-
 router.post("/:id/comments", async (req, res) => {
   try {
     const { id } = req.params; // Itinerary ID
