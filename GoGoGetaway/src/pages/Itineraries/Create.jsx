@@ -476,7 +476,6 @@ const Create = () => {
       return updatedItineraries;
     });
   };
-
   useEffect(() => {
     const handleBeforeUnload = (event) => {
       // Set the confirmation message
