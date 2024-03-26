@@ -7,8 +7,8 @@ import {
   FaCommentAlt,
   FaTimes,
 } from 'react-icons/fa';
-import { GoPlus } from "react-icons/go";
-import { IoMdCheckmark } from "react-icons/io";
+import { GoPlus } from 'react-icons/go';
+import { IoMdCheckmark } from 'react-icons/io';
 import { CgProfile } from 'react-icons/cg';
 import axios from 'axios'; // Make sure to install axios with npm or yarn
 import { FaRegBookmark, FaBookmark } from 'react-icons/fa6';
@@ -26,7 +26,7 @@ import {
 } from '@/components/ui/drawer';
 import { Button } from '@/components/ui/button';
 import { useUserContext } from '@/context/userContext';
-import Comment from './Comment';
+import Comment from '../../pages/ForYou/Comment';
 export default function ForYouLikes({
   isMobile,
   itinerariesProp,
@@ -39,12 +39,15 @@ export default function ForYouLikes({
       liked: false, // Initialize all itineraries as not liked
     })),
   );
-  console.log(itineraries);
   const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(false);
   const { currentUser, updateCurrentUser } = useUserContext();
-  const [following, setFollowing] = useState(currentUser.following.some((user) => user.userId === itineraries[index].userId));
+  const [following, setFollowing] = useState(
+    currentUser.following.some(
+      (user) => user.userId === itineraries[index].userId,
+    ),
+  );
   const [animate, setAnimate] = useState(false);
 
   const handleLikeButton = async (itineraryId, index) => {
@@ -138,20 +141,22 @@ export default function ForYouLikes({
       console.error('Error submitting comment:', error);
       // Handle error appropriately, such as displaying an error message
     }
-
-  }
+  };
 
   const handleFollowButton = async (userId) => {
     try {
       if (following) {
         // Unfollow logic
-        const response = await fetch(`http://localhost:8080/users/unfollow/${userId}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+        const response = await fetch(
+          `http://localhost:8080/users/unfollow/${userId}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ currentUser: currentUser.id }),
           },
-          body: JSON.stringify({ currentUser: currentUser.id }),
-        });
+        );
         if (!response.ok) {
           throw new Error('Failed to unfollow user');
         }
@@ -165,20 +170,23 @@ export default function ForYouLikes({
         console.log('User unfollowed successfully');
       } else {
         // Follow logic
-        const response = await fetch(`http://localhost:8080/users/follow/${userId}`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
+        const response = await fetch(
+          `http://localhost:8080/users/follow/${userId}`,
+          {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ currentUser: currentUser.id }),
           },
-          body: JSON.stringify({ currentUser: currentUser.id }),
-        });
+        );
         //Update the current user's with the response
         const updatedUser = await response.json();
         if (updatedUser) {
           // Update the current user context with the updated user data
           updateCurrentUser(updatedUser);
         }
-        console.log(currentUser)
+        console.log(currentUser);
         if (!response.ok) {
           throw new Error('Failed to follow user');
         }
@@ -193,29 +201,28 @@ export default function ForYouLikes({
       console.error('Error:', error);
       // Handle error appropriately, such as displaying an error message
     }
-
   };
 
   return (
     <div className="h-70 absolute bottom-40 right-6 z-10 mb-12 flex flex-col gap-6 rounded-xl  bg-white/60 px-2 py-4 text-sm sm:mb-8 sm:ml-4 sm:text-lg lg:static lg:right-16 lg:bg-transparent">
-      <div className='flex flex-col items-center relative '>
+      <div className="relative flex flex-col items-center ">
         {itineraries[index]?.userPhoto ? (
           <img
             src={itineraries[index]?.userPhoto}
             alt="Profile"
-            className="w-12 mb-1 rounded-full"
+            className="mb-1 w-12 rounded-full"
           />
         ) : (
-          <CgProfile className="h-12 w-12 mb-1" />
+          <CgProfile className="mb-1 h-12 w-12" />
         )}
         <Button
-          className={`absolute -bottom-0.5 max-w-5 h-5 px-1 bg-rose-400 hover:bg-rose-500 text-white rounded-full text-justify transition-all duration-300 ease-in-out ${following ? 'animate-bounce-2' : animate ? 'animate-shake' : ''
-            }`}
+          className={`absolute -bottom-0.5 h-5 max-w-5 rounded-full bg-rose-400 px-1 text-justify text-white transition-all duration-300 ease-in-out hover:bg-rose-500 ${
+            following ? 'animate-bounce-2' : animate ? 'animate-shake' : ''
+          }`}
           onClick={() => handleFollowButton(itineraries[index].userId)}
         >
           {following ? <IoMdCheckmark /> : <GoPlus />}
         </Button>
-
       </div>
 
       <div className="flex flex-col items-center gap-2">
@@ -284,10 +291,9 @@ export default function ForYouLikes({
       <div className="flex flex-col items-center gap-2">
         <FaRegBookmark size={iconSize} />
 
-      {/* <div className="flex flex-col items-center gap-2">
+        {/* <div className="flex flex-col items-center gap-2">
         <FaShare size={iconSize} />
-        <div className=" font-bold">Share</div>*/
-      }
+        <div className=" font-bold">Share</div>*/}
       </div>
     </div>
   );

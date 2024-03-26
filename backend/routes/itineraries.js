@@ -133,6 +133,49 @@ router.get("/all", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+router.get("/followed-itineraries/:userId", async (req, res) => {
+  try {
+    // The userId parameter comes from the URL
+    const { userId } = req.params;
+
+    // Fetch the user document to get the 'following' list
+    const userRef = db.collection("users").doc(userId);
+    const userSnapshot = await userRef.get();
+
+    if (!userSnapshot.exists) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Get the 'following' list from the user document
+    const userFollowing = userSnapshot.data().following || [];
+    const myId = userFollowing && userFollowing.userId;
+    // Query itineraries created by users that the current user is following
+    const itinerariesPromises = userFollowing.map(async (followedUserId) => {
+      console.log("id=", followedUserId.userId);
+      const itinerariesSnapshot = await db
+        .collection("itineraries")
+        .where("userId", "==", followedUserId.userId)
+        .get();
+
+      return itinerariesSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+    });
+    // Wait for all the promises to resolve
+    const itinerariesResults = await Promise.all(itinerariesPromises);
+    console.log("result", itinerariesResults);
+
+    // Flatten the array of arrays into a single array of itineraries
+    const followedItineraries = itinerariesResults.flat();
+
+    // Respond with the fetched itineraries
+    res.status(200).json(followedItineraries);
+  } catch (error) {
+    console.error("Error fetching followed itineraries:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
 
 // Increment the like count for a specific itinerary
 router.post("/increment-like/:id", async (req, res) => {
