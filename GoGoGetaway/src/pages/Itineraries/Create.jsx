@@ -230,6 +230,7 @@ const Create = () => {
         ...itineraries,
         images: imageUrls, // Add the image URLs to the itinerary data
         userId: currentUser.id,
+        photoURL: currentUser.photoURL,
         totalPrice, // Assume this function calculates the total price
       };
 

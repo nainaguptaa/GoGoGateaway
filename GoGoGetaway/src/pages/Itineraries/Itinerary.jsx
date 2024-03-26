@@ -117,7 +117,7 @@ export default function Itinerary() {
               key={index}
               src={image}
               alt="Itinerary Image"
-              className="h-[23rem] w-[20rem] object-cover"
+              className="h-[23rem] w-[25rem] object-cover"
             />
           ))}
         </div>
@@ -139,7 +139,7 @@ export default function Itinerary() {
                     >
                       <div className="flex items-end justify-between gap-5 text-2xl font-semibold">
                         <div className="flex gap-2">
-                          <div className="text-black">{event.event}</div>
+                          <div className="">{event.event}</div>
                           <div className=" flex items-center text-base text-gray-500">
                             <MdLocationPin />
                             {event.locationEvent}
@@ -185,9 +185,7 @@ export default function Itinerary() {
                     >
                       <div className="flex items-end justify-between gap-5 text-2xl font-semibold">
                         <div className="flex gap-2">
-                          <div className="text-black">
-                            {restaurant.restaurant}
-                          </div>
+                          <div className="">{restaurant.restaurant}</div>
                           <div className=" flex items-center text-base text-gray-500">
                             <MdLocationPin />
                             {restaurant.locationRestaurant}
@@ -233,9 +231,7 @@ export default function Itinerary() {
                   <div className="mb-2 flex flex-col gap-3 rounded-xl border-2 p-6">
                     <div className="flex items-end justify-between gap-5 text-2xl font-semibold">
                       <div className="flex gap-2">
-                        <div className="text-black">
-                          {itinerary.hotel.hotel}
-                        </div>
+                        <div className="">{itinerary.hotel.hotel}</div>
                         <div className=" flex items-center text-base text-gray-500">
                           <MdLocationPin />
                           {itinerary.hotel.locationHotel}
@@ -293,25 +289,23 @@ export default function Itinerary() {
                   </div>
                   <div className="flex gap-3 rounded-xl border-2 px-5 py-2">
                     <CiCalendar size={25} />
-                    <div className="text-xl font-semibold text-black">
+                    <div className="text-xl font-semibold ">
                       {' '}
                       {formattedDate}
                     </div>
                   </div>
                 </div>
                 <div className="mb-2 mt-5 flex flex-col gap-2 border-b-2 border-t-2 pb-4 pt-4">
-                  <div className="text-2xl font-semibold text-black">
-                    Quantities
-                  </div>
-                  <div className="flex justify-between text-xl text-black">
+                  <div className="text-2xl font-semibold ">Quantities</div>
+                  <div className="flex justify-between text-xl ">
                     <div className="font-normal">Restaurants:</div>
                     {itinerary.restaurants.length}
                   </div>
-                  <div className="flex justify-between text-xl text-black">
+                  <div className="flex justify-between text-xl ">
                     <div className="font-normal"> Events:</div>
                     {itinerary.events.length}
                   </div>
-                  <div className="flex justify-between text-xl text-black">
+                  <div className="flex justify-between text-xl ">
                     {' '}
                     <div className="font-normal">Hotels:</div> 1
                   </div>
