@@ -153,6 +153,9 @@ export const UserProvider = ({ children }) => {
       firstName: result.user.displayName?.split(' ')[0] || '', // Optional: Capture first name from displayName
       lastName: result.user.displayName?.split(' ').slice(1).join(' ') || '', // Optional: Capture last name from displayName
       googleUser: true,
+      following: [],
+      followers: [],
+
       // Include any other user fields you want to capture or update
     };
 
