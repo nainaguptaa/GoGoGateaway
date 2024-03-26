@@ -43,8 +43,8 @@ export default function ForYouLikes({
   const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(false);
-  const { currentUser } = useUserContext();
-  const [following, setFollowing] = useState(false);
+  const { currentUser, updateCurrentUser } = useUserContext();
+  const [following, setFollowing] = useState(currentUser.following.some((user) => user.userId === itineraries[index].userId));
   const [animate, setAnimate] = useState(false);
 
   const handleLikeButton = async (itineraryId, index) => {
@@ -142,6 +142,13 @@ export default function ForYouLikes({
         if (!response.ok) {
           throw new Error('Failed to unfollow user');
         }
+        //Update the current user's with the response
+        const updatedUser = await response.json();
+        if (updatedUser) {
+          // Update the current user context with the updated user data
+          updateCurrentUser(updatedUser);
+        }
+
         console.log('User unfollowed successfully');
       } else {
         // Follow logic
@@ -152,6 +159,13 @@ export default function ForYouLikes({
           },
           body: JSON.stringify({ currentUser: currentUser.id }),
         });
+        //Update the current user's with the response
+        const updatedUser = await response.json();
+        if (updatedUser) {
+          // Update the current user context with the updated user data
+          updateCurrentUser(updatedUser);
+        }
+        console.log(currentUser)
         if (!response.ok) {
           throw new Error('Failed to follow user');
         }
