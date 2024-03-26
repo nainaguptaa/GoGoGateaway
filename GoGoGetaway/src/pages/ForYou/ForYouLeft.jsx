@@ -3,12 +3,11 @@ import { Link, NavLink, useLocation } from 'react-router-dom';
 import {
   FaHome,
   FaUserFriends,
-  FaCompass,
-  FaBroadcastTower,
-  FaUserAlt,
 } from 'react-icons/fa'; // Import icons from react-icons
+import { useUserContext } from '@/context/userContext';
 export default function ForYouLeft({ iconSize }) {
   const [active, setActive] = useState('For You');
+  const [followingList, setFollowingList] = useState([]);
   const navigationLinks = [
     { name: 'For You', path: '/foryou', icon: <FaHome size={20} /> },
     {
@@ -22,6 +21,15 @@ export default function ForYouLeft({ iconSize }) {
   useEffect(() => {
     setActive();
   }, []);
+
+  const { currentUser } = useUserContext();
+
+  useEffect(() => {
+    setFollowingList(currentUser.following);
+  }, [currentUser.following]);
+
+  
+  
   return (
     <div className="fixed flex h-full w-64 flex-col border-r-2 border-gray-200 pt-6 sm:w-44 md:w-64">
       <div className="">
@@ -43,24 +51,27 @@ export default function ForYouLeft({ iconSize }) {
       </div>
 
       <div>
+
         <p className="px-5 py-2 text-sm uppercase">Following accounts</p>
         {/* Dynamically render following accounts here */}
         {/* Example of a single account link */}
-        <Link
-          to="/user/username"
-          className="flex items-center px-5 py-2 hover:bg-gray-700"
-        >
-          <img
-            src="path_to_profile_picture"
-            alt="User"
-            className="mr-3 h-8 w-8 rounded-full"
-          />
-          <div>
-            <p className="font-bold">Username</p>
-            <p className="text-sm">Name</p>
-          </div>
-        </Link>
-        {/* ... more accounts ... */}
+        {followingList.map((following) => (
+          <Link
+            key={following.username}
+            to={`/user/${following.username}`}
+            className="flex items-center px-5 py-2 hover:bg-gray-700"
+          >
+            <img
+              src={following.photoURL}
+              alt="User"
+              className="mr-3 h-8 w-8 rounded-full"
+            />
+            <div>
+              <p className="font-bold">{following.username}</p>
+            </div>
+          </Link>
+        ))}
+
       </div>
     </div>
   );

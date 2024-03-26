@@ -48,14 +48,14 @@ router.post("/follow/:id", async (req, res) => {
     // Add the current user to the followed user's followers list
     const followedUserFollowers = followedUserData.followers || [];
     if (!followedUserFollowers.some(user => user.userId === currentUser)) {
-      followedUserFollowers.push({ userId: currentUser, username: currentUserData.username });
+      followedUserFollowers.push({ userId: currentUser, username: currentUserData.username, photoURL: currentUserData.photoURL});
       await followedUserRef.update({ followers: followedUserFollowers });
     }
 
     // Add the followed user to the current user's following list
     const currentUserFollowing = currentUserData.following || [];
     if (!currentUserFollowing.some(user => user.userId === followedUserId)) {
-      currentUserFollowing.push({ userId: followedUserId, username: followedUsername });
+      currentUserFollowing.push({ userId: followedUserId, username: followedUsername, photoURL: followedUserData.photoURL});
       await currentUserRef.update({ following: currentUserFollowing });
     }
 
