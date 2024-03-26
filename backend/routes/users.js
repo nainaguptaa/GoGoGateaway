@@ -25,26 +25,40 @@ router.get("/:id", async (req, res) => {
 
 router.post("/follow/:id", async (req, res) => {
   try {
-    const userId = req.params.id;
+    const followedUserId = req.params.id;
     const currentUser = req.body.currentUser;
-    // Add the current user to the followed user's followers list
-    const userRef = db.collection('users').doc(userId);
-    const user = await userRef.get();
-    if (!user.exists) {
+
+    // Retrieve the username of the followed user
+    const followedUserRef = db.collection('users').doc(followedUserId);
+    const followedUserSnapshot = await followedUserRef.get();
+
+    if (!followedUserSnapshot.exists) {
       return res.status(404).json({ error: 'User not found' });
     }
-    const userDoc = user.data();
-    if (!userDoc.followers.includes(currentUser)) {
-      userDoc.followers.push(currentUser);
-      await userRef.update({ followers: userDoc.followers });
-    }
-    // Add the followed user to the current user's following list
+
+    // Retrieve the followed user's data
+    const followedUserData = followedUserSnapshot.data();
+    const followedUsername = followedUserData.username;
+
+    // Retrieve the current user's data
     const currentUserRef = db.collection('users').doc(currentUser);
-    const currentUserDoc = (await currentUserRef.get()).data();
-    if (!currentUserDoc.following.includes(userId)) {
-      currentUserDoc.following.push(userId);
-      await currentUserRef.update({ following: currentUserDoc.following });
+    const currentUserSnapshot = await currentUserRef.get();
+    const currentUserData = currentUserSnapshot.data();
+
+    // Add the current user to the followed user's followers list
+    const followedUserFollowers = followedUserData.followers || [];
+    if (!followedUserFollowers.some(user => user.userId === currentUser)) {
+      followedUserFollowers.push({ userId: currentUser, username: currentUserData.username });
+      await followedUserRef.update({ followers: followedUserFollowers });
     }
+
+    // Add the followed user to the current user's following list
+    const currentUserFollowing = currentUserData.following || [];
+    if (!currentUserFollowing.some(user => user.userId === followedUserId)) {
+      currentUserFollowing.push({ userId: followedUserId, username: followedUsername });
+      await currentUserRef.update({ following: currentUserFollowing });
+    }
+
     return res.json({ message: 'User followed successfully' });
   } catch (error) {
     console.error('Error following user:', error);
@@ -52,36 +66,47 @@ router.post("/follow/:id", async (req, res) => {
   }
 })
 
+
 router.post("/unfollow/:id", async (req, res) => {
   try {
-    const userId = req.params.id;
+    const followedUserId = req.params.id;
     const currentUser = req.body.currentUser;
+
     // Remove the current user from the followed user's followers list
-    const userRef = db.collection('users').doc(userId);
-    const user = await userRef.get();
-    if (!user.exists) {
+    const followedUserRef = db.collection('users').doc(followedUserId);
+    const followedUserSnapshot = await followedUserRef.get();
+
+    if (!followedUserSnapshot.exists) {
       return res.status(404).json({ error: 'User not found' });
     }
-    const userDoc = user.data();
-    const index = userDoc.followers.indexOf(currentUser);
-    if (index !== -1) {
-      userDoc.followers.splice(index, 1);
-      await userRef.update({ followers: userDoc.followers });
-    }
+
+    const followedUserData = followedUserSnapshot.data();
+    const followedUserFollowers = followedUserData.followers || [];
+    const updatedFollowers = followedUserFollowers.filter(user => user.userId !== currentUser);
+
+    await followedUserRef.update({ followers: updatedFollowers });
+
     // Remove the followed user from the current user's following list
     const currentUserRef = db.collection('users').doc(currentUser);
-    const currentUserDoc = (await currentUserRef.get()).data();
-    const followingIndex = currentUserDoc.following.indexOf(userId);
-    if (followingIndex !== -1) {
-      currentUserDoc.following.splice(followingIndex, 1);
-      await currentUserRef.update({ following: currentUserDoc.following });
+    const currentUserSnapshot = await currentUserRef.get();
+
+    if (!currentUserSnapshot.exists) {
+      return res.status(404).json({ error: 'Current user not found' });
     }
+
+    const currentUserData = currentUserSnapshot.data();
+    const currentUserFollowing = currentUserData.following || [];
+    const updatedFollowing = currentUserFollowing.filter(user => user.userId !== followedUserId);
+
+    await currentUserRef.update({ following: updatedFollowing });
+
     return res.json({ message: 'User unfollowed successfully' });
   } catch (error) {
     console.error('Error unfollowing user:', error);
     return res.status(500).json({ error: 'Something went wrong' });
   }
 })
+
 
 
 
