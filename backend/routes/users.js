@@ -124,6 +124,8 @@ router.post("/unfollow/:id", async (req, res) => {
   } catch (error) {
     console.error("Error unfollowing user:", error);
     return res.status(500).json({ error: "Something went wrong" });
+  }
+});
 
 router.post("/:userId/save-itinerary", async (req, res) => {
   const userId = req.params.userId; // Retrieve the user ID from the URL parameters
