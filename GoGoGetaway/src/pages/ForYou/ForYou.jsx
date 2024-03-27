@@ -106,7 +106,7 @@ const ForYou = ({ isMobile, iconSize }) => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  if (itineraries.length > 0) {
+  if (!itineraries.length > 0) {
     console.log('HERE');
     console.log(itineraries.length);
     console.log(itineraries);
