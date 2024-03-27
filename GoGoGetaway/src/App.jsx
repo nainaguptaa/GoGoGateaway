@@ -96,7 +96,10 @@ function App() {
               path="/following"
               element={<Following isMobile={isMobile} iconSize={iconSize} />}
             />
-            <Route path="/itineraries" element={<Itinerary />} />{' '}
+            <Route
+              path="/itineraries"
+              element={<Itinerary iconSize={iconSize} />}
+            />{' '}
             <Route path="/create" element={<Create />} />
             <Route path="/test" element={<Test />} />
             <Route path="*" element={<Navigate to="/ " replace />} />

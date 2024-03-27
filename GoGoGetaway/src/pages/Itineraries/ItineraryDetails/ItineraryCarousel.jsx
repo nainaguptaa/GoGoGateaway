@@ -17,7 +17,7 @@ export default function ItineraryCarousel({ itinerary }) {
               <img
                 src={image}
                 alt="Itinerary Image"
-                className="h-[23rem] w-full object-cover"
+                className="h-[23rem]  w-full object-cover"
               />
             </CarouselItem>
           ))}
