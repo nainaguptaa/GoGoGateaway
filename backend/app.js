@@ -24,7 +24,12 @@ app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 
-app.use(cors({ origin: true, credentials: true }));
+app.use(
+  cors({
+    origin: ["https://gogogetaway.netlify.app"],
+    credentials: true,
+  })
+);
 
 // view engine setup
 app.set("views", path.join(__dirname, "views"));
