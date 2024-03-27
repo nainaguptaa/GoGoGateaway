@@ -17,46 +17,49 @@ export default function ItineraryCardMobile({
   saveItinerary,
 }) {
   return (
-    <div className="fixed bottom-[0rem]  w-full border-t-2 bg-card">
+    <div className="fixed bottom-[0rem] w-full  border-t-2 bg-card lg:hidden">
       <div className="z-10 flex items-center justify-between gap-2 p-3">
-        <div className="flex w-1/4 flex-col ">
-          <div className="text-[0.85rem] font-medium">
-            ${itinerary.totalPrice}
+        <div className="flex flex-col ">
+          <div className="flex  flex-col ">
+            <div className="text-[0.85rem] font-medium">
+              ${itinerary.totalPrice}
+            </div>
+            <div className="text-[0.75rem]">{formattedDate}</div>
           </div>
-          <div className="text-[0.75rem]">{formattedDate}</div>
-        </div>
-        <Drawer>
-          <DrawerTrigger asChild>
-            <div className="grow text-base underline underline-offset-1">
-              Quantities
-            </div>
-          </DrawerTrigger>
-          <DrawerContent>
-            <div className="mx-auto w-full max-w-sm">
-              <DrawerHeader>
-                <DrawerTitle>Quantities</DrawerTitle>
-              </DrawerHeader>
-              <div className="p-4 pb-0">
-                <div className="flex justify-between text-xl ">
-                  <div className="font-normal">Restaurants:</div>
-                  {itinerary.restaurants.length}
-                </div>
-                <div className="flex justify-between text-xl ">
-                  <div className="font-normal">Events:</div>
-                  {itinerary.events.length}
-                </div>
-                <div className="flex justify-between text-xl ">
-                  <div className="font-normal">Hotels:</div> 1
-                </div>
+          <Drawer>
+            <DrawerTrigger asChild>
+              <div className="grow text-base underline underline-offset-1">
+                Quantities
               </div>
-              <DrawerFooter>
-                <DrawerClose asChild>
-                  <Button variant="outline">Close</Button>
-                </DrawerClose>
-              </DrawerFooter>
-            </div>
-          </DrawerContent>
-        </Drawer>
+            </DrawerTrigger>
+            <DrawerContent>
+              <div className="mx-auto w-full max-w-sm">
+                <DrawerHeader>
+                  <DrawerTitle>Quantities</DrawerTitle>
+                </DrawerHeader>
+                <div className="p-4 pb-0">
+                  <div className="flex justify-between text-xl ">
+                    <div className="font-normal">Restaurants:</div>
+                    {itinerary.restaurants.length}
+                  </div>
+                  <div className="flex justify-between text-xl ">
+                    <div className="font-normal">Events:</div>
+                    {itinerary.events.length}
+                  </div>
+                  <div className="flex justify-between text-xl ">
+                    <div className="font-normal">Hotels:</div> 1
+                  </div>
+                </div>
+                <DrawerFooter>
+                  <DrawerClose asChild>
+                    <Button variant="outline">Close</Button>
+                  </DrawerClose>
+                </DrawerFooter>
+              </div>
+            </DrawerContent>
+          </Drawer>
+        </div>
+
         <button
           className="flex justify-center rounded-xl bg-amber-500 px-2 py-2 text-sm font-semibold text-white"
           onClick={saveItinerary}

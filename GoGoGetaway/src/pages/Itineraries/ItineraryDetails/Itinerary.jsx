@@ -24,6 +24,8 @@ export default function Itinerary({ iconSize }) {
   const [events, setEvents] = useState([]);
   const [showComments, setShowComments] = useState(false);
   const [itineraryId, setItineraryId] = useState('');
+  const apiURL =
+    import.meta.env.VITE_API_URL_DEPLOY || import.meta.env.VITE_API_URL;
   // Function to toggle comments visibility
   const toggleComments = () => {
     setShowComments(!showComments);
@@ -38,9 +40,7 @@ export default function Itinerary({ iconSize }) {
 
       try {
         // Update the URL to point to your backend API endpoint
-        const response = await axios.get(
-          `http://localhost:8080/itineraries/${id}`,
-        );
+        const response = await axios.get(`${apiURL}/itineraries/${id}`);
         setItinerary(response.data);
       } catch (error) {
         // setItinerary(itinerariesDummy)
@@ -76,8 +76,7 @@ export default function Itinerary({ iconSize }) {
       console.log(itineraryId);
       // Replace 'YOUR_BACKEND_ENDPOINT' with the actual backend endpoint URL
       const response = await axios.post(
-        // 'http://localhost:8080/itineraries/create',
-        `http://localhost:8080/users/${userId}/save-itinerary`,
+        `${apiURL}/users/${userId}/save-itinerary`,
         {
           itineraryId: itineraryId,
         },
@@ -120,18 +119,20 @@ export default function Itinerary({ iconSize }) {
 
         <div className="px-2 py-4">
           <div className="flex ">
-            <div className="flex flex-col lg:w-2/3">
+            <div className="flex w-full flex-col lg:w-2/3 ">
               <h1 className="hidden text-3xl font-semibold lg:block">
                 Itinerary Details
               </h1>
-              <div className="block text-2xl font-medium lg:hidden">
+              <div className="block max-w-[15rem]  text-2xl font-medium lg:hidden">
                 {itinerary.name}
               </div>
-              <div className="text-xl font-normal">{itinerary.city}</div>
-              <div className="text-xl font-normal text-gray-400">
+              <div className="max-w-[15rem]  text-xl font-normal">
+                {itinerary.city}
+              </div>
+              <div className=" max-w-[15rem] text-xl font-normal text-gray-400">
                 {formattedDate}
               </div>
-              <div className="flex flex-col gap-5 ">
+              <div className="mb-20 flex flex-col gap-5  lg:pr-4">
                 <div className="mr-5 mt-6 flex w-full flex-col gap-3 border-b-2 pb-4">
                   <h2 className="text-3xl font-semibold lg:text-4xl">Events</h2>
                   {itinerary.events.map((event, index) => (
@@ -170,7 +171,7 @@ export default function Itinerary({ iconSize }) {
                       </div>
                       <div className="mt-2 flex justify-between border-t-2 pt-2 lg:flex-row">
                         {' '}
-                        <div className="flex items-end gap-2">
+                        <div className="flex items-center gap-2">
                           <div className="flex items-center  gap-1">
                             {' '}
                             <CiClock1 size={iconSize} />
@@ -195,7 +196,7 @@ export default function Itinerary({ iconSize }) {
                       key={index}
                       className="mb-2 flex flex-col gap-3 rounded-xl border-2 p-3 lg:p-6"
                     >
-                      <div className="gap:2 flex max-w-[15rem] flex-col justify-between    lg:flex-row lg:items-end lg:gap-5">
+                      <div className="gap:2 flex max-w-[10rem] flex-col justify-between bg-red-100 lg:flex-row lg:items-end lg:gap-5">
                         <div className="flex  flex-col gap-0.5 lg:flex-row lg:gap-2">
                           <div className="text-xl font-medium lg:text-2xl lg:font-semibold">
                             {restaurant.restaurant}
@@ -219,17 +220,17 @@ export default function Itinerary({ iconSize }) {
                         </div>
                       </div>
                       <div className="mt-3 flex justify-end gap-2">
-                        <div className="text-xl font-semibold text-gray-500 lg:text-2xl">
+                        <div className="text-lg font-semibold text-gray-500 lg:text-2xl">
                           Price:{' '}
                         </div>
-                        <div className="text-xl lg:text-2xl">
+                        <div className="text-lg lg:text-2xl">
                           {' '}
                           ${restaurant.priceRestaurant}
                         </div>
                       </div>
                       <div className="mt-2 flex justify-between border-t-2 pt-2 lg:flex-row">
                         {' '}
-                        <div className="flex items-end  gap-2">
+                        <div className="flex items-center  gap-2">
                           <div className="gap-1s flex  items-center">
                             {' '}
                             <CiClock1 size={iconSize} />
@@ -290,7 +291,7 @@ export default function Itinerary({ iconSize }) {
                     </div>
                     <div className="mt-2 flex  justify-between border-t-2 pt-2  lg:flex-row">
                       {' '}
-                      <div className="flex items-end  gap-2">
+                      <div className="flex items-center  gap-2">
                         <div className="flex items-center gap-1 ">
                           {' '}
                           <CiClock1 size={iconSize} />
