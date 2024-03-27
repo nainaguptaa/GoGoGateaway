@@ -69,7 +69,7 @@ export default function UserProfile() {
 
   return (
     <div className='sm:container flex flex-col md:flex-row md:gap-10 mt-5'>
-      <Card className="sm:w-[350px] shadow-lg rounded-xl">
+      <Card className="sm:w-[350px] sm:h-[350px] shadow-lg rounded-xl">
         <CardHeader  >
           <CardTitle className="flex flex-col gap-2">
             <Avatar className="w-20 h-20">
@@ -109,15 +109,15 @@ export default function UserProfile() {
         </CardContent>
       </Card>
 
-      <Tabs defaultValue="post" className="w-full border bg-card text-card-foreground shadow-lg  rounded-xl">
+      <Tabs defaultValue="post" className="w-full border bg-card text-card-foreground shadow-lg rounded-xl">
         <TabsList className="w-full grid grid-cols-3 place-content-center py-6 bg-card border-b rounded-none">
           <TabsTrigger value="post" className="text-md">Posts</TabsTrigger>
           <TabsTrigger value="saved" className="text-md">Saved</TabsTrigger>
           <TabsTrigger value="like" className="text-md">Liked</TabsTrigger>
         </TabsList>
         <TabsContent value="post">
-          <Card className="rounded-none border-0">
-            <CardContent>
+          <Card className="rounded-none border-0 ">
+            <CardContent className=" grid sm:grid-cols-2 gap-3">
               {postedItineraries.map((itinerary) => (
                 <ItineraryProfile key={itinerary.id}  itinerary={itinerary}/>
               ))}
@@ -126,7 +126,7 @@ export default function UserProfile() {
         </TabsContent>
         <TabsContent value="saved">
           <Card className="rounded-none border-0">
-            <CardContent>
+            <CardContent className="grid sm:grid-cols-2 gap-3">
               {savedItineraries.map((itinerary) => (
                 <ItineraryProfile key={itinerary.id}  itinerary={itinerary}/>
               ))}
@@ -135,7 +135,7 @@ export default function UserProfile() {
         </TabsContent>
         <TabsContent value="like">
           <Card className="rounded-none border-0">
-            <CardContent>
+            <CardContent className="grid sm:grid-cols-2 gap-3">
               {likedItineraries.map((itinerary) => (
                 <ItineraryProfile key={itinerary.id} itinerary={itinerary}/>
               ))}
