@@ -12,7 +12,10 @@ export default function UserProfile() {
   const { username } = useParams();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-
+  const [postedItineraries, setPostedItineraries] = useState([]);
+  const [savedItineraries, setSavedItineraries] = useState([]);
+  const [likedItineraries, setLikedItineraries] = useState([]);
+  const [activeTab, setActiveTab] = useState('post');
   const isCurrentUser = currentUser.username === username;
 
   useEffect(() => {
@@ -59,8 +62,8 @@ export default function UserProfile() {
   }
 
   return (
-    <div className='sm:container md:flex gap-10 mt-5'>
-      <Card className="sm:w-[350px] shadow-lg">
+    <div className='sm:container flex flex-col md:flex-row md:gap-10 mt-5'>
+      <Card className="sm:w-[350px] shadow-lg rounded-xl">
         <CardHeader  >
           <CardTitle className="flex flex-col gap-2">
             <Avatar className="w-20 h-20">
@@ -87,37 +90,40 @@ export default function UserProfile() {
                 <h1>Followers</h1>
               </div>
             </div>
-            {isCurrentUser ? <Button variant="secondary" className="w-1/2 md:text-md">Edit Profile</Button> : <Button variant="secondary" className="w-1/2 md:text-md">Follow</Button>}
+            {isCurrentUser ? <Button variant="secondary" className="w-2/3 md:text-md">Edit Profile</Button> : <Button variant="secondary" className="w-1/2 md:text-md">Follow</Button>}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <Button variant="ghost" className="w-full justify-start gap-2 md:text-lg pl-1">
-            <FaRegBookmark />
-            Favourites
-          </Button>
+            <Button variant="ghost" className="w-full justify-start gap-2 md:text-lg pl-1" 
+            onClick={() => setActiveTab('saved')}>
+            
+              <FaRegBookmark />
+              Favourites
+            </Button>
         </CardContent>
       </Card>
-      <Tabs defaultValue="post" className="w-full border rounded-lg bg-card text-card-foreground shadow-lg">
-        <TabsList className="w-full grid grid-cols-3 place-content-center py-6 bg-card border-b">
+
+      <Tabs defaultValue="post"  className="w-full border bg-card text-card-foreground shadow-lg  rounded-xl">
+        <TabsList active={activeTab} className="w-full grid grid-cols-3 place-content-center py-6 bg-card border-b rounded-none">
           <TabsTrigger value="post" className="text-md">Posts</TabsTrigger>
           <TabsTrigger value="saved" className="text-md">Saved</TabsTrigger>
           <TabsTrigger value="like" className="text-md">Liked</TabsTrigger>
         </TabsList>
         <TabsContent value="post">
-        <Card>
-          <CardHeader>
-            <CardTitle>Account</CardTitle>
-            <CardDescription>
-              Make changes to your account here. Click save when you're done.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
+          <Card className="rounded-none border-0">
+            <CardHeader>
+              <CardTitle>Account</CardTitle>
+              <CardDescription>
+                Make changes to your account here. Click save when you're done.
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
 
-          </CardContent>
-          <CardFooter>
-            <Button>Save changes</Button>
-          </CardFooter>
-        </Card>
+            </CardContent>
+            <CardFooter>
+              <Button>Save changes</Button>
+            </CardFooter>
+          </Card>
         </TabsContent>
         <TabsContent value="saved">Change your password here.</TabsContent>
         <TabsContent value="like">Change your password here.</TabsContent>
