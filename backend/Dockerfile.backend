@@ -5,9 +5,7 @@ COPY ./package.json ./
 COPY ./package-lock.json ./
 COPY . .
 
-ARG SECRET_PATH
-COPY ${SECRET_PATH} ./gogogetaway.key
-
+COPY ./gogogetaway.key ./
 RUN npm install
 
 EXPOSE 8080
