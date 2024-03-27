@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import ItineraryProfile from '@/components/ItineraryList/ItineraryProfile';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Button } from '@/components/ui/button';
 import {
   Card,
   CardContent,
@@ -9,12 +10,11 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { FaRegBookmark } from 'react-icons/fa6';
 import { useUserContext } from '@/context/userContext';
-import ItineraryProfile from '@/components/ItineraryList/ItineraryProfile';
+import React, { useEffect, useState } from 'react';
+import { FaRegBookmark } from 'react-icons/fa6';
+import { useParams } from 'react-router-dom';
 export default function UserProfile() {
   const { currentUser } = useUserContext();
   const { username } = useParams();
@@ -29,7 +29,7 @@ export default function UserProfile() {
     const fetchData = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/users/username/${username}`,
+          `${apiURL}/users/username/${username}`,
         );
         if (!response.ok) {
           throw new Error('Failed to fetch user');
@@ -47,7 +47,7 @@ export default function UserProfile() {
     const fetchItineraries = async () => {
       try {
         const response = await fetch(
-          `http://localhost:8080/itineraries/user/${username}`,
+          `${apiURL}/itineraries/user/${username}`,
         );
         if (!response.ok) {
           throw new Error('Failed to fetch itineraries');

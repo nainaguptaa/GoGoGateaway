@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
 import axios from 'axios';
+import React, { useState } from 'react';
 
 function ImageUpload({ onUploadSuccess }) {
   const [selectedImages, setSelectedImages] = useState([]);
+  const apiURL = import.meta.env.VITE_API_URL;
 
   const handleFileChange = (event) => {
     setSelectedImages([...event.target.files]);
@@ -17,7 +18,7 @@ function ImageUpload({ onUploadSuccess }) {
 
     try {
       const response = await axios.post(
-        'http://localhost:8080/cloudinaryUpload/image',
+        `${apiURL}/cloudinaryUpload/image`,
         formData,
         {
           headers: {
