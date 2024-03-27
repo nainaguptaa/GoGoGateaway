@@ -47,7 +47,7 @@ export default function ForYouLikes({
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(false);
   const [savedItineraries, setSavedItineraries] = useState([]);
-  const { currentUser, updateCurrentUser } = useUserContext();
+  const { currentUser, updateCurrentUser, setSignPopup } = useUserContext();
   const [following, setFollowing] = useState(false);
 
   useEffect(() => {
@@ -57,11 +57,17 @@ export default function ForYouLikes({
           (user) => user.userId === itineraries[index].userId,
         ),
       );
+    } else {
+      setFollowing(false);
     }
   }, [currentUser, itineraries, index]);
   const [animate, setAnimate] = useState(false);
   const navigate = useNavigate();
   const handleLikeButton = async (itineraryId, index) => {
+    if (!currentUser) {
+      setSignPopup(true);
+      return;
+    }
     const itinerary = itineraries[index];
     console.log(itineraryId);
     setLiked((prev) => !prev);
@@ -104,16 +110,27 @@ export default function ForYouLikes({
   };
 
   useEffect(() => {
-    // Assuming currentUser.savedItineraries is an array of saved itinerary IDs
-    const savedItineraryIds = new Set(currentUser.savedItineraries || []);
+    if (currentUser) {
+      // Proceed only if currentUser exists
+      // Assuming currentUser.savedItineraries is an array of saved itinerary IDs
+      const savedItineraryIds = new Set(currentUser.savedItineraries);
 
-    // Update itineraries with saved state
-    const updatedItineraries = itineraries.map((itinerary) => ({
-      ...itinerary,
-      saved: savedItineraryIds.has(itinerary.id),
-    }));
-    setItineraries(updatedItineraries);
-  }, [currentUser.savedItineraries]);
+      // Update itineraries with saved state
+      const updatedItineraries = itineraries.map((itinerary) => ({
+        ...itinerary,
+        saved: savedItineraryIds.has(itinerary.id),
+      }));
+      setItineraries(updatedItineraries);
+    } else {
+      // If currentUser is null (logged out/not signed in), mark all itineraries as not saved
+      const updatedItineraries = itineraries.map((itinerary) => ({
+        ...itinerary,
+        saved: false,
+      }));
+      setItineraries(updatedItineraries);
+    }
+  }, [currentUser]); // Add itineraries to the dependency array if it's not static
+
   const handleSaveItineraryWithAnimation = async (itineraryId) => {
     if (!itineraries[index].saved) {
       setAnimate(true); // Trigger animation
@@ -122,7 +139,10 @@ export default function ForYouLikes({
     }
   };
   const handleSaveItinerary = async (itineraryId) => {
-    console.log(currentUser);
+    if (!currentUser) {
+      setSignPopup(true);
+      return;
+    }
     try {
       // Proceed to save the itinerary if not already saved
       const saveResponse = await axios.post(
@@ -166,6 +186,10 @@ export default function ForYouLikes({
   };
 
   const submitComment = async (itineraryId, comment) => {
+    if (!currentUser) {
+      setSignPopup(true);
+      return;
+    }
     // add the comment to the comments array
     try {
       // Send the comment to the server
@@ -209,6 +233,10 @@ export default function ForYouLikes({
   };
 
   const handleFollowButton = async (userId) => {
+    if (!currentUser) {
+      setSignPopup(true);
+      return;
+    }
     try {
       if (following) {
         // Unfollow logic

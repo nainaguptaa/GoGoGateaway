@@ -19,7 +19,7 @@ import { useNavigate } from 'react-router-dom';
 export default function Itinerary({ iconSize }) {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { currentUser } = useUserContext();
+  const { currentUser, setSignPopup } = useUserContext();
   const location = useLocation();
   const [itinerary, setItinerary] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
@@ -70,6 +70,10 @@ export default function Itinerary({ iconSize }) {
     day: 'numeric',
   });
   const saveItinerary = async () => {
+    if (!currentUser) {
+      setSignPopup(true);
+      return;
+    }
     try {
       // Replace 'userId' with the actual logged-in user's ID
       const userId = currentUser.id;

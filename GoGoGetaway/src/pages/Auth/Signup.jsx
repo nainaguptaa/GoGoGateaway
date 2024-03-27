@@ -94,7 +94,7 @@ const Signup = () => {
   };
   console.log(type);
   return (
-    <div className="absolute top-0 z-40 flex h-screen w-full items-center justify-center bg-black/30 backdrop-blur">
+    <div className="fixed top-0 z-40 flex h-screen w-full items-center justify-center bg-black/30 backdrop-blur">
       <div className="absolute right-20 top-16">
         <IoMdClose
           size={55}
