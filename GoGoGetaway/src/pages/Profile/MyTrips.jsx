@@ -1,129 +1,127 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useParams } from 'react-router-dom';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Separator } from "@/components/ui/separator"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Button } from "@/components/ui/button"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { FaRegBookmark } from 'react-icons/fa6';
 import { useUserContext } from '@/context/userContext';
-import { useToast } from '@/components/ui/use-toast';
-
-export default function MyTrips() {
-  const { username } = useParams();
-  const navigate = useNavigate();
+export default function UserProfile() {
   const { currentUser } = useUserContext();
-  const { toast } = useToast();
-  const [savedItineraries, setSavedItineraries] = useState([]);
+  const { username } = useParams();
+  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+
+  const isCurrentUser = currentUser.username === username;
 
   useEffect(() => {
-    const fetchSavedItineraries = async () => {
-      if (!currentUser || !currentUser.id || !currentUser.savedItineraries) {
-        toast({
-          title: "Error",
-          description: "You must be logged in to view saved itineraries.",
-          status: "error",
-        });
-        return;
-      }
-
+    const fetchData = async () => {
       try {
-        const itineraryPromises = currentUser.savedItineraries.map(itineraryId =>
-          axios.get(`http://localhost:8080/itineraries/${itineraryId}`)
-        );
-        const responses = await Promise.all(itineraryPromises);
-        const itinerariesData = responses.map(response => response.data);
-        setSavedItineraries(itinerariesData);
-      } catch (err) {
-        console.error('Failed to fetch saved itineraries:', err);
-        setError('Failed to fetch saved itineraries');
+        const response = await fetch(`http://localhost:8080/users/username/${username}`);
+        if (!response.ok) {
+          throw new Error('Failed to fetch user');
+        }
+        const user = await response.json();
+        setUser(user);
+        console.log(user);
+      } catch (error) {
+        console.error('Error:', error);
+        // Handle error appropriately, such as displaying an error message
       } finally {
-        setLoading(false);
+        setLoading(false); // Set loading to false regardless of success or failure
       }
     };
 
-    fetchSavedItineraries();
-  }, [currentUser, toast]);
+    // const fetchItineraries = async () => {
+    //   try {
+    //     const response = await fetch(`http://localhost:8080/itineraries/user/${username}`);
+    //     if (!response.ok) {
+    //       throw new Error('Failed to fetch itineraries');
+    //     }
+    //     // const itineraries = await response.json();
+    //     // setItineraries(itineraries);
+    //   } catch (error) {
+    //     console.error('Error:', error);
+    //     // Handle error appropriately, such as displaying an error message
+    //   } finally {
+    //     setLoading(false); // Set loading to false regardless of success or failure
+    //   }
+    // };
 
+    fetchData(); // Call the async function immediately
+    // fetchItineraries();
+  }, [username]);
+
+  // Render loading indicator if user is still loading
   if (loading) {
     return <div>Loading...</div>;
   }
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
-  const removeSavedItinerary = async (itineraryId) => {
-    try {
-      await axios.post(`/users/${currentUser.id}/remove-saved-itinerary`, { itineraryId });
-      toast({
-        title: "Success",
-        description: "Itinerary removed from saved list.",
-        status: "success",
-      });
-      // Refresh the list of saved itineraries
-      const updatedSavedItineraries = savedItineraries.filter(itinerary => itinerary.id !== itineraryId);
-      setSavedItineraries(updatedSavedItineraries);
-    } catch (error) {
-      console.error('Error removing saved itinerary:', error);
-      toast({
-        title: "Error",
-        description: "Failed to remove itinerary.",
-        status: "error",
-      });
-    }
-  };
-  const calculateAverageRating = (itinerary) => {
-    let totalRating = 0;
-    let count = 0;
-
-    if (itinerary.hotel && itinerary.hotel.rating) {
-      totalRating += parseInt(itinerary.hotel.rating, 10);
-      count += 1;
-    }
-
-    itinerary.events.forEach(event => {
-      if (event.rating) {
-        totalRating += parseInt(event.rating, 10);
-        count += 1;
-      }
-    });
-
-    itinerary.restaurants.forEach(restaurant => {
-      if (restaurant.rating) {
-        totalRating += parseInt(restaurant.rating, 10);
-        count += 1;
-      }
-    });
-
-    return count > 0 ? (totalRating / count).toFixed(1) : "No ratings";
-  };
-
   return (
-<div className="flex flex-col h-screen justify-start items-center pt-2">
-  <h1 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 dark:text-white">Welcome, {currentUser.firstName}!</h1>
-  <p>Your saved itineraries:</p>
-  {savedItineraries.length > 0 ? (
-    <div className="w-full max-w-6xl">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {savedItineraries.map((itinerary) => (
-          <div key={itinerary.id}
-            className="cursor-pointer rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden relative"
-            onClick={() => navigate(`/itineraries?id=${itinerary.id}`)}>
+    <div className='sm:container md:flex gap-10 mt-5'>
+      <Card className="sm:w-[350px] shadow-lg">
+        <CardHeader  >
+          <CardTitle className="flex flex-col gap-2">
+            <Avatar className="w-20 h-20">
+              <AvatarImage src={user.photoURL} />
+              <AvatarFallback>{user.firstName[0]}{user.lastName[0]}</AvatarFallback>
+            </Avatar>
+            <div className='grid gap-1'>
+              {user.firstName} {user.lastName}
+              <CardDescription>
+                @{user.username}
+              </CardDescription>
+            </div>
 
-            <img src={itinerary.images[0]} alt="Itinerary" className="h-56 w-full object-cover" />
-            <div className="p-4 bg-white">
-              <h3 className="text-xl font-light text-gray-900">{itinerary.name}</h3>
-              <p className="text-gray-600">{itinerary.city}</p>
-              <p className="font-light text-gray-800">Total Price: ${itinerary.totalPrice}</p>
-              <div className="absolute bottom-2 right-2 bg-white bg-opacity-80 p-2 rounded-lg flex items-center">
-                <span className="text-yellow-400 mr-2">★</span>
-                <span className="font-bold text-gray-800">{calculateAverageRating(itinerary)}</span>
+          </CardTitle>
+          <CardDescription className="grid gap-3">
+            <div className='grid grid-cols-4'>
+              <div>
+                <h1 className='font-bold text-lg'>{user.following.length}</h1>
+                <h1>Following</h1>
+              </div>
+              <Separator orientation="vertical" className="justify-self-center" />
+              <div >
+                <h1 className='font-bold text-lg'>{user.followers.length}</h1>
+                <h1>Followers</h1>
               </div>
             </div>
-          </div>
-        ))}
-      </div>
+            {isCurrentUser ? <Button variant="secondary" className="w-1/2 md:text-md">Edit Profile</Button> : <Button variant="secondary" className="w-1/2 md:text-md">Follow</Button>}
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <Button variant="ghost" className="w-full justify-start gap-2 md:text-lg pl-1">
+            <FaRegBookmark />
+            Favourites
+          </Button>
+        </CardContent>
+      </Card>
+      <Tabs defaultValue="post" className="w-full border rounded-lg bg-card text-card-foreground shadow-lg">
+        <TabsList className="w-full grid grid-cols-3 place-content-center py-6 bg-card border-b">
+          <TabsTrigger value="post" className="text-md">Posts</TabsTrigger>
+          <TabsTrigger value="saved" className="text-md">Saved</TabsTrigger>
+          <TabsTrigger value="like" className="text-md">Liked</TabsTrigger>
+        </TabsList>
+        <TabsContent value="post">
+        <Card>
+          <CardHeader>
+            <CardTitle>Account</CardTitle>
+            <CardDescription>
+              Make changes to your account here. Click save when you're done.
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-2">
+
+          </CardContent>
+          <CardFooter>
+            <Button>Save changes</Button>
+          </CardFooter>
+        </Card>
+        </TabsContent>
+        <TabsContent value="saved">Change your password here.</TabsContent>
+        <TabsContent value="like">Change your password here.</TabsContent>
+      </Tabs>
     </div>
-  ) : (
-    <p>No saved itineraries found.</p>
-  )}
-</div>
   );
 }

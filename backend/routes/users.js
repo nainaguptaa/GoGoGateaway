@@ -23,6 +23,21 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.get("/username/:username", async (req, res) => {
+  try {
+    const username = req.params.username;
+    const userRef = db.collection("users").where("username", "==", username);
+    const user = await userRef.get();
+    if (user.empty) {
+      return res.status(404).json({ error: "User not found" });
+    }
+    return res.json(user.docs[0].data());
+  } catch (error) {
+    console.error("Error fetching user:", error);
+    return res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
 
 router.post("/follow/:id", async (req, res) => {
   try {

@@ -33,7 +33,6 @@ const Navbar = ({ isMobile, iconSize }) => {
     useUserContext();
   const { theme } = useTheme();
   const navigate = useNavigate();
-  console.log(signPopup);
   const [sidebarOpen, setSidebarOpen] = useState(false);
   if (isMobile) {
     return (

@@ -234,6 +234,40 @@ router.get("/followed-itineraries/:userId", async (req, res) => {
   }
 });
 
+// Get all itineraries created by a specific user
+router.get("/user/:username", async (req, res) => {
+  try {
+    const username = req.params.username;
+
+    // Fetch the user document to get the user's ID
+    const userRef = db.collection("users").where("username", "==", username);
+    const userSnapshot = await userRef.get();
+
+    if (userSnapshot.empty) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const userId = userSnapshot.docs[0].id;
+
+    // Query itineraries created by the specified user
+    const itinerariesSnapshot = await db
+      .collection("itineraries")
+      .where("userId", "==", userId)
+      .get();
+    const itineraries = itinerariesSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    // Get the saved itineraries for the user
+    const userSavedItineraries = userSnapshot.docs[0].data().savedItineraries || [];
+
+  } catch (error) {
+    console.error("Error fetching user itineraries:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 // Increment the like count for a specific itinerary
 router.post("/increment-like/:id", async (req, res) => {
   console.log(`Incrementing like for ID: ${req.params.id}`);

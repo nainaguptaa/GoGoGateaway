@@ -27,6 +27,8 @@ import {
 import { Button } from '@/components/ui/button';
 import { useUserContext } from '@/context/userContext';
 import Comment from '../../pages/ForYou/Comment';
+import { Link, useNavigate } from 'react-router-dom';
+
 export default function ForYouLikes({
   isMobile,
   itinerariesProp,
@@ -49,7 +51,7 @@ export default function ForYouLikes({
     ),
   );
   const [animate, setAnimate] = useState(false);
-
+  const navigate = useNavigate();
   const handleLikeButton = async (itineraryId, index) => {
     const itinerary = itineraries[index];
     console.log(itineraryId);
@@ -203,22 +205,44 @@ export default function ForYouLikes({
     }
   };
 
+  const handleProfileLink = async (userId) => {
+    //get the user id and navigate to the user's profile from this url `http://localhost:8080/users/${userId}`
+    try{
+      console.log(userId);
+      const response = await fetch(`http://localhost:8080/users/${userId}`);
+      if(!response.ok){
+        throw new Error('Failed to fetch user');
+      }
+      const user = await response.json();
+      //Go to url of http://localhost:5173/user/syriltj1 using react router
+      navigate(`/user/${user.username}`);
+    }
+    catch(error){
+      console.error('Error:', error);
+      // Handle error appropriately, such as displaying an error message
+    }
+  }
+
   return (
     <div className="h-70 absolute bottom-40 right-6 z-10 mb-12 flex flex-col gap-6 rounded-xl  bg-white/60 px-2 py-4 text-sm sm:mb-8 sm:ml-4 sm:text-lg lg:static lg:right-16 lg:bg-transparent">
       <div className="relative flex flex-col items-center ">
-        {itineraries[index]?.userPhoto ? (
-          <img
-            src={itineraries[index]?.userPhoto}
-            alt="Profile"
-            className="mb-1 w-12 rounded-full"
-          />
-        ) : (
-          <CgProfile className="mb-1 h-12 w-12" />
-        )}
+        <Link
+        onClick={() => handleProfileLink(itineraries[index].userId)}
+        >
+          {itineraries[index]?.userPhoto ? (
+            <img
+              src={itineraries[index]?.userPhoto}
+              alt="Profile"
+              className="mb-1 w-12 rounded-full"
+            />
+          ) : (
+            <CgProfile className="mb-1 h-12 w-12" />
+          )}
+        </Link>
+
         <Button
-          className={`absolute -bottom-0.5 h-5 max-w-5 rounded-full bg-rose-400 px-1 text-justify text-white transition-all duration-300 ease-in-out hover:bg-rose-500 ${
-            following ? 'animate-bounce-2' : animate ? 'animate-shake' : ''
-          }`}
+          className={`absolute -bottom-0.5 h-5 max-w-5 rounded-full bg-rose-400 px-1 text-justify text-white transition-all duration-300 ease-in-out hover:bg-rose-500 ${following ? 'animate-bounce-2' : animate ? 'animate-shake' : ''
+            }`}
           onClick={() => handleFollowButton(itineraries[index].userId)}
         >
           {following ? <IoMdCheckmark /> : <GoPlus />}

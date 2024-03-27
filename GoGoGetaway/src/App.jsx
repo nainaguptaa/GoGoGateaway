@@ -75,7 +75,7 @@ function App() {
     <>
       {signPopup && <Signup />}
       <Navbar isMobile={isMobile} iconSize={iconSize} />
-      <div className=" lg:pt-[6.25rem] ">
+      <div className=" lg:pt-[6.25rem] pt-[3rem]">
         {/* <ForYouLeft className="" />{' '} */}
         <Suspense fallback={<Loading />}>
           <Routes>
