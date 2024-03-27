@@ -95,16 +95,16 @@ const Signup = () => {
   console.log(type);
   return (
     <div className="fixed top-0 z-40 flex h-screen w-full items-center justify-center bg-black/30 backdrop-blur">
-      <div className="absolute right-20 top-16">
+      <div className="absolute top-10 hidden lg:right-10 lg:block">
         <IoMdClose
           size={55}
           onClick={() => setSignPopup(false)}
           className="ease cursor-pointer transition duration-100 hover:brightness-125"
         />
       </div>
-      <div className="flex h-2/3 w-4/5 rounded-3xl bg-card p-4 shadow-lg dark:bg-zinc-800">
+      <div className="flex w-4/5 rounded-3xl bg-card p-4 shadow-lg dark:bg-zinc-800 lg:h-5/6">
         {/* Left side */}
-        <div className="relative  w-1/2 grow justify-center px-10 py-4">
+        <div className="relative  hidden w-1/2 grow justify-center px-10 py-4 lg:block">
           <img src={Signin1} className="absolute bottom-12 h-60" />
           <img src={Signin2} className=" w-full" />
         </div>
@@ -221,17 +221,24 @@ const Signup = () => {
         {step == 0 ? (
           <>
             {' '}
-            <div className="shadow-deep-inner flex h-full w-1/2 flex-col  items-center rounded-2xl p-4">
-              <div className="flex w-56 overflow-hidden rounded-xl border-2">
+            <div className="shadow-deep-inner relative flex h-full w-full flex-col  items-center rounded-2xl p-4 lg:w-1/2">
+              <div className="absolute right-1 top-1 lg:right-20 lg:hidden ">
+                <IoMdClose
+                  size={30}
+                  onClick={() => setSignPopup(false)}
+                  className="ease cursor-pointer transition duration-100 hover:brightness-125"
+                />
+              </div>
+              <div className="mb-8 mt-6 flex  w-56 overflow-hidden rounded-xl border-2 lg:mt-0 ">
                 <div
                   onClick={() => setType(0)}
-                  className={`duration-400 w-full cursor-pointer px-4 py-2 text-center text-lg transition hover:bg-lime-600 hover:text-white ${type == 0 ? 'bg-teal-500 text-white' : 'text-'}`}
+                  className={`duration-400 w-full cursor-pointer px-4 py-2 text-center text-lg transition hover:bg-amber-500 hover:text-white ${type == 0 ? 'bg-teal-500 text-white' : 'text-'}`}
                 >
                   Sign Up
                 </div>
                 <div
                   onClick={() => setType(1)}
-                  className={`duration-400 w-full cursor-pointer px-4 py-2 text-center text-lg transition hover:bg-lime-600 hover:text-white ${type == 1 ? 'bg-teal-500 text-white' : 'text-primary'}`}
+                  className={`duration-400 w-full cursor-pointer px-4 py-2 text-center text-lg transition hover:bg-amber-500 hover:text-white ${type == 1 ? 'bg-teal-500 text-white' : 'text-primary'}`}
                 >
                   Log In
                 </div>
@@ -240,7 +247,7 @@ const Signup = () => {
 
               <form
                 onSubmit={handleSubmit}
-                className={`mt-8 flex  w-full flex-col gap-3  ${type == 0 ? '' : 'h-52'}`}
+                className={`lg-mt-4 flex  w-full flex-col gap-3  ${type == 0 ? '' : 'h-52'}`}
               >
                 <div className="flex  flex-col gap-2">
                   <label htmlFor="email" className="label">
