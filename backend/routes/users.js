@@ -38,7 +38,6 @@ router.get("/username/:username", async (req, res) => {
   }
 });
 
-
 router.post("/follow/:id", async (req, res) => {
   try {
     const followedUserId = req.params.id;
@@ -210,7 +209,35 @@ router.post("/:userId/add-to-liked", async (req, res) => {
   } catch (error) {
     console.error("Error saving itinerary:", error);
     res.status(500).json({ error: "Internal Server Error" });
-  
+  }
+});
+
+router.post("/:userId/remove-from-liked", async (req, res) => {
+  const userId = req.params.userId; // Retrieve the user ID from the URL parameters
+  const itineraryId = req.body.itineraryId; // Assuming the itinerary ID is sent in the request body
+
+  if (!itineraryId) {
+    return res.status(400).json({ error: "Missing itinerary ID" });
+  }
+
+  try {
+    // Reference to the user's document in the 'users' collection
+    const userRef = db.collection("users").doc(userId);
+    const doc = await userRef.get();
+
+    if (!doc.exists) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Atomically remove the itinerary ID from the 'likedItineraries' array field in the user's document
+    await userRef.update({
+      likedItineraries: admin.firestore.FieldValue.arrayRemove(itineraryId),
+    });
+
+    res.status(200).json({ message: "Itinerary unliked successfully" });
+  } catch (error) {
+    console.error("Error removing itinerary from liked:", error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
 });
 

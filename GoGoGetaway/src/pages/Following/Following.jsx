@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import ForYouLeft from '../ForYou/ForYouLeft';
 import ItineraryList from '@/components/ItineraryList/ItineraryList';
 import { useUserContext } from '@/context/userContext';
+import axios from 'axios';
 import itinerariesDummy from '../../dummyData/dummyItinerary.json';
 import { useNavigate } from 'react-router-dom';
 export default function Following({ isMobile, iconSize }) {
@@ -41,20 +42,17 @@ export default function Following({ isMobile, iconSize }) {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+  const apiURL = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const fetchItineraries = async () => {
       const userId = currentUser.id;
       try {
-        // const response = await fetch('http://localhost:8080/itineraries/all'); // Adjust the URL as needed
         //
-        const response = await fetch(
-          `http://localhost:8080/itineraries/followed-itineraries/${userId}`,
+        const response = await axios.get(
+          `${apiURL}/itineraries/followed-itineraries/${userId}`,
         );
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
 
+        const data = response.data;
         console.log(data);
         setItineraries(data);
         setDisplayedPosts(data.slice(0, postsPerPage));

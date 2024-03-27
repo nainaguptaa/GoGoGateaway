@@ -12,12 +12,14 @@ const SearchResults = () => {
 
   let query = searchParams.get('q');
   query = query.charAt(0).toUpperCase() + query.slice(1);
-
+  const apiURL = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`http://localhost:8080/itineraries/?city=${query}`);
+        const response = await axios.get(
+          `${apiURL}/itineraries/?city=${query}`,
+        );
         setResults(response.data);
       } catch (error) {
         console.error('Failed to fetch data:', error);
@@ -38,14 +40,14 @@ const SearchResults = () => {
       count += 1;
     }
 
-    itinerary.events.forEach(event => {
+    itinerary.events.forEach((event) => {
       if (event.rating) {
         totalRating += parseInt(event.rating, 10);
         count += 1;
       }
     });
 
-    itinerary.restaurants.forEach(restaurant => {
+    itinerary.restaurants.forEach((restaurant) => {
       if (restaurant.rating) {
         totalRating += parseInt(restaurant.rating, 10);
         count += 1;
@@ -55,7 +57,7 @@ const SearchResults = () => {
     if (count > 0) {
       return (totalRating / count).toFixed(1); // Keeping one decimal for average
     } else {
-      return "No ratings";
+      return 'No ratings';
     }
   };
 
@@ -72,33 +74,69 @@ const SearchResults = () => {
   });
 
   return (
-<div className="flex flex-col h-screen justify-start items-center pt-2">
-  <div className="w-full max-w-6xl flex justify-between items-center mb-4 px-4 py-2">
-    <h2 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 dark:text-white">Search Results for: {query}</h2>
-    <div className="sort-dropdown flex items-center">
-      <label htmlFor="sortCriteria" className="mr-2 text-gray-400">Sort by:</label>
-      <select id="sortCriteria" value={sortCriteria} onChange={(e) => setSortCriteria(e.target.value)} className="px-5 py-3 text-base font-medium text-center text-gray-900 bg-gray-200 border border-gray-400 rounded-lg shadow-sm dark:text-white dark:bg-gray-700">
-        <option value="rating">Highest Rated</option>
-        <option value="price">Price (Lowest to Highest)</option>
-      </select>
-    </div>
-  </div>
+    <div className="flex h-screen flex-col items-center justify-start pt-2">
+      <div className="mb-4 flex w-full max-w-6xl items-center justify-between px-4 py-2">
+        <h2 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 dark:text-white">
+          Search Results for: {query}
+        </h2>
+        <div className="sort-dropdown flex items-center">
+          <label htmlFor="sortCriteria" className="mr-2 text-gray-400">
+            Sort by:
+          </label>
+          <select
+            id="sortCriteria"
+            value={sortCriteria}
+            onChange={(e) => setSortCriteria(e.target.value)}
+            className="rounded-lg border border-gray-400 bg-gray-200 px-5 py-3 text-center text-base font-medium text-gray-900 shadow-sm dark:bg-gray-700 dark:text-white"
+          >
+            <option value="rating">Highest Rated</option>
+            <option value="price">Price (Lowest to Highest)</option>
+          </select>
+        </div>
+      </div>
       {loading ? (
         <p className="text-lg text-blue-500">Loading...</p>
       ) : sortedResults.length > 0 ? (
         <div className="w-full max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
             {sortedResults.map((itinerary) => (
-              <div key={itinerary.id} className="cursor-pointer rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden relative" onClick={() => navigate(`/itineraries?id=${itinerary.id}`)}>
-                <img src={itinerary.images[0]} alt="Itinerary" className="h-56 w-full object-cover" />
-                <div className="p-4 bg-white">
-                  <h3 className="text-xl font-light text-gray-900">{itinerary.name}</h3>
+              <div
+                key={itinerary.id}
+                className="relative cursor-pointer overflow-hidden rounded-lg shadow-lg transition-shadow duration-300 hover:shadow-xl"
+                onClick={() => navigate(`/itineraries?id=${itinerary.id}`)}
+              >
+                <img
+                  src={itinerary.images[0]}
+                  alt="Itinerary"
+                  className="h-56 w-full object-cover"
+                />
+                <div className="bg-white p-4">
+                  <h3 className="text-xl font-light text-gray-900">
+                    {itinerary.name}
+                  </h3>
                   <p className="text-gray-600">{itinerary.city}</p>
-                  <p className="font-light text-gray-800">Total Price: ${itinerary.totalPrice}</p>
+                  <p className="font-light text-gray-800">
+                    Total Price: ${itinerary.totalPrice}
+                  </p>
                   {/* Display the calculated average rating as acalculated average rating as a star on the bottom right */}
-                  <div style={{position: 'absolute', bottom: '10px', right: '10px', backgroundColor: 'rgba(255, 255, 255, 0.8)', padding: '5px 10px', borderRadius: '10px', display: 'flex', alignItems: 'center'}}>
-                    <span style={{color: '#FFD700', marginRight: '5px'}}>★</span>
-                    <span style={{fontWeight: 'bold', color: '#333'}}>{calculateAverageRating(itinerary)}</span>
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: '10px',
+                      right: '10px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                      padding: '5px 10px',
+                      borderRadius: '10px',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <span style={{ color: '#FFD700', marginRight: '5px' }}>
+                      ★
+                    </span>
+                    <span style={{ fontWeight: 'bold', color: '#333' }}>
+                      {calculateAverageRating(itinerary)}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -106,7 +144,9 @@ const SearchResults = () => {
           </div>
         </div>
       ) : (
-        <p className="text-lg text-red-500">No search results found for {query}</p>
+        <p className="text-lg text-red-500">
+          No search results found for {query}
+        </p>
       )}
     </div>
   );

@@ -7,16 +7,14 @@ const Comment = ({ comment }) => {
   const handleImageError = () => {
     setImageError(true);
   };
-
+  const apiURL = import.meta.env.VITE_API_URL;
   const [liked, setLiked] = useState(false);
 
   useEffect(() => {
     const fetchUserData = async () => {
       try {
         // Perform a fetch operation to get user data based on comment.userId
-        const response = await fetch(
-          `http://localhost:3000/users/${comment.userId}`,
-        );
+        const response = await fetch(`${apiURL}/users/${comment.userId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch user data');
         }
@@ -67,7 +65,7 @@ const Comment = ({ comment }) => {
         comment.likeCount++;
         // Send the comment to the server
         const response = await fetch(
-          `http://localhost:8080/itineraries/comments/${commentID}/like/increment`,
+          `${apiURL}/itineraries/comments/${commentID}/like/increment`,
           {
             method: 'POST',
             headers: {
@@ -85,7 +83,7 @@ const Comment = ({ comment }) => {
 
         // Send the comment to the server
         const response = await fetch(
-          `http://localhost:8080/itineraries/comments/${commentID}/like/decrement`,
+          `${apiURL}/itineraries/comments/${commentID}/like/decrement`,
           {
             method: 'POST',
             headers: {
