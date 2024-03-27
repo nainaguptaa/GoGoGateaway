@@ -254,17 +254,17 @@ const Create = () => {
     if (type === 'Event') {
       setEventState((prev) => ({
         ...prev,
-        [name]: roundedTime,
+        [name]: value,
       }));
     } else if (type === 'Hotel') {
       setHotelState((prev) => ({
         ...prev,
-        [name]: roundedTime,
+        [name]: value,
       }));
     } else if (type === 'Restaurant') {
       setResState((prev) => ({
         ...prev,
-        [name]: roundedTime,
+        [name]: value,
       }));
     }
   };
