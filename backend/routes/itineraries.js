@@ -171,7 +171,7 @@ router.get("/followed-itineraries/:userId", async (req, res) => {
     // Fetch the user document to get the 'following' list
     const userRef = db.collection("users").doc(userId);
     const userSnapshot = await userRef.get();
-
+    const likedItineraries = userSnapshot.data().likedItineraries || [];
     if (!userSnapshot.exists) {
       return res.status(404).json({ error: "User not found" });
     }
@@ -190,6 +190,7 @@ router.get("/followed-itineraries/:userId", async (req, res) => {
       return itinerariesSnapshot.docs.map((doc) => ({
         id: doc.id,
         ...doc.data(),
+        isLiked: likedItineraries.includes(doc.id),
       }));
     });
     // Wait for all the promises to resolve
