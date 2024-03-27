@@ -254,17 +254,17 @@ const Create = () => {
     if (type === 'Event') {
       setEventState((prev) => ({
         ...prev,
-        [name]: roundedTime,
+        [name]: value,
       }));
     } else if (type === 'Hotel') {
       setHotelState((prev) => ({
         ...prev,
-        [name]: roundedTime,
+        [name]: value,
       }));
     } else if (type === 'Restaurant') {
       setResState((prev) => ({
         ...prev,
-        [name]: roundedTime,
+        [name]: value,
       }));
     }
   };
@@ -522,44 +522,60 @@ const Create = () => {
     }));
   };
   return (
-    <div className=" flex h-screen flex-col">
+    <div className="top-[20rem] flex h-screen flex-col">
       {popup && <SignUpReminder className="" setPopup={setPopup} />}
       {/* <ForYouLeft /> */}
-      <div className="  flex h-[200rem] flex-grow flex-col  gap-2   ">
+      <div className=" flex h-[200rem] flex-grow flex-col gap-2     ">
         {/* <h1 className="text-3xl font-bold">Create Itinerary</h1> */}
-        <div className="sticky top-0 flex items-center gap-4 border-b-2 bg-card p-3 ">
-          <Input
-            type="text"
-            value={itineraries.name}
-            onChange={handleNameChange}
-            placeholder="My Itinerary"
-            className="w-3/5"
-          />
-          <DatePickerDemo
-            date={itineraries.date}
-            setDate={handleDateChange}
-            className="text-lg"
-          />
-          <Dialog open={isCityOpen} onOpenChange={setIsCityOpen}>
-            <DialogTrigger asChild>
-              <Button onClick={() => setIsCityOpen(true)}>Change City</Button>
-            </DialogTrigger>
-            <ChooseCity
-              city={itineraries.city}
-              setCity={handleCityChange}
-              toTitleCase={toTitleCase}
-            />
-          </Dialog>
-          <Button
-            onClick={saveItineraryToAPI}
-            className="btn-fill bg-amber-500  font-bold text-white hover:bg-blue-700"
-          >
-            Save Itinerary
-          </Button>
+        <div className="h-[15rem]top-0 sticky flex flex-col items-center gap-2 border-b-2 bg-card p-3 ">
+          <div className="w-full pt-[1rem] text-xl font-semibold sm:text-3xl">
+            {itineraries.city}
+          </div>
+          <div className="flex w-full flex-col gap-2 sm:flex-row  sm:items-end">
+            <div className="flex w-full flex-row gap-2 sm:w-2/3 ">
+              {' '}
+              <Input
+                type="text"
+                value={itineraries.name}
+                onChange={handleNameChange}
+                placeholder="My Itinerary"
+                className="w-3/5"
+              />
+              <DatePickerDemo
+                date={itineraries.date}
+                setDate={handleDateChange}
+                className="text-lg"
+              />
+            </div>
+            <div className="flex flex-col justify-between gap-3 sm:flex-row">
+              {' '}
+              <Dialog open={isCityOpen} onOpenChange={setIsCityOpen}>
+                <DialogTrigger asChild>
+                  <Button
+                    className="w-full"
+                    onClick={() => setIsCityOpen(true)}
+                  >
+                    Change City
+                  </Button>
+                </DialogTrigger>
+                <ChooseCity
+                  city={itineraries.city}
+                  setCity={handleCityChange}
+                  toTitleCase={toTitleCase}
+                />
+              </Dialog>
+              <Button
+                onClick={saveItineraryToAPI}
+                className="btn-fill w-full bg-amber-500  font-bold text-white hover:bg-blue-700"
+              >
+                Save Itinerary
+              </Button>
+            </div>
+          </div>
         </div>
-        <div className="flex   px-8 pb-64">
-          <div className="w-9/12 ">
-            <div className="rounded-xl  border-2 bg-card px-5 py-6">
+        <div className="flex flex-col-reverse px-2 pb-64   sm:px-8 lg:flex-row">
+          <div className="w-full sm:w-9/12 ">
+            <div className="border-2  bg-card px-5 py-6 sm:rounded-xl">
               <div className="text-4xl font-normal">
                 {toTitleCase(itineraries.city)} Trip
               </div>
@@ -787,17 +803,21 @@ const Create = () => {
             </div>
             <ItineraryOverview itineraries={itineraries} />
           </div>
-          <div className="flex grow flex-col items-center  gap-10   text-lg">
-            <div className="w-[30rem] overflow-hidden rounded-xl border-2 bg-card shadow-sm">
+          <div className="flex w-full grow flex-col  items-center  gap-10 text-lg">
+            <div className=" mb-4 w-full overflow-hidden bg-card shadow-sm sm:rounded-xl sm:border-2">
               {' '}
-              <SearchableMap searchAddress={itineraries.city} loading="lazy" />
+              <SearchableMap
+                className="h-[4rem]"
+                searchAddress={itineraries.city}
+                loading="lazy"
+              />
               <div className="p-5 text-xl font-semibold">
                 {toTitleCase(itineraries.city)}
               </div>
             </div>
           </div>
         </div>
-        <Footer />
+        {/* <Footer /> */}
       </div>{' '}
     </div>
   );
