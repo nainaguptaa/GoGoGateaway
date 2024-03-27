@@ -261,7 +261,27 @@ router.get("/user/:username", async (req, res) => {
 
     // Get the saved itineraries for the user
     const userSavedItineraries = userSnapshot.docs[0].data().savedItineraries || [];
+    const savedItinerariesPromises = userSavedItineraries.map(async (itineraryId) => {
+      const itineraryRef = db.collection("itineraries").doc(itineraryId);
+      const itinerarySnapshot = await itineraryRef.get();
+      return { id: itinerarySnapshot.id, ...itinerarySnapshot.data() };
+    });
+    // Wait for all promises to resolve
+    const savedItineraries = await Promise.all(savedItinerariesPromises);
 
+    // Get the liked itineraries for the user
+    const userLikedItineraries = userSnapshot.docs[0].data().likedItineraries || [];
+    const likedItinerariesPromises = userLikedItineraries.map(async (itineraryId) => {
+      const itineraryRef = db.collection("itineraries").doc(itineraryId);
+      const itinerarySnapshot = await itineraryRef.get();
+      return { id: itinerarySnapshot.id, ...itinerarySnapshot.data() };
+    });
+    // Wait for all promises to resolve
+    const likedItineraries = await Promise.all(likedItinerariesPromises);
+
+
+    // Respond with the fetched itineraries
+    res.status(200).json({ posted: itineraries, saved: savedItineraries, liked: likedItineraries });
   } catch (error) {
     console.error("Error fetching user itineraries:", error);
     res.status(500).json({ error: "Internal Server Error" });

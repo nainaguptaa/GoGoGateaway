@@ -1,6 +1,6 @@
 const ItineraryProfile = ({itinerary}) => {
   return (
-    <div>ItineraryProfile</div>
+    <div>{itinerary?.city}</div>
   )
 }
 export default ItineraryProfile
