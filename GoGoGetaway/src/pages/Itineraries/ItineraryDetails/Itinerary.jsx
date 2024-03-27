@@ -118,9 +118,9 @@ export default function Itinerary() {
 
         <ItineraryCarousel itinerary={itinerary} />
 
-        <div className="px-2 py-4">
-          <div className="flex ">
-            <div className="flex w-2/3 flex-col">
+        <div className="bg-red-100 px-2 py-4">
+          <div className="flex bg-green-100">
+            <div className="flex flex-col lg:w-2/3">
               <h1 className="hidden text-3xl font-semibold lg:block">
                 Itinerary Details
               </h1>

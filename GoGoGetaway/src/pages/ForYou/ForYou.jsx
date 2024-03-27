@@ -38,10 +38,13 @@ const ForYou = ({ isMobile, iconSize }) => {
   // Number of posts to display per "page"
   const postsPerPage = 5;
   // Define the function to fetch itineraries
+  const apiURL =
+    import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_DEPLOY;
+  console.log('using, ', apiURL);
   useEffect(() => {
     const fetchItineraries = async () => {
       try {
-        const response = await fetch('http://localhost:8080/itineraries/all'); // Adjust the URL as needed
+        const response = await fetch(`${apiURL}/itineraries/all`); // Adjust the URL as needed
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -95,7 +98,6 @@ const ForYou = ({ isMobile, iconSize }) => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  console.log(itineraries);
   return (
     <div className="flex h-screen">
       {!isMobile && <ForYouLeft />}
