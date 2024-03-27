@@ -41,7 +41,7 @@ const ForYou = ({ isMobile, iconSize }) => {
   // Define the function to fetch itineraries
   const apiURLDeploy = import.meta.env.VITE_API_URL_DEPLOY;
   const apiURL = import.meta.env.VITE_API_URL;
-
+  console.log(itineraries, 'from main for you');
   useEffect(() => {
     const fetchItineraries = async () => {
       try {

@@ -42,8 +42,10 @@ export default function ForYouLikes({
       favourites: false, //
     })),
   );
+  console.log(itineraries);
 
-  const [liked, setLiked] = useState(itineraries[index].isLiked);
+  const [liked, setLiked] = useState(itineraries[index]?.isLiked || false);
+
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(false);
   const [savedItineraries, setSavedItineraries] = useState([]);
@@ -108,28 +110,16 @@ export default function ForYouLikes({
     }
     // }
   };
+  const [savedItineraryIds, setSavedItineraryIds] = useState(new Set());
 
   useEffect(() => {
     if (currentUser) {
-      // Proceed only if currentUser exists
-      // Assuming currentUser.savedItineraries is an array of saved itinerary IDs
-      const savedItineraryIds = new Set(currentUser.savedItineraries);
-
-      // Update itineraries with saved state
-      const updatedItineraries = itineraries.map((itinerary) => ({
-        ...itinerary,
-        saved: savedItineraryIds.has(itinerary.id),
-      }));
-      setItineraries(updatedItineraries);
+      const savedIds = new Set(currentUser.savedItineraries || []);
+      setSavedItineraryIds(savedIds);
     } else {
-      // If currentUser is null (logged out/not signed in), mark all itineraries as not saved
-      const updatedItineraries = itineraries.map((itinerary) => ({
-        ...itinerary,
-        saved: false,
-      }));
-      setItineraries(updatedItineraries);
+      setSavedItineraryIds(new Set()); // Clear saved IDs if logged out
     }
-  }, [currentUser]); // Add itineraries to the dependency array if it's not static
+  }, [currentUser]);
 
   const handleSaveItineraryWithAnimation = async (itineraryId) => {
     if (!itineraries[index].saved) {
@@ -306,7 +296,7 @@ export default function ForYouLikes({
       // Handle error appropriately, such as displaying an error message
     }
   };
-
+  if (index >= itineraries.length) return <div>Loading...</div>;
   return (
     <div className="h-70 absolute bottom-40 right-6 z-10 mb-12 flex flex-col gap-6 rounded-xl  bg-white/60 px-2 py-4 text-sm sm:mb-8 sm:ml-4 sm:text-lg lg:static lg:right-16 lg:bg-transparent">
       <div className="relative flex flex-col items-center ">
