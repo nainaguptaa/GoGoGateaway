@@ -1,5 +1,7 @@
 import { useState, useEffect, lazy, Suspense } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
 // import Signup from './pages/Auth/Signup';
 import LandingPage from './pages/LandingPage/LandingPage';
 import Profile from './pages/Profile/Profile';
@@ -14,7 +16,9 @@ import Navbar from './components/Navbar';
 const Following = lazy(() => import('./pages/Following/Following'));
 // import Following from './pages/Following/Following';
 import ForYouLeft from './pages/ForYou/ForYouLeft';
-const Itinerary = lazy(() => import('./pages/Itineraries/Itinerary'));
+const Itinerary = lazy(
+  () => import('./pages/Itineraries/ItineraryDetails/Itinerary'),
+);
 // import Itinerary from './pages/Itineraries/Itinerary';
 import Test from './pages/Test';
 import BottomBar from './components/BottomBar';
@@ -23,7 +27,7 @@ import MyTrips from './pages/Profile/MyTrips';
 import { Toaster } from './components/ui/toaster';
 function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
-
+  const location = useLocation();
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 1024);
@@ -75,7 +79,7 @@ function App() {
     <>
       {signPopup && <Signup />}
       <Navbar isMobile={isMobile} iconSize={iconSize} />
-      <div className=" lg:pt-[6.25rem] pt-[3rem]">
+      <div className=" pt-[3rem] lg:pt-[6.25rem]">
         {/* <ForYouLeft className="" />{' '} */}
         <Suspense fallback={<Loading />}>
           <Routes>
@@ -101,11 +105,12 @@ function App() {
           </Routes>
         </Suspense>
       </div>
-      {isMobile && (
+      {isMobile && !location.pathname.startsWith('/itineraries') && (
         <div className="fixed bottom-0 w-full">
           <BottomBar iconSize={iconSize} />
         </div>
       )}
+
       <Toaster />
     </>
   );
