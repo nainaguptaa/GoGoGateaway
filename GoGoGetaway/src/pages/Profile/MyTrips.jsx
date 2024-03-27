@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useUserContext } from '@/context/userContext';
 import { useToast } from '@/components/ui/use-toast';
-import Itinerary from '../Itineraries/Itinerary';
 
 export default function MyTrips() {
   const { username } = useParams();
@@ -52,27 +51,20 @@ export default function MyTrips() {
   }
   const removeSavedItinerary = async (itineraryId) => {
     try {
-      const response = await axios.post(`http://localhost:8080/users/${currentUser.id}/remove-saved-itinerary`, { itineraryId });
-      console.log('Response from remove itinerary:', response.data);
-      console.log(itineraryId);
-  
+      await axios.post(`/users/${currentUser.id}/remove-saved-itinerary`, { itineraryId });
       toast({
         title: "Success",
         description: "Itinerary removed from saved list.",
         status: "success",
       });
-  
       // Refresh the list of saved itineraries
       const updatedSavedItineraries = savedItineraries.filter(itinerary => itinerary.id !== itineraryId);
       setSavedItineraries(updatedSavedItineraries);
     } catch (error) {
       console.error('Error removing saved itinerary:', error);
-      if (error.response) {
-        console.error('Error details:', error.response.data);
-      }
       toast({
         title: "Error",
-        description: "Failed to remove itinerary. Please try again.",
+        description: "Failed to remove itinerary.",
         status: "error",
       });
     }
@@ -111,23 +103,18 @@ export default function MyTrips() {
     <div className="w-full max-w-6xl">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {savedItineraries.map((itinerary) => (
-          <div key={itinerary.id} className="cursor-pointer rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden relative">
+          <div key={itinerary.id}
+            className="cursor-pointer rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden relative"
+            onClick={() => navigate(`/itineraries?id=${itinerary.id}`)}>
+
             <img src={itinerary.images[0]} alt="Itinerary" className="h-56 w-full object-cover" />
             <div className="p-4 bg-white">
               <h3 className="text-xl font-light text-gray-900">{itinerary.name}</h3>
               <p className="text-gray-600">{itinerary.city}</p>
               <p className="font-light text-gray-800">Total Price: ${itinerary.totalPrice}</p>
-              <div className="flex justify-between items-center">
-                <div className="flex items-center">
-                  <span className="text-yellow-400 mr-2">★</span>
-                  <span className="font-bold text-gray-800">{calculateAverageRating(itinerary)}</span>
-                </div>
-                {/* <button
-                  onClick={() => removeSavedItinerary(itinerary.id)}
-                  className="text-red-500 hover:text-red-700 transition-colors duration-300"
-                >
-                  Remove
-                </button> */}
+              <div className="absolute bottom-2 right-2 bg-white bg-opacity-80 p-2 rounded-lg flex items-center">
+                <span className="text-yellow-400 mr-2">★</span>
+                <span className="font-bold text-gray-800">{calculateAverageRating(itinerary)}</span>
               </div>
             </div>
           </div>
