@@ -39,7 +39,10 @@ export default function BottomBar({ iconSize }) {
       <div className="  py-2 sm:px-4 sm:py-4">
         <FaCompass size={iconSize} />
       </div>
-      <div className=" py-2 sm:px-4 sm:py-4">
+      <div
+        className=" py-2 sm:px-4 sm:py-4"
+        onClick={() => navigate('/create')}
+      >
         <MdAdd size={iconSize} />
       </div>
       <div className="py-2 sm:px-4 sm:py-4" onClick={() => handleProfile()}>

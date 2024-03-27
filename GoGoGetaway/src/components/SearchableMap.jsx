@@ -33,9 +33,10 @@ const SearchableMap = ({ searchAddress }) => {
       center={[51.505, -0.09]} // Initial position
       zoom={13} // Initial zoom level
       //   style={{ height: '100vh', width: '100%' }}
-      className="z-0 h-[35rem] w-full"
+      className="z-0 h-[20rem] w-full"
     >
       <TileLayer
+        // className="h-[10rem]"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
