@@ -131,13 +131,13 @@ export default function Itinerary({ iconSize }) {
               <h1 className="hidden text-3xl font-semibold lg:block">
                 Itinerary Details
               </h1>
-              <div className="block max-w-[15rem]  text-2xl font-medium lg:hidden">
+              <div className="block max-w-[15rem] text-2xl font-medium sm:max-w-[45rem] lg:hidden">
                 {itinerary.name}
               </div>
-              <div className="max-w-[15rem]  text-xl font-normal">
+              <div className="max-w-[15rem] text-xl font-normal sm:max-w-[45rem]">
                 {itinerary.city}
               </div>
-              <div className=" max-w-[15rem] text-xl font-normal text-gray-400">
+              <div className=" max-w-[15rem] text-xl font-normal text-gray-400 sm:max-w-[45rem]">
                 {formattedDate}
               </div>
               <div className="mb-20 flex flex-col gap-5  lg:pr-4">
@@ -148,7 +148,7 @@ export default function Itinerary({ iconSize }) {
                       key={index}
                       className="mb-2 flex flex-col gap-3 rounded-xl border-2 p-3 lg:p-6"
                     >
-                      <div className="gap:2 flex max-w-[15rem] flex-col justify-between   lg:flex-row lg:items-end lg:gap-5">
+                      <div className="gap:2 flex max-w-[15rem] flex-col justify-between sm:max-w-[45rem]   lg:flex-row lg:items-end lg:gap-5">
                         <div className="flex flex-col gap-0.5 lg:flex-row lg:gap-2 ">
                           <div className="text-xl font-medium lg:text-2xl lg:font-semibold">
                             {event.event}
@@ -204,7 +204,7 @@ export default function Itinerary({ iconSize }) {
                       key={index}
                       className="mb-2 flex flex-col gap-3 rounded-xl border-2 p-3 lg:p-6"
                     >
-                      <div className="gap:2 flex max-w-[10rem] flex-col justify-between bg-red-100 lg:flex-row lg:items-end lg:gap-5">
+                      <div className="gap:2 flex max-w-[10rem] flex-col justify-between sm:max-w-[45rem] lg:flex-row lg:items-end lg:gap-5">
                         <div className="flex  flex-col gap-0.5 lg:flex-row lg:gap-2">
                           <div className="text-xl font-medium lg:text-2xl lg:font-semibold">
                             {restaurant.restaurant}
@@ -260,7 +260,7 @@ export default function Itinerary({ iconSize }) {
                 <div className="mr-5 mt-6 flex w-full flex-col gap-3 border-b-2  pb-4">
                   <h2 className="text-4xl font-semibold">Hotel</h2>
                   <div className="mb-2 flex flex-col gap-3 rounded-xl border-2 p-3 lg:p-6">
-                    <div className="gap:2  flex max-w-[15rem] flex-col justify-between   lg:flex-row lg:items-end lg:gap-5">
+                    <div className="gap:2  flex max-w-[15rem] flex-col justify-between sm:max-w-[45rem]   lg:flex-row lg:items-end lg:gap-5">
                       <div className="flex flex-col gap-0.5 lg:flex-row lg:gap-2 ">
                         <div className="text-xl font-medium lg:text-2xl lg:font-semibold">
                           {itinerary.hotel.hotel}
@@ -274,7 +274,7 @@ export default function Itinerary({ iconSize }) {
                         </div>
                       </div>
                     </div>
-                    <div className="mt-2 flex max-w-[15rem] bg-red-200">
+                    <div className="mt-2 flex max-w-[15rem]  sm:max-w-[45rem]">
                       <div className="flex items-center gap-2 text-lg">
                         <div className="font-semibold">Booking:</div>
                         <a
