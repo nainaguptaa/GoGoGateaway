@@ -123,31 +123,40 @@ router.get("/all", async (req, res) => {
   try {
     const userId = req.query.userId;
 
-    // Step 2: Fetch the user's liked itineraries
-    const userDoc = await db.collection("users").doc(userId).get();
-    const likedItineraries = userDoc.data().likedItineraries || [];
+    // Initialize itineraries array
+    let itineraries = [];
 
-    // Step 3: Fetch all itineraries
-    const itinerariesSnapshot = await db.collection("itineraries").get();
-    let itineraries = itinerariesSnapshot.docs.map((doc) => ({
-      id: doc.id,
-      ...doc.data(),
-      isLiked: false, // Initialize all as not liked
-    }));
+    // Check if userId is provided
+    if (userId) {
+      // Fetch the user's liked itineraries if userId is provided
+      const userDoc = await db.collection("users").doc(userId).get();
+      const likedItineraries = userDoc.data().likedItineraries || [];
 
-    // Step 4: Mark itineraries as liked
-    itineraries = itineraries.map((itinerary) => ({
-      ...itinerary,
-      isLiked: likedItineraries.includes(itinerary.id), // Check if the itinerary is liked
-    }));
+      // Fetch all itineraries
+      const itinerariesSnapshot = await db.collection("itineraries").get();
+      itineraries = itinerariesSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        isLiked: likedItineraries.includes(doc.id), // Mark itineraries as liked if they are in user's liked list
+      }));
+    } else {
+      // Fetch all itineraries without checking for likes, if userId is not provided
+      const itinerariesSnapshot = await db.collection("itineraries").get();
+      itineraries = itinerariesSnapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data(),
+        isLiked: false, // Initialize all as not liked
+      }));
+    }
 
-    // console.log("\n\n", itineraries);
+    // Return the itineraries
     res.status(200).json(itineraries);
   } catch (error) {
     console.error("Error fetching all itineraries:", error);
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 // router.get("/all", async (req, res) => {
 //   try {
 //     const itinerariesSnapshot = await db.collection("itineraries").get();

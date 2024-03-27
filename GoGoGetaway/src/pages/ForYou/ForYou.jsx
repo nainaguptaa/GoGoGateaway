@@ -41,14 +41,15 @@ const ForYou = ({ isMobile, iconSize }) => {
   // Define the function to fetch itineraries
   const apiURLDeploy = import.meta.env.VITE_API_URL_DEPLOY;
   const apiURL = import.meta.env.VITE_API_URL;
-  console.log('using, ', apiURL);
-  console.log(itineraries);
+
   useEffect(() => {
     const fetchItineraries = async () => {
       try {
         // Define the API URL
-        const myurl = `${apiURL}/itineraries/all?userId=${currentUser.id}`;
-        console.log(myurl);
+        const myID = currentUser && currentUser.id;
+
+        const myurl = `${apiURL}/itineraries/all?userId=${myID ? myID : ''}`;
+
         // Use axios.get to fetch the itineraries
         const response = await axios.get(myurl);
 
