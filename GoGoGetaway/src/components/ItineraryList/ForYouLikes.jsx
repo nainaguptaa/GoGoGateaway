@@ -29,16 +29,12 @@ import { useUserContext } from '@/context/userContext';
 import Comment from '../../pages/ForYou/Comment';
 import { Link, useNavigate } from 'react-router-dom';
 
-
-
-
 export default function ForYouLikes({
   isMobile,
   itinerariesProp,
   index,
   iconSize,
 }) {
-  
   const [itineraries, setItineraries] = useState(
     itinerariesProp.map((itinerary) => ({
       ...itinerary,
@@ -46,8 +42,8 @@ export default function ForYouLikes({
       favourites: false, //
     })),
   );
-  
-  const [liked, setLiked] = useState(false);
+
+  const [liked, setLiked] = useState(itineraries[index].isLiked);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(false);
   const [savedItineraries, setSavedItineraries] = useState([]);
@@ -62,7 +58,11 @@ export default function ForYouLikes({
   const handleLikeButton = async (itineraryId, index) => {
     const itinerary = itineraries[index];
     console.log(itineraryId);
-    const newLikedState = !itinerary.liked; // Toggle the liked state
+    setLiked((prev) => !prev);
+    const newLikedState = !liked; // Toggle the liked state
+
+    // We only proceed with the request if the like state changes
+    // if (liked !== newLikedState) {
     const likeChange = newLikedState ? 1 : -1; // Increment if liking, decrement if unliking
     const userId = currentUser.id;
     // Optimistically update the UI
@@ -75,27 +75,34 @@ export default function ForYouLikes({
     setItineraries(newItineraries);
 
     try {
-      // Send the request to the server to increment or decrement the like count
+      // Determine the correct endpoint based on the new liked state
       const endpoint = newLikedState
         ? `http://localhost:8080/itineraries/increment-like/${itineraryId}`
-        : `http://localhost:8080/itineraries/decrement-like/${itineraryId}`; // Assume you have a decrement-like endpoint
+        : `http://localhost:8080/itineraries/decrement-like/${itineraryId}`;
       await axios.post(endpoint);
 
-      const addToLikedEndpoint = `http://localhost:8080/users/${userId}/add-to-liked`;
-      await axios.post(addToLikedEndpoint, {
+      // Optionally, manage adding/removing from liked items if needed
+      // This is just an example and might need to be adapted based on your backend logic
+      const likedEndpointAction = newLikedState
+        ? 'add-to-liked'
+        : 'remove-from-liked';
+      const likedEndpoint = `http://localhost:8080/users/${userId}/${likedEndpointAction}`;
+      await axios.post(likedEndpoint, {
         itineraryId: itineraryId,
       });
     } catch (error) {
       console.error('Error updating like count:', error);
       // Optionally, revert the optimistic update here
     }
+    // }
   };
+
   useEffect(() => {
     // Assuming currentUser.savedItineraries is an array of saved itinerary IDs
     const savedItineraryIds = new Set(currentUser.savedItineraries || []);
-  
+
     // Update itineraries with saved state
-    const updatedItineraries = itineraries.map(itinerary => ({
+    const updatedItineraries = itineraries.map((itinerary) => ({
       ...itinerary,
       saved: savedItineraryIds.has(itinerary.id),
     }));
@@ -111,15 +118,17 @@ export default function ForYouLikes({
   const handleSaveItinerary = async (itineraryId) => {
     console.log(currentUser);
     try {
- 
       // Proceed to save the itinerary if not already saved
-      const saveResponse = await axios.post(`http://localhost:8080/itineraries/users/${currentUser.id}/save-itinerary`, {
-        itineraryId,
-      });
-  
+      const saveResponse = await axios.post(
+        `http://localhost:8080/itineraries/users/${currentUser.id}/save-itinerary`,
+        {
+          itineraryId,
+        },
+      );
+
       if (saveResponse.status === 200) {
         // Optimistically update the UI to reflect the saved state
-        const updatedItineraries = itineraries.map(itinerary => {
+        const updatedItineraries = itineraries.map((itinerary) => {
           if (itinerary.id === itineraryId) {
             return { ...itinerary, saved: true };
           }
@@ -131,7 +140,6 @@ export default function ForYouLikes({
       console.error('Error saving itinerary:', error);
     }
   };
-
 
   const openComments = async (itineraryId) => {
     setComment('');
@@ -256,28 +264,25 @@ export default function ForYouLikes({
 
   const handleProfileLink = async (userId) => {
     //get the user id and navigate to the user's profile from this url `http://localhost:8080/users/${userId}`
-    try{
+    try {
       console.log(userId);
       const response = await fetch(`http://localhost:8080/users/${userId}`);
-      if(!response.ok){
+      if (!response.ok) {
         throw new Error('Failed to fetch user');
       }
       const user = await response.json();
       //Go to url of http://localhost:5173/user/syriltj1 using react router
       navigate(`/user/${user.username}`);
-    }
-    catch(error){
+    } catch (error) {
       console.error('Error:', error);
       // Handle error appropriately, such as displaying an error message
     }
-  }
+  };
 
   return (
     <div className="h-70 absolute bottom-40 right-6 z-10 mb-12 flex flex-col gap-6 rounded-xl  bg-white/60 px-2 py-4 text-sm sm:mb-8 sm:ml-4 sm:text-lg lg:static lg:right-16 lg:bg-transparent">
       <div className="relative flex flex-col items-center ">
-        <Link
-        onClick={() => handleProfileLink(itineraries[index].userId)}
-        >
+        <Link onClick={() => handleProfileLink(itineraries[index].userId)}>
           {itineraries[index]?.userPhoto ? (
             <img
               src={itineraries[index]?.userPhoto}
@@ -290,8 +295,9 @@ export default function ForYouLikes({
         </Link>
 
         <Button
-          className={`absolute -bottom-0.5 h-5 max-w-5 rounded-full bg-rose-400 px-1 text-justify text-white transition-all duration-300 ease-in-out hover:bg-rose-500 ${following ? 'animate-bounce-2' : animate ? 'animate-shake' : ''
-            }`}
+          className={`absolute -bottom-0.5 h-5 max-w-5 rounded-full bg-rose-400 px-1 text-justify text-white transition-all duration-300 ease-in-out hover:bg-rose-500 ${
+            following ? 'animate-bounce-2' : animate ? 'animate-shake' : ''
+          }`}
           onClick={() => handleFollowButton(itineraries[index].userId)}
         >
           {following ? <IoMdCheckmark /> : <GoPlus />}
@@ -299,7 +305,7 @@ export default function ForYouLikes({
       </div>
 
       <div className="flex flex-col items-center gap-2">
-        {itineraries[index].liked ? (
+        {liked ? (
           <FaHeart
             size={iconSize}
             className="ease cursor-pointer text-rose-500 transition duration-200 hover:text-rose-500"
@@ -366,17 +372,20 @@ export default function ForYouLikes({
           <FaBookmark
             size={iconSize}
             className={`cursor-pointer text-rose-500 ${animate ? 'animate-bounce' : ''}`} // Filled icon for saved, with bounce animation
-            onClick={() => handleSaveItineraryWithAnimation(itineraries[index].id)}
+            onClick={() =>
+              handleSaveItineraryWithAnimation(itineraries[index].id)
+            }
           />
         ) : (
           <FaRegBookmark
             size={iconSize}
             className="cursor-pointer text-gray-900" // Outlined icon for not saved
-            onClick={() => handleSaveItineraryWithAnimation(itineraries[index].id)}
+            onClick={() =>
+              handleSaveItineraryWithAnimation(itineraries[index].id)
+            }
           />
         )}
       </div>
-      
     </div>
   );
 }

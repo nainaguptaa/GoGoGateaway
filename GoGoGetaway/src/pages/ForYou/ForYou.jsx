@@ -1,12 +1,12 @@
 import Navbar from '@/components/Navbar';
 import React, { useState, useEffect, lazy, Suspense } from 'react';
 import ForYouLeft from './ForYouLeft';
-
+import axios from 'axios';
 import itinerariesDummy from '../../dummyData/dummyItinerary.json';
 import dumdum from '../../dummyData/dumdum.json';
 import { useNavigate } from 'react-router-dom';
 const ROW_HEIGHT = 100;
-
+import { useUserContext } from '@/context/userContext';
 import { FixedSizeList as List } from 'react-window';
 import {
   FaRegHeart,
@@ -30,6 +30,7 @@ import { PiShareFat } from 'react-icons/pi';
 import ForYouLikes from '../../components/ItineraryList/ForYouLikes';
 import ItineraryList from '@/components/ItineraryList/ItineraryList';
 const ForYou = ({ isMobile, iconSize }) => {
+  const { currentUser } = useUserContext();
   const [itineraries, setItineraries] = useState([]);
   const navigate = useNavigate();
   const [displayedPosts, setDisplayedPosts] = useState([]);
@@ -38,27 +39,33 @@ const ForYou = ({ isMobile, iconSize }) => {
   // Number of posts to display per "page"
   const postsPerPage = 5;
   // Define the function to fetch itineraries
-  const apiURL =
-    import.meta.env.VITE_API_URL_DEPLOY || import.meta.env.VITE_API_URL;
+  const apiURLDeploy = import.meta.env.VITE_API_URL_DEPLOY;
+  const apiURL = import.meta.env.VITE_API_URL;
   console.log('using, ', apiURL);
+  console.log(itineraries);
   useEffect(() => {
     const fetchItineraries = async () => {
       try {
-        const response = await fetch(`${apiURL}/itineraries/all`); // Adjust the URL as needed
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
+        // Define the API URL
+        const myurl = `${apiURL}/itineraries/all?userId=${currentUser.id}`;
+        console.log(myurl);
+        // Use axios.get to fetch the itineraries
+        const response = await axios.get(myurl);
 
+        // Directly access the data from the axios response
+        const data = response.data;
+
+        // Update state with the fetched data
         setItineraries(data);
         setDisplayedPosts(data.slice(0, postsPerPage));
       } catch (error) {
         console.error('Failed to fetch itineraries:', error);
+        // Fallback to dummy data in case of an error
         setItineraries(itinerariesDummy);
       }
     };
     fetchItineraries();
-  }, [postsPerPage]);
+  }, [apiURL, postsPerPage]); // Added apiURL as a dependency
 
   useEffect(() => {
     const handleResize = () => {

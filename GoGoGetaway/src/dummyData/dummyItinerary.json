@@ -8,7 +8,7 @@
     "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocIoAioWWpGogU_6kBG0tVoOiuDK_m9IV-OpgRr154R2K4k=s96-c",
     "city": "Calgary",
     "totalPrice": 320,
-    "name": "FunTime In Calgary",
+    "name": "Dummy FunTime In Calgary",
     "restaurants": [
       {
         "locationRestaurant": " 4604 37 SE 3C9",
@@ -81,7 +81,7 @@
     "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocJpzkrfk58dSs6vvziVOqEBr6D7pgNaxN5M80PP3UkN=s96-c",
     "city": "Fort Mcmurray",
     "totalPrice": 500,
-    "name": "best trip ever",
+    "name": "dummy best trip ever",
     "restaurants": [
       {
         "locationRestaurant": "somewhere",
@@ -153,7 +153,7 @@
     ],
     "city": "Edmonton",
     "totalPrice": 341,
-    "name": "Dedmonton",
+    "name": "dummy Dedmonton",
     "restaurants": [
       {
         "locationRestaurant": "Northwest",
