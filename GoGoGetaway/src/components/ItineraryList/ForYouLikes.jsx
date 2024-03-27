@@ -83,6 +83,26 @@ export default function ForYouLikes({
       // Optionally, revert the optimistic update here
     }
   };
+  const handleSaveItinerary = async (itineraryId) => {
+    try {
+      const response = await axios.post(`http://localhost:8080/itineraries/users/${currentUser.id}/save-itinerary`, {
+        itineraryId,
+      });
+
+      if (response.status === 200) {
+        // Optimistically update the UI to reflect the saved state
+        const updatedItineraries = [...itineraries];
+        updatedItineraries[index] = {
+          ...itineraries[index],
+          saved: true, // Assuming 'saved' is a boolean indicating if the itinerary is saved
+        };
+        setItineraries(updatedItineraries);
+      }
+    } catch (error) {
+      console.error('Error saving itinerary:', error);
+    }
+  };
+
 
   const openComments = async (itineraryId) => {
     setComment('');
@@ -313,11 +333,19 @@ export default function ForYouLikes({
         <div className=" font-bold">{itineraries[index].commentCount}</div>
       </div>
       <div className="flex flex-col items-center gap-2">
-        <FaRegBookmark size={iconSize} />
-
-        {/* <div className="flex flex-col items-center gap-2">
-        <FaShare size={iconSize} />
-        <div className=" font-bold">Share</div>*/}
+        {itineraries[index].saved ? (
+          <FaBookmark
+            size={iconSize}
+            className="cursor-pointer"
+            // Optionally, disable or hide the button since it's already saved
+          />
+        ) : (
+          <FaRegBookmark
+            size={iconSize}
+            className="cursor-pointer"
+            onClick={() => handleSaveItinerary(itineraries[index].id)}
+          />
+        )}
       </div>
     </div>
   );
