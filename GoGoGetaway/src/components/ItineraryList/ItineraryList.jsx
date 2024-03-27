@@ -5,12 +5,8 @@ import ForYouLikes from './ForYouLikes';
 import { FixedSizeList as List } from 'react-window';
 
 const ItineraryList = ({ itineraries, isMobile, iconSize, itemSize }) => {
-  console.log(1, itineraries);
-
   const navigate = useNavigate();
   const Row = ({ index, style }) => {
-    console.log(3, index);
-    console.log(4, itineraries[index]);
     return (
       <div style={style} className="mx:px-20 px-4 lg:px-14 lg:pt-8 ">
         <div className="flex h-full items-end md:h-[48rem] md:items-center md:justify-center">

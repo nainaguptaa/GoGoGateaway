@@ -21,7 +21,6 @@ export default function ForYouLeft({ iconSize }) {
   useEffect(() => {
     setFollowingList(currentUser ? currentUser.following : []);
   }, [currentUser]);
-  console.log('LENGHT', followingList.length);
   return (
     <div className="fixed flex h-full w-64 flex-col border-r-2 border-gray-200 pt-6 sm:w-44 md:w-64">
       <div className="">

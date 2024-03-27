@@ -41,7 +41,6 @@ const ForYou = ({ isMobile, iconSize }) => {
   // Define the function to fetch itineraries
   const apiURLDeploy = import.meta.env.VITE_API_URL_DEPLOY;
   const apiURL = import.meta.env.VITE_API_URL;
-  console.log(itineraries, 'from main for you');
   useEffect(() => {
     const fetchItineraries = async () => {
       try {
@@ -107,9 +106,6 @@ const ForYou = ({ isMobile, iconSize }) => {
     return () => window.removeEventListener('resize', handleResize);
   }, []);
   if (!itineraries.length > 0) {
-    console.log('HERE');
-    console.log(itineraries.length);
-    console.log(itineraries);
     return (
       <>
         <div className="z-100 ml-20 mt-20">Loading</div>
