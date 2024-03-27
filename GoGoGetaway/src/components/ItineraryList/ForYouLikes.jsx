@@ -48,11 +48,17 @@ export default function ForYouLikes({
   const [comments, setComments] = useState(false);
   const [savedItineraries, setSavedItineraries] = useState([]);
   const { currentUser, updateCurrentUser } = useUserContext();
-  const [following, setFollowing] = useState(
-    currentUser.following.some(
-      (user) => user.userId === itineraries[index].userId,
-    ),
-  );
+  const [following, setFollowing] = useState(false);
+
+  useEffect(() => {
+    if (currentUser && currentUser.following) {
+      setFollowing(
+        currentUser.following.some(
+          (user) => user.userId === itineraries[index].userId,
+        ),
+      );
+    }
+  }, [currentUser, itineraries, index]);
   const [animate, setAnimate] = useState(false);
   const navigate = useNavigate();
   const handleLikeButton = async (itineraryId, index) => {
