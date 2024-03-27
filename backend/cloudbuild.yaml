@@ -8,7 +8,7 @@ steps:
       gcloud secrets versions access latest --secret=gogogetaway_key > gogogetaway.key
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/fl2f-1/github.com/santigf12/gogogateaway-backend:latest', '-f', 'Dockerfile.backend', '.']
+    args: ['build', '-t', 'gcr.io/fl2f-1/github.com/santigf12/gogogateaway-backend:latest', '-f', 'backend/Dockerfile.backend', 'backend']
     env:
     - 'SECRET_PATH=gogogetaway.key'
 
