@@ -106,9 +106,17 @@ const ForYou = ({ isMobile, iconSize }) => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+  if (itineraries) {
+    return (
+      <>
+        <div className="z-100 ml-20 mt-20">Loading</div>
+      </>
+    );
+  }
   return (
     <div className="flex h-screen">
       {!isMobile && <ForYouLeft />}
+
       <ItineraryList
         itineraries={itineraries}
         isMobile={isMobile}
