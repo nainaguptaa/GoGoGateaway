@@ -288,6 +288,7 @@ router.get("/user/:username", async (req, res) => {
   }
 });
 
+
 // Increment the like count for a specific itinerary
 router.post("/increment-like/:id", async (req, res) => {
   console.log(`Incrementing like for ID: ${req.params.id}`);

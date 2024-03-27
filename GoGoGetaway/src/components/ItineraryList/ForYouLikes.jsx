@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   FaRegHeart,
   FaHeart,
@@ -29,21 +29,28 @@ import { useUserContext } from '@/context/userContext';
 import Comment from '../../pages/ForYou/Comment';
 import { Link, useNavigate } from 'react-router-dom';
 
+
+
+
 export default function ForYouLikes({
   isMobile,
   itinerariesProp,
   index,
   iconSize,
 }) {
+  
   const [itineraries, setItineraries] = useState(
     itinerariesProp.map((itinerary) => ({
       ...itinerary,
       liked: false, // Initialize all itineraries as not liked
+      favourites: false, //
     })),
   );
+  
   const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState(false);
+  const [savedItineraries, setSavedItineraries] = useState([]);
   const { currentUser, updateCurrentUser } = useUserContext();
   const [following, setFollowing] = useState(
     currentUser.following.some(
@@ -83,19 +90,41 @@ export default function ForYouLikes({
       // Optionally, revert the optimistic update here
     }
   };
+  useEffect(() => {
+    // Assuming currentUser.savedItineraries is an array of saved itinerary IDs
+    const savedItineraryIds = new Set(currentUser.savedItineraries || []);
+  
+    // Update itineraries with saved state
+    const updatedItineraries = itineraries.map(itinerary => ({
+      ...itinerary,
+      saved: savedItineraryIds.has(itinerary.id),
+    }));
+    setItineraries(updatedItineraries);
+  }, [currentUser.savedItineraries]);
+  const handleSaveItineraryWithAnimation = async (itineraryId) => {
+    if (!itineraries[index].saved) {
+      setAnimate(true); // Trigger animation
+      await handleSaveItinerary(itineraryId); // Call your existing save function
+      setTimeout(() => setAnimate(false), 500); // Reset animation state after 500ms
+    }
+  };
   const handleSaveItinerary = async (itineraryId) => {
+    console.log(currentUser);
     try {
-      const response = await axios.post(`http://localhost:8080/itineraries/users/${currentUser.id}/save-itinerary`, {
+ 
+      // Proceed to save the itinerary if not already saved
+      const saveResponse = await axios.post(`http://localhost:8080/itineraries/users/${currentUser.id}/save-itinerary`, {
         itineraryId,
       });
-
-      if (response.status === 200) {
+  
+      if (saveResponse.status === 200) {
         // Optimistically update the UI to reflect the saved state
-        const updatedItineraries = [...itineraries];
-        updatedItineraries[index] = {
-          ...itineraries[index],
-          saved: true, // Assuming 'saved' is a boolean indicating if the itinerary is saved
-        };
+        const updatedItineraries = itineraries.map(itinerary => {
+          if (itinerary.id === itineraryId) {
+            return { ...itinerary, saved: true };
+          }
+          return itinerary;
+        });
         setItineraries(updatedItineraries);
       }
     } catch (error) {
@@ -336,17 +365,18 @@ export default function ForYouLikes({
         {itineraries[index].saved ? (
           <FaBookmark
             size={iconSize}
-            className="cursor-pointer"
-            // Optionally, disable or hide the button since it's already saved
+            className={`cursor-pointer text-rose-500 ${animate ? 'animate-bounce' : ''}`} // Filled icon for saved, with bounce animation
+            onClick={() => handleSaveItineraryWithAnimation(itineraries[index].id)}
           />
         ) : (
           <FaRegBookmark
             size={iconSize}
-            className="cursor-pointer"
-            onClick={() => handleSaveItinerary(itineraries[index].id)}
+            className="cursor-pointer text-gray-900" // Outlined icon for not saved
+            onClick={() => handleSaveItineraryWithAnimation(itineraries[index].id)}
           />
         )}
       </div>
+      
     </div>
   );
 }
