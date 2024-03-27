@@ -15,16 +15,12 @@ export default function ForYouLeft({ iconSize }) {
     // ... more navigation links
   ];
   const location = useLocation();
-  useEffect(() => {
-    setActive();
-  }, []);
 
   const { currentUser } = useUserContext();
 
   useEffect(() => {
     setFollowingList(currentUser ? currentUser.following : []);
   }, [currentUser]);
-
   return (
     <div className="fixed flex h-full w-64 flex-col border-r-2 border-gray-200 pt-6 sm:w-44 md:w-64">
       <div className="">
@@ -50,22 +46,31 @@ export default function ForYouLeft({ iconSize }) {
         <p className="px-5 py-2 text-sm uppercase">Following accounts</p>
         {/* Dynamically render following accounts here */}
         {/* Example of a single account link */}
-        {followingList.map((following) => (
-          <Link
-            key={following.username}
-            to={`/user/${following.username}`}
-            className="flex items-center px-5 py-2 hover:bg-gray-700"
-          >
-            <img
-              src={following.photoURL}
-              alt="User"
-              className="mr-3 h-8 w-8 rounded-full"
-            />
-            <div>
-              <p className="font-bold">{following.username}</p>
-            </div>
-          </Link>
-        ))}
+        {followingList.length <= 0 ? (
+          <>
+            {' '}
+            {followingList.map((following) => (
+              <Link
+                key={following.username}
+                to={`/user/${following.username}`}
+                className="flex items-center px-5 py-2 hover:bg-gray-700"
+              >
+                <img
+                  src={following.photoURL}
+                  alt="User"
+                  className="mr-3 h-8 w-8 rounded-full"
+                />
+                <div>
+                  <p className="font-bold">{following.username}</p>
+                </div>
+              </Link>
+            ))}
+          </>
+        ) : (
+          <>
+            <div className=" pl-5 text-lg text-gray-400">No Following</div>
+          </>
+        )}
       </div>
     </div>
   );

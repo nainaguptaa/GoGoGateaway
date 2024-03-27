@@ -42,7 +42,6 @@ export default function ForYouLikes({
       favourites: false, //
     })),
   );
-  console.log(itineraries);
 
   const [liked, setLiked] = useState(itineraries[index]?.isLiked || false);
 
@@ -126,7 +125,7 @@ export default function ForYouLikes({
     const wasSaved = savedItineraryIds.has(itineraryId);
     await handleSaveItinerary(itineraryId); // Call your existing save function
     setTimeout(() => setAnimate(false), 500); // Reset animation state after 500ms
-  
+
     // Update the savedItineraryIds set based on the action
     setSavedItineraryIds((prevSavedIds) => {
       const updatedSavedIds = new Set(prevSavedIds);

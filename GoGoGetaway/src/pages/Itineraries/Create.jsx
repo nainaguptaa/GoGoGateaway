@@ -250,23 +250,33 @@ const Create = () => {
 
   const handleChange = (type) => (e) => {
     const { name, value } = e.target;
+    let roundedTime = roundTimeToNearestFive(value); // Round time to nearest multiple of five
     if (type === 'Event') {
       setEventState((prev) => ({
         ...prev,
-        [name]: value,
+        [name]: roundedTime,
       }));
     } else if (type === 'Hotel') {
       setHotelState((prev) => ({
         ...prev,
-        [name]: value,
+        [name]: roundedTime,
       }));
     } else if (type === 'Restaurant') {
       setResState((prev) => ({
         ...prev,
-        [name]: value,
+        [name]: roundedTime,
       }));
     }
   };
+  const roundTimeToNearestFive = (time) => {
+    const [hours, minutes] = time.split(':').map(Number);
+    const roundedMinutes = Math.round(minutes / 5) * 5; // Round minutes to nearest multiple of five
+    const roundedHours = hours + Math.floor(roundedMinutes / 60);
+    const formattedHours = String(roundedHours).padStart(2, '0');
+    const formattedMinutes = String(roundedMinutes % 60).padStart(2, '0');
+    return `${formattedHours}:${formattedMinutes}`;
+  };
+
   // Submit handlers for events and restaurants
   const handleSubmit = (type, item) => () => {
     setItineraries((prev) => ({

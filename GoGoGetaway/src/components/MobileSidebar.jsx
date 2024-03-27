@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useUserContext } from '@/context/userContext';
 import { Link, NavLink, useLocation, useNavigate } from 'react-router-dom';
 import {
   FaHome,
@@ -10,6 +11,7 @@ import {
 import { ModeToggle } from './ModeToggle';
 import { GiHamburgerMenu } from 'react-icons/gi';
 export default function MobileSidebar({ isOpen, closeSidebar, iconSize }) {
+  const { currentUser } = useUserContext();
   const navigationLinks = [
     { name: 'For You', path: '/foryou', icon: <FaHome size={35} /> },
     {
@@ -21,6 +23,10 @@ export default function MobileSidebar({ isOpen, closeSidebar, iconSize }) {
     // ... more navigation links
   ];
   const navigate = useNavigate();
+  const [followingList, setFollowingList] = useState([]);
+  useEffect(() => {
+    setFollowingList(currentUser ? currentUser.following : []);
+  }, [currentUser]);
   return (
     <>
       <div className="">
@@ -51,13 +57,46 @@ export default function MobileSidebar({ isOpen, closeSidebar, iconSize }) {
                   }
                   // This function dynamically sets the class based on the active state
                 >
-                  {link.icon}
+                  <div className="shrink-0">{link.icon}</div>
                   <span>{link.name}</span>
                 </NavLink>
               ))}
             </div>
-            <div className="w-full border-t-2 px-3 py-2 pt-4">
-              <ModeToggle />
+            <div>
+              <p className="px-5 py-2 text-sm uppercase">Following accounts</p>
+              {/* Dynamically render following accounts here */}
+              {/* Example of a single account link */}
+              {followingList.length <= 0 ? (
+                <>
+                  {' '}
+                  {followingList.map((following) => (
+                    <Link
+                      key={following.username}
+                      to={`/user/${following.username}`}
+                      className="flex items-center px-5 py-2 hover:bg-gray-700"
+                    >
+                      <img
+                        src={following.photoURL}
+                        alt="User"
+                        className="mr-3 h-8 w-8 rounded-full"
+                      />
+                      <div>
+                        <p className="font-bold">{following.username}</p>
+                      </div>
+                    </Link>
+                  ))}
+                </>
+              ) : (
+                <>
+                  <div className=" mb-6 pl-5 text-lg text-gray-400">
+                    No Following
+                  </div>
+                </>
+              )}
+            </div>
+            <div className="flex w-full items-center gap-2 border-t-2 px-3 py-2 pt-4">
+              <ModeToggle className="bg-transparent" />
+              <div className="text-lg font-bold">Theme Change</div>
             </div>
           </div>
         </div>
