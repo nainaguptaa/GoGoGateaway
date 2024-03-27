@@ -95,6 +95,7 @@ const ForYou = ({ isMobile, iconSize }) => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
+  console.log(itineraries);
   return (
     <div className="flex h-screen">
       {!isMobile && <ForYouLeft />}

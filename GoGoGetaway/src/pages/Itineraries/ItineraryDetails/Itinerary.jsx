@@ -1,18 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import dumdum from '../../dummyData/dumdum.json';
 import { useToast } from '@/components/ui/use-toast';
 
-import ItineraryComments from './ItineraryComments';
+import ItineraryComments from '../ItineraryComments';
 import Stars from '@/components/Stars';
 import { CiCalendar } from 'react-icons/ci';
 import { MdLocationPin } from 'react-icons/md';
 import { MdOutlineHotel } from 'react-icons/md';
 // import itinerary from '../../dummyData/dumdum.json';
-import itinerariesDummy from '../../dummyData/dummyItinerary.json';
+import itinerariesDummy from '../../../dummyData/dummyItinerary.json';
 import { useUserContext } from '@/context/userContext';
 import { CiClock1 } from 'react-icons/ci';
 import axios from 'axios';
+import ItineraryStickyCard from './ItineraryCard';
+import ItineraryCardMobile from './ItineraryCardMobile';
+import ItineraryCarousel from './ItineraryCarousel';
 export default function Itinerary() {
   const { toast } = useToast();
   const { currentUser } = useUserContext();
@@ -26,13 +28,12 @@ export default function Itinerary() {
   const toggleComments = () => {
     setShowComments(!showComments);
   };
-  console.log(itinerary);
+  // console.log(itinerary);
   useEffect(() => {
     const fetchItinerary = async () => {
       const queryParams = new URLSearchParams(location.search);
 
       const id = queryParams.get('id');
-      console.log(id);
       setItineraryId(id);
 
       try {
@@ -42,6 +43,7 @@ export default function Itinerary() {
         );
         setItinerary(response.data);
       } catch (error) {
+        // setItinerary(itinerariesDummy)
         const matchedItinerary = itinerariesDummy.find(
           (itin) => itin.id === id,
         );
@@ -109,25 +111,25 @@ export default function Itinerary() {
   };
   return (
     <>
-      <div className="flex flex-col gap-2 px-40 py-8">
-        <div className="text-4xl font-semibold">{itinerary.name}</div>
-        <div className="mt-3 flex space-x-2 overflow-hidden rounded-3xl">
-          {itinerary.images.map((image, index) => (
-            <img
-              key={index}
-              src={image}
-              alt="Itinerary Image"
-              className="h-[23rem] w-[25rem] object-cover"
-            />
-          ))}
+      <div className="lg:flex lg:flex-col lg:px-40 lg:py-8">
+        <div className="hidden text-4xl font-semibold lg:block">
+          {itinerary.name}
         </div>
+
+        <ItineraryCarousel itinerary={itinerary} />
 
         <div className="px-2 py-4">
           <div className="flex ">
             <div className="flex w-2/3 flex-col">
-              <h1 className="text-3xl font-semibold">Itinerary Details</h1>
-              <div className="text-2xl font-normal text-gray-400">
-                {formattedDate}, {itinerary.city}
+              <h1 className="hidden text-3xl font-semibold lg:block">
+                Itinerary Details
+              </h1>
+              <div className="block text-2xl font-medium lg:hidden">
+                {itinerary.name}
+              </div>
+              <div className="text-xl font-normal">{itinerary.city}</div>
+              <div className="text-xl font-normal text-gray-400">
+                {formattedDate}
               </div>
               <div className="flex flex-col gap-5">
                 <div className="mr-5 mt-6 flex flex-col gap-3 border-b-2 pb-4">
@@ -171,8 +173,6 @@ export default function Itinerary() {
                         </div>
                         <Stars rating={event.rating} />
                       </div>
-
-                      {/* Displaying placeholder for eventID */}
                     </div>
                   ))}
                 </div>
@@ -226,7 +226,7 @@ export default function Itinerary() {
                   ))}
                 </div>
 
-                <div className="mr-5 mt-6 flex flex-col gap-3 border-b-2 pb-4">
+                <div className="mr-5 mt-6 flex flex-col gap-3 border-b-2  pb-4">
                   <h2 className="text-4xl font-semibold">Hotel</h2>
                   <div className="mb-2 flex flex-col gap-3 rounded-xl border-2 p-6">
                     <div className="flex items-end justify-between gap-5 text-2xl font-semibold">
@@ -279,55 +279,20 @@ export default function Itinerary() {
                 </div>
               </div>
             </div>
-            <div className="grow ">
-              {/* Sticky card */}
-              <div className="sticky top-32 flex  grow flex-col justify-between rounded-xl border-2 p-7 shadow-xl">
-                <div className="text-2xl font-bold">Quick Overview</div>
-                <div className="mt-6 flex flex-col gap-2">
-                  <div className="text-semibold text-xl text-gray-400">
-                    Date
-                  </div>
-                  <div className="flex gap-3 rounded-xl border-2 px-5 py-2">
-                    <CiCalendar size={25} />
-                    <div className="text-xl font-semibold ">
-                      {' '}
-                      {formattedDate}
-                    </div>
-                  </div>
-                </div>
-                <div className="mb-2 mt-5 flex flex-col gap-2 border-b-2 border-t-2 pb-4 pt-4">
-                  <div className="text-2xl font-semibold ">Quantities</div>
-                  <div className="flex justify-between text-xl ">
-                    <div className="font-normal">Restaurants:</div>
-                    {itinerary.restaurants.length}
-                  </div>
-                  <div className="flex justify-between text-xl ">
-                    <div className="font-normal"> Events:</div>
-                    {itinerary.events.length}
-                  </div>
-                  <div className="flex justify-between text-xl ">
-                    {' '}
-                    <div className="font-normal">Hotels:</div> 1
-                  </div>
-                </div>
-
-                <button
-                  className="mt-3 flex justify-center rounded-xl bg-amber-500 py-2 text-2xl font-semibold text-white"
-                  onClick={saveItinerary}
-                >
-                  Save Itinerary
-                </button>
-                <div className=" mt-6 flex items-end justify-between">
-                  <div className="text-xl  text-gray-600">Total</div>
-                  <div className="text-3xl font-semibold">
-                    {' '}
-                    ${itinerary.totalPrice}
-                  </div>
-                </div>
-              </div>
+            <div className="hidden lg:block lg:grow">
+              <ItineraryStickyCard
+                formattedDate={formattedDate}
+                itinerary={itinerary}
+                saveItinerary={saveItinerary}
+              />
             </div>
           </div>
         </div>
+        <ItineraryCardMobile
+          formattedDate={formattedDate}
+          itinerary={itinerary}
+          saveItinerary={saveItinerary}
+        />
       </div>
     </>
   );
