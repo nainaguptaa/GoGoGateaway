@@ -23,7 +23,7 @@ export default function UserProfile() {
   const [postedItineraries, setPostedItineraries] = useState([]);
   const [savedItineraries, setSavedItineraries] = useState([]);
   const [likedItineraries, setLikedItineraries] = useState([]);
-  const isCurrentUser = currentUser.username === username;
+  const isCurrentUser = currentUser && currentUser.username === username;
   const apiURL = import.meta.env.VITE_API_URL;
   useEffect(() => {
     const fetchData = async () => {

@@ -54,6 +54,7 @@ const Navbar = ({ isMobile, iconSize }) => {
         </div>
         <MobileSidebar
           isOpen={sidebarOpen}
+          iconSize={iconSize}
           closeSidebar={() => setSidebarOpen(false)}
         />
       </>

@@ -122,7 +122,7 @@ router.post("/create", async (req, res) => {
 router.get("/all", async (req, res) => {
   try {
     const userId = req.query.userId;
-    console.log("calling", userId);
+
     // Step 2: Fetch the user's liked itineraries
     const userDoc = await db.collection("users").doc(userId).get();
     const likedItineraries = userDoc.data().likedItineraries || [];
@@ -140,7 +140,7 @@ router.get("/all", async (req, res) => {
       ...itinerary,
       isLiked: likedItineraries.includes(itinerary.id), // Check if the itinerary is liked
     }));
-    console.log(itineraries);
+
     // console.log("\n\n", itineraries);
     res.status(200).json(itineraries);
   } catch (error) {
@@ -420,13 +420,11 @@ router.get("/user/:username", async (req, res) => {
     const likedItineraries = await Promise.all(likedItinerariesPromises);
 
     // Respond with the fetched itineraries
-    res
-      .status(200)
-      .json({
-        posted: itineraries,
-        saved: savedItineraries,
-        liked: likedItineraries,
-      });
+    res.status(200).json({
+      posted: itineraries,
+      saved: savedItineraries,
+      liked: likedItineraries,
+    });
   } catch (error) {
     console.error("Error fetching user itineraries:", error);
     res.status(500).json({ error: "Internal Server Error" });
