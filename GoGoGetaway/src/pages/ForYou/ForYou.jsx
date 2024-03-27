@@ -106,7 +106,7 @@ const ForYou = ({ isMobile, iconSize }) => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  if (itineraries) {
+  if (!itineraries) {
     return (
       <>
         <div className="z-100 ml-20 mt-20">Loading</div>
