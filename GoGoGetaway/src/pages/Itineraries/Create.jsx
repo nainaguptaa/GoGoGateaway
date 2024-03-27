@@ -241,7 +241,7 @@ const Create = () => {
         itineraryDataWithImages,
       );
       console.log('Itinerary saved successfully:', response.data);
-      navigate('/my-trips');
+      navigate('/foryou');
       sessionStorage.removeItem('itineraries');
     } catch (error) {
       console.error('Error:', error);
