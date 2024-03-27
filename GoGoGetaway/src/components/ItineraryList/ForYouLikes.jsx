@@ -122,11 +122,21 @@ export default function ForYouLikes({
   }, [currentUser]);
 
   const handleSaveItineraryWithAnimation = async (itineraryId) => {
-    if (!itineraries[index].saved) {
-      setAnimate(true); // Trigger animation
-      await handleSaveItinerary(itineraryId); // Call your existing save function
-      setTimeout(() => setAnimate(false), 500); // Reset animation state after 500ms
-    }
+    setAnimate(true); // Trigger animation
+    const wasSaved = savedItineraryIds.has(itineraryId);
+    await handleSaveItinerary(itineraryId); // Call your existing save function
+    setTimeout(() => setAnimate(false), 500); // Reset animation state after 500ms
+  
+    // Update the savedItineraryIds set based on the action
+    setSavedItineraryIds((prevSavedIds) => {
+      const updatedSavedIds = new Set(prevSavedIds);
+      if (wasSaved) {
+        updatedSavedIds.delete(itineraryId); // Remove the itinerary ID if it was saved (unsave action)
+      } else {
+        updatedSavedIds.add(itineraryId); // Add the itinerary ID if it was not saved (save action)
+      }
+      return updatedSavedIds;
+    });
   };
   const handleSaveItinerary = async (itineraryId) => {
     if (!currentUser) {
@@ -386,7 +396,7 @@ export default function ForYouLikes({
         <div className=" font-bold">{itineraries[index].commentCount}</div>
       </div>
       <div className="flex flex-col items-center gap-2">
-        {itineraries[index].saved ? (
+        {savedItineraryIds.has(itineraries[index].id) ? (
           <FaBookmark
             size={iconSize}
             className={`cursor-pointer text-rose-500 ${animate ? 'animate-bounce' : ''}`} // Filled icon for saved, with bounce animation
