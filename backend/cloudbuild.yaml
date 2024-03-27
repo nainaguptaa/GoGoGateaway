@@ -1,0 +1,16 @@
+steps:
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+    - '-c'
+    - |
+      echo "Retrieving secret..."
+      gcloud secrets versions access latest --secret=gogogetaway_key > /workspace/gogogetaway.key
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/fl2f-1/github.com/santigf12/gogogateaway-backend:latest', '.']
+    env:
+    - 'SECRET_PATH=/workspace/gogogetaway.key'
+
+images:
+- 'gcr.io/fl2f-1/github.com/santigf12/gogogateaway-backend:latest'
