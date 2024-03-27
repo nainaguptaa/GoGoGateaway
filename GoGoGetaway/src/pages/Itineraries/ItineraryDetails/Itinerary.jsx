@@ -15,7 +15,9 @@ import axios from 'axios';
 import ItineraryStickyCard from './ItineraryCard';
 import ItineraryCardMobile from './ItineraryCardMobile';
 import ItineraryCarousel from './ItineraryCarousel';
+import { useNavigate } from 'react-router-dom';
 export default function Itinerary({ iconSize }) {
+  const navigate = useNavigate();
   const { toast } = useToast();
   const { currentUser } = useUserContext();
   const location = useLocation();
@@ -106,6 +108,9 @@ export default function Itinerary({ iconSize }) {
       });
       // alert('Error saving itinerary. Please try again later.');
     }
+    setTimeout(() => {
+      navigate(`/user/${currentUser.username}`); // Replace '/your-destination-route' with your actual route
+    }, 1000);
   };
   return (
     <>

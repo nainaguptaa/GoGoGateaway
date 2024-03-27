@@ -28,7 +28,7 @@ import { Button } from '@/components/ui/button';
 import { useUserContext } from '@/context/userContext';
 import Comment from '../../pages/ForYou/Comment';
 import { Link, useNavigate } from 'react-router-dom';
-
+const apiURL = import.meta.env.VITE_API_URL;
 export default function ForYouLikes({
   isMobile,
   itinerariesProp,
@@ -48,11 +48,17 @@ export default function ForYouLikes({
   const [comments, setComments] = useState(false);
   const [savedItineraries, setSavedItineraries] = useState([]);
   const { currentUser, updateCurrentUser } = useUserContext();
-  const [following, setFollowing] = useState(
-    currentUser.following.some(
-      (user) => user.userId === itineraries[index].userId,
-    ),
-  );
+  const [following, setFollowing] = useState(false);
+
+  useEffect(() => {
+    if (currentUser && currentUser.following) {
+      setFollowing(
+        currentUser.following.some(
+          (user) => user.userId === itineraries[index].userId,
+        ),
+      );
+    }
+  }, [currentUser, itineraries, index]);
   const [animate, setAnimate] = useState(false);
   const navigate = useNavigate();
   const handleLikeButton = async (itineraryId, index) => {
@@ -77,8 +83,8 @@ export default function ForYouLikes({
     try {
       // Determine the correct endpoint based on the new liked state
       const endpoint = newLikedState
-        ? `http://localhost:8080/itineraries/increment-like/${itineraryId}`
-        : `http://localhost:8080/itineraries/decrement-like/${itineraryId}`;
+        ? `${apiURL}/itineraries/increment-like/${itineraryId}`
+        : `${apiURL}/itineraries/decrement-like/${itineraryId}`;
       await axios.post(endpoint);
 
       // Optionally, manage adding/removing from liked items if needed
@@ -86,7 +92,7 @@ export default function ForYouLikes({
       const likedEndpointAction = newLikedState
         ? 'add-to-liked'
         : 'remove-from-liked';
-      const likedEndpoint = `http://localhost:8080/users/${userId}/${likedEndpointAction}`;
+      const likedEndpoint = `${apiURL}/users/${userId}/${likedEndpointAction}`;
       await axios.post(likedEndpoint, {
         itineraryId: itineraryId,
       });
@@ -120,7 +126,7 @@ export default function ForYouLikes({
     try {
       // Proceed to save the itinerary if not already saved
       const saveResponse = await axios.post(
-        `http://localhost:8080/itineraries/users/${currentUser.id}/save-itinerary`,
+        `${apiURL}/itineraries/users/${currentUser.id}/save-itinerary`,
         {
           itineraryId,
         },
@@ -146,7 +152,7 @@ export default function ForYouLikes({
     try {
       // Fetch comments for the itinerary
       const response = await fetch(
-        `http://localhost:8080/itineraries/${itineraryId}/comments`,
+        `${apiURL}/itineraries/${itineraryId}/comments`,
       );
       if (!response.ok) {
         throw new Error('Failed to fetch comments');
@@ -164,7 +170,7 @@ export default function ForYouLikes({
     try {
       // Send the comment to the server
       const response = await fetch(
-        `http://localhost:8080/itineraries/${itineraryId}/comments`,
+        `${apiURL}/itineraries/${itineraryId}/comments`,
         {
           method: 'POST',
           headers: {
@@ -206,16 +212,13 @@ export default function ForYouLikes({
     try {
       if (following) {
         // Unfollow logic
-        const response = await fetch(
-          `http://localhost:8080/users/unfollow/${userId}`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ currentUser: currentUser.id }),
+        const response = await fetch(`${apiURL}/users/unfollow/${userId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+          body: JSON.stringify({ currentUser: currentUser.id }),
+        });
         if (!response.ok) {
           throw new Error('Failed to unfollow user');
         }
@@ -229,16 +232,13 @@ export default function ForYouLikes({
         console.log('User unfollowed successfully');
       } else {
         // Follow logic
-        const response = await fetch(
-          `http://localhost:8080/users/follow/${userId}`,
-          {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ currentUser: currentUser.id }),
+        const response = await fetch(`${apiURL}/users/follow/${userId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        );
+          body: JSON.stringify({ currentUser: currentUser.id }),
+        });
         //Update the current user's with the response
         const updatedUser = await response.json();
         if (updatedUser) {
@@ -266,7 +266,7 @@ export default function ForYouLikes({
     //get the user id and navigate to the user's profile from this url `http://localhost:8080/users/${userId}`
     try {
       console.log(userId);
-      const response = await fetch(`http://localhost:8080/users/${userId}`);
+      const response = await fetch(`${apiURL}/users/${userId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch user');
       }
