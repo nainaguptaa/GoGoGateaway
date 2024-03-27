@@ -39,7 +39,7 @@ const ForYou = ({ isMobile, iconSize }) => {
   const postsPerPage = 5;
   // Define the function to fetch itineraries
   const apiURL =
-    import.meta.env.VITE_API_URL || import.meta.env.VITE_API_URL_DEPLOY;
+    import.meta.env.VITE_API_URL_DEPLOY || import.meta.env.VITE_API_URL;
   console.log('using, ', apiURL);
   useEffect(() => {
     const fetchItineraries = async () => {
