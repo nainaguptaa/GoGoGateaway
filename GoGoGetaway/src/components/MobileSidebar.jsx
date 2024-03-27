@@ -9,13 +9,13 @@ import {
 } from 'react-icons/fa'; // Import icons from react-icons
 import { ModeToggle } from './ModeToggle';
 import { GiHamburgerMenu } from 'react-icons/gi';
-export default function MobileSidebar({ isOpen, closeSidebar }) {
+export default function MobileSidebar({ isOpen, closeSidebar, iconSize }) {
   const navigationLinks = [
-    { name: 'For You', path: '/foryou', icon: <FaHome size={50} /> },
+    { name: 'For You', path: '/foryou', icon: <FaHome size={35} /> },
     {
       name: 'Following',
       path: '/following',
-      icon: <FaUserFriends size={50} />,
+      icon: <FaUserFriends size={35} />,
     },
 
     // ... more navigation links
