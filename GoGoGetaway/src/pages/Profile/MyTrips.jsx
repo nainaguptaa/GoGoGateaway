@@ -16,7 +16,6 @@ export default function UserProfile() {
   const [postedItineraries, setPostedItineraries] = useState([]);
   const [savedItineraries, setSavedItineraries] = useState([]);
   const [likedItineraries, setLikedItineraries] = useState([]);
-  const [activeTab, setActiveTab] = useState('post');
   const isCurrentUser = currentUser.username === username;
 
   useEffect(() => {
@@ -69,7 +68,7 @@ export default function UserProfile() {
 
   return (
     <div className='sm:container flex flex-col md:flex-row md:gap-10 mt-5'>
-      <Card className="sm:w-[350px] sm:h-[350px] shadow-lg rounded-xl">
+      <Card className="sm:w-[350px] sm:h-[300px] shadow-lg rounded-xl">
         <CardHeader  >
           <CardTitle className="flex flex-col gap-2">
             <Avatar className="w-20 h-20">
@@ -99,14 +98,14 @@ export default function UserProfile() {
             {isCurrentUser ? <Button variant="secondary" className="w-2/3 md:text-md">Edit Profile</Button> : <Button variant="secondary" className="w-1/2 md:text-md">Follow</Button>}
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        {/* <CardContent>
           <Button variant="ghost" className="w-full justify-start gap-2 md:text-lg pl-1"
             onClick={() => setActiveTab('saved')}>
 
             <FaRegBookmark />
             Favourites
           </Button>
-        </CardContent>
+        </CardContent> */}
       </Card>
 
       <Tabs defaultValue="post" className="w-full border bg-card text-card-foreground shadow-lg rounded-xl">
