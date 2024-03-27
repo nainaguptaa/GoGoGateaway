@@ -369,6 +369,135 @@ router.post("/comments/:commentId/like/increment", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+router.get("/user/:username", async (req, res) => {
+  try {
+    const username = req.params.username;
+
+    // Fetch the user document to get the user's ID
+    const userRef = db.collection("users").where("username", "==", username);
+    const userSnapshot = await userRef.get();
+
+    if (userSnapshot.empty) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    const userId = userSnapshot.docs[0].id;
+
+    // Query itineraries created by the specified user
+    const itinerariesSnapshot = await db
+      .collection("itineraries")
+      .where("userId", "==", userId)
+      .get();
+    const itineraries = itinerariesSnapshot.docs.map((doc) => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+
+    // Get the saved itineraries for the user
+    const userSavedItineraries =
+      userSnapshot.docs[0].data().savedItineraries || [];
+    const savedItinerariesPromises = userSavedItineraries.map(
+      async (itineraryId) => {
+        const itineraryRef = db.collection("itineraries").doc(itineraryId);
+        const itinerarySnapshot = await itineraryRef.get();
+        return { id: itinerarySnapshot.id, ...itinerarySnapshot.data() };
+      }
+    );
+    // Wait for all promises to resolve
+    const savedItineraries = await Promise.all(savedItinerariesPromises);
+
+    // Get the liked itineraries for the user
+    const userLikedItineraries =
+      userSnapshot.docs[0].data().likedItineraries || [];
+    const likedItinerariesPromises = userLikedItineraries.map(
+      async (itineraryId) => {
+        const itineraryRef = db.collection("itineraries").doc(itineraryId);
+        const itinerarySnapshot = await itineraryRef.get();
+        return { id: itinerarySnapshot.id, ...itinerarySnapshot.data() };
+      }
+    );
+    // Wait for all promises to resolve
+    const likedItineraries = await Promise.all(likedItinerariesPromises);
+
+    // Respond with the fetched itineraries
+    res
+      .status(200)
+      .json({
+        posted: itineraries,
+        saved: savedItineraries,
+        liked: likedItineraries,
+      });
+  } catch (error) {
+    console.error("Error fetching user itineraries:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+router.post("/users/:userId/save-itinerary", async (req, res) => {
+  try {
+    const { userId } = req.params;
+    const { itineraryId } = req.body;
+
+    if (!itineraryId) {
+      return res.status(400).json({ error: "Missing itinerary ID" });
+    }
+
+    // Reference to the user's document in the 'users' collection
+    const userRef = db.collection("users").doc(userId);
+    const userDoc = await userRef.get();
+
+    if (!userDoc.exists) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Atomically add the itinerary ID to the 'savedItineraries' array field in the user's document
+    await userRef.update({
+      savedItineraries: admin.firestore.FieldValue.arrayUnion(itineraryId),
+    });
+
+    res.status(200).json({ message: "Itinerary saved successfully" });
+  } catch (error) {
+    console.error("Error saving itinerary:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+router.post("/users/:userId/remove-saved-itinerary", async (req, res) => {
+  const { userId } = req.params; // Extract userId from URL parameters
+  const { itineraryId } = req.body; // Extract itineraryId from request body
+
+  try {
+    // Reference to the user's document in the 'users' collection
+    const userRef = db.collection("users").doc(userId);
+    // Fetch the document to check if the user exists
+    const userDoc = await userRef.get();
+
+    if (!userDoc.exists) {
+      // If the user document does not exist, return a 404 error
+      console.log(`User not found with ID: ${userId}`);
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Atomically remove the itinerary ID from the 'savedItineraries' array field
+    await userRef.update({
+      savedItineraries: admin.firestore.FieldValue.arrayRemove(itineraryId),
+    });
+
+    console.log(
+      `Itinerary ID ${itineraryId} removed from user ID ${userId}'s saved itineraries`
+    );
+    res.json({
+      message: "Itinerary removed successfully from saved itineraries",
+    });
+  } catch (error) {
+    console.error(
+      `Error removing saved itinerary for user ID ${userId}: ${error.message}`
+    );
+    res.status(500).json({
+      message:
+        error.message ||
+        "Error Occurred while removing itinerary from saved itineraries",
+    });
+  }
+});
 
 router.post("/comments/:commentId/like/decrement", async (req, res) => {
   try {

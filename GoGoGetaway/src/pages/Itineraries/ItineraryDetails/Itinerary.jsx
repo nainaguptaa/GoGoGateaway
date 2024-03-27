@@ -24,8 +24,7 @@ export default function Itinerary({ iconSize }) {
   const [events, setEvents] = useState([]);
   const [showComments, setShowComments] = useState(false);
   const [itineraryId, setItineraryId] = useState('');
-  const apiURL =
-    import.meta.env.VITE_API_URL_DEPLOY || import.meta.env.VITE_API_URL;
+  const apiURL = import.meta.env.VITE_API_URL;
   // Function to toggle comments visibility
   const toggleComments = () => {
     setShowComments(!showComments);

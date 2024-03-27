@@ -5,13 +5,15 @@ const ItineraryComments = ({ itineraryId }) => {
   const [comments, setComments] = useState([]);
   const [newCommentText, setNewCommentText] = useState('');
   const [loading, setLoading] = useState(false);
-
+  const apiURL = import.meta.env.VITE_API_URL;
   // Fetch comments
   useEffect(() => {
     const fetchComments = async () => {
       setLoading(true);
       try {
-        const response = await axios.get(`http://localhost:8080/itineraries/${itineraryId}/comments`);
+        const response = await axios.get(
+          `${apiURL}/itineraries/${itineraryId}/comments`,
+        );
         setComments(response.data);
       } catch (error) {
         console.error('Error fetching comments:', error);
@@ -28,10 +30,13 @@ const ItineraryComments = ({ itineraryId }) => {
     e.preventDefault();
     if (!newCommentText.trim()) return;
     try {
-      const { data } = await axios.post(`/itineraries/${itineraryId}/comments`, {
-        text: newCommentText,
-        userId: "YourUserIdHere" // Replace with actual user ID from your authentication logic
-      });
+      const { data } = await axios.post(
+        `/itineraries/${itineraryId}/comments`,
+        {
+          text: newCommentText,
+          userId: 'YourUserIdHere', // Replace with actual user ID from your authentication logic
+        },
+      );
       setComments([...comments, data.comment]); // Assuming your backend returns the added comment
       setNewCommentText('');
     } catch (error) {
@@ -43,7 +48,7 @@ const ItineraryComments = ({ itineraryId }) => {
   const handleDeleteComment = async (commentId) => {
     try {
       await axios.delete(`/itineraries/${itineraryId}/comments/${commentId}`);
-      setComments(comments.filter(comment => comment.id !== commentId));
+      setComments(comments.filter((comment) => comment.id !== commentId));
     } catch (error) {
       console.error('Error deleting comment:', error);
     }
@@ -57,7 +62,9 @@ const ItineraryComments = ({ itineraryId }) => {
       {comments.map((comment) => (
         <div key={comment.id}>
           <p>{comment.text}</p>
-          <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>
+          <button onClick={() => handleDeleteComment(comment.id)}>
+            Delete
+          </button>
         </div>
       ))}
       <form onSubmit={handleAddComment}>

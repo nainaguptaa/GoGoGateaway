@@ -3,16 +3,15 @@ import axios from 'axios';
 
 const AddCommentForm = ({ itineraryId }) => {
   const [commentText, setCommentText] = useState('');
-
+  const apiURL = import.meta.env.VITE_API_URL;
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`http://localhost:8080/itineraries/${itineraryId}/comments`, {
+      await axios.post(`${apiURL}/itineraries/${itineraryId}/comments`, {
         userId: 'user123', // This should be dynamically set based on the logged-in user
         text: commentText,
       });
       setCommentText('');
- 
     } catch (error) {
       console.error('Error adding comment:', error);
     }

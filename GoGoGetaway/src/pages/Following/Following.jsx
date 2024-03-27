@@ -47,7 +47,6 @@ export default function Following({ isMobile, iconSize }) {
     const fetchItineraries = async () => {
       const userId = currentUser.id;
       try {
-        // const response = await fetch('http://localhost:8080/itineraries/all'); // Adjust the URL as needed
         //
         const response = await axios.get(
           `${apiURL}/itineraries/followed-itineraries/${userId}`,

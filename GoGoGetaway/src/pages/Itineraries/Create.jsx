@@ -92,6 +92,7 @@ const Create = () => {
     totalPrice: 0,
     images: [],
   });
+  const apiURL = import.meta.env.VITE_API_URL;
   // After each add/update operation, call this function to update the totalPrice
   const [selectedImages, setSelectedImages] = useState([]);
   const [isDragging, setIsDragging] = useState(false); // New state to track drag status
@@ -208,7 +209,7 @@ const Create = () => {
       try {
         console.log('all image uplaod(');
         const response = await axios.post(
-          'http://localhost:8080/cloudinaryUpload/image',
+          `${apiURL}/cloudinaryUpload/image`,
           formData,
           {
             headers: {
@@ -236,7 +237,7 @@ const Create = () => {
 
       // Then, submit the complete itinerary data including image URLs
       const response = await axios.post(
-        'http://localhost:8080/itineraries/create',
+        `${apiURL}/itineraries/create`,
         itineraryDataWithImages,
       );
       console.log('Itinerary saved successfully:', response.data);
