@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { IoHome, IoPerson } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import { MdAdd } from 'react-icons/md';
+import { useUserContext } from '@/context/userContext';
 import { FaCompass } from 'react-icons/fa';
 export default function BottomBar({ iconSize }) {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 375);
-
+  const { currentUser } = useUserContext();
+  // console.log(currentUser);
   useEffect(() => {
     const handleResize = () => {
       setIsMobile(window.innerWidth < 375);
@@ -32,7 +34,10 @@ export default function BottomBar({ iconSize }) {
       <div className=" py-2 sm:px-4 sm:py-4">
         <MdAdd size={iconSize} />
       </div>
-      <div className="py-2 sm:px-4 sm:py-4" onClick={() => navigate('profile')}>
+      <div
+        className="py-2 sm:px-4 sm:py-4"
+        onClick={() => navigate(`/user/${currentUser.username}`)}
+      >
         <IoPerson size={iconSize} />
       </div>
     </div>

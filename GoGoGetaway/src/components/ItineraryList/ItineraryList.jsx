@@ -23,14 +23,14 @@ const ItineraryList = ({ itineraries, isMobile, iconSize, itemSize }) => {
 
           <div className="flex justify-between px-4 pb-3">
             <div className="flex flex-col">
-              <div className="text-3xl font-bold">
+              <div className="text-xl font-bold sm:text-3xl">
                 {itineraries[index].name}
               </div>
-              <div className="text-xl font-semibold">
+              <div className="text-lg font-semibold sm:text-xl">
                 {itineraries[index].city}
               </div>
             </div>
-            <div className="text-2xl font-bold">
+            <div className="text-xl font-bold sm:text-2xl">
               {new Intl.NumberFormat('en-CA', {
                 style: 'currency',
                 currency: 'CAD',
