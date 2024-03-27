@@ -17,6 +17,7 @@ export default function MobileSidebar({ isOpen, closeSidebar }) {
       path: '/following',
       icon: <FaUserFriends size={50} />,
     },
+
     // ... more navigation links
   ];
   const navigate = useNavigate();
