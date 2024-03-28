@@ -1,81 +1,153 @@
-import Navbar from '@/components/Navbar';
 import React, { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import ForYouLeft from './ForYou/ForYouLeft';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const SearchResults = () => {
   const [searchParams] = useSearchParams();
-  const query = searchParams.get('q'); // Get the search query from the URL
+  const navigate = useNavigate();
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  // Default sort by highest rated
+  const [sortCriteria, setSortCriteria] = useState('rating');
 
-  // // Mock an async search function
-  // const search = async (query) => {
-  //   setLoading(true);
-  //   // Here you would typically make an API call with the query
-  //   // For demonstration, we'll just filter an array of mock items
-  //   const mockItems = [
-  //     { id: 1, name: 'Funny Cat Video' },
-  //     { id: 2, name: 'Hilarious Dog Compilation' },
-  //     { id: 3, name: 'Amazing Nature Clips' },
-  //   ];
-  //   const filteredItems = mockItems.filter((item) =>
-  //     item.name.toLowerCase().includes(query.toLowerCase()),
-  //   );
+  let query = searchParams.get('q');
+  query = query.charAt(0).toUpperCase() + query.slice(1);
+  const apiURL = import.meta.env.VITE_API_URL;
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setLoading(true);
+        const response = await axios.get(
+          `${apiURL}/itineraries/?city=${query}`,
+        );
+        setResults(response.data);
+      } catch (error) {
+        console.error('Failed to fetch data:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  //   setTimeout(() => {
-  //     setResults(filteredItems);
-  //     setLoading(false);
-  //   }, 500); // Simulate network delay
-  // };
+    fetchData();
+  }, [query]);
 
-  // Function to fetch data using Axios
-  const fetchData = async () => {
-    try {
-      setLoading(true);
-      // Make a GET request to the desired URL
-      const response = await axios.get(`http://localhost:3000/itineraries/?location=${query}`);
-      // Set the data received from the API to the state
-      setResults(response.data);
-      console.log(response.data);
-    } finally {
-      // Update loading state regardless of success or failure
-      setLoading(false);
+  const calculateAverageRating = (itinerary) => {
+    let totalRating = 0;
+    let count = 0;
+
+    if (itinerary.hotel && itinerary.hotel.rating) {
+      totalRating += parseInt(itinerary.hotel.rating, 10);
+      count += 1;
+    }
+
+    itinerary.events.forEach((event) => {
+      if (event.rating) {
+        totalRating += parseInt(event.rating, 10);
+        count += 1;
+      }
+    });
+
+    itinerary.restaurants.forEach((restaurant) => {
+      if (restaurant.rating) {
+        totalRating += parseInt(restaurant.rating, 10);
+        count += 1;
+      }
+    });
+
+    if (count > 0) {
+      return (totalRating / count).toFixed(1); // Keeping one decimal for average
+    } else {
+      return 'No ratings';
     }
   };
 
-  // Effect hook to perform search when the query changes
-  useEffect(() => {
-    // Use axios to make an API call to the backend
-    fetchData();
-  }, [query]);
+  // Sort results based on the selected criteria
+  const sortedResults = results.sort((a, b) => {
+    if (sortCriteria === 'price') {
+      return a.totalPrice - b.totalPrice;
+    } else if (sortCriteria === 'rating') {
+      const ratingA = parseFloat(calculateAverageRating(a));
+      const ratingB = parseFloat(calculateAverageRating(b));
+      return ratingB - ratingA; // For rating, sort in descending order
+    }
+    return 0;
+  });
+
   return (
-    <div>
-      <div className="">
-        <div className="flex h-screen">
-          <ForYouLeft className="" />
-          <div className="ml-64 flex flex-grow gap-2 overflow-hidden">
-            <h2>Search Results for: {query}</h2>
-            {loading ? (
-              <p>Loading...</p>
-            ) : (
-              <ul>
-                {results.map((itinerary) => (
-                  <div key={itinerary.id} className="itinerary">
-                    <h3>Price: ${itinerary.price}</h3>
-                    <p>Rating: {itinerary.rating}</p>
-                    <div>
-                      <img src={itinerary.hotel.imageURL} alt="Hotel" style={{ width: '100px', height: '100px' }} />
-                    </div>
-                    <p>Locations: {itinerary.locations.join(', ')}</p>
-                  </div>
-                ))}
-              </ul>
-            )}
-          </div>
+    <div className="flex h-screen flex-col items-center justify-start pt-2">
+      <div className="mb-4 flex w-full max-w-6xl flex-col items-center justify-between px-4 py-2 pt-10 sm:flex-row">
+        <h2 className="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900 dark:text-white sm:text-4xl">
+          Search Results for: {query}
+        </h2>
+        <div className="sort-dropdown flex w-full items-center  sm:justify-end">
+          <label htmlFor="sortCriteria" className="mr-2 text-gray-400">
+            Sort by:
+          </label>
+          <select
+            id="sortCriteria"
+            value={sortCriteria}
+            onChange={(e) => setSortCriteria(e.target.value)}
+            className="rounded-lg border border-gray-400 bg-gray-200 px-3 py-2 text-center text-base font-medium text-gray-900 shadow-sm dark:bg-gray-700 dark:text-white sm:px-5 sm:py-3"
+          >
+            <option value="rating">Highest Rated</option>
+            <option value="price">Price (Lowest to Highest)</option>
+          </select>
         </div>
       </div>
+      {loading ? (
+        <p className="text-lg text-blue-500">Loading...</p>
+      ) : sortedResults.length > 0 ? (
+        <div className="w-full max-w-6xl">
+          <div className="mb-16 grid grid-cols-1  gap-4 px-2 md:grid-cols-2 lg:grid-cols-3">
+            {sortedResults.map((itinerary) => (
+              <div
+                key={itinerary.id}
+                className="relative cursor-pointer overflow-hidden rounded-lg shadow-lg transition-shadow duration-300 hover:shadow-xl"
+                onClick={() => navigate(`/itineraries?id=${itinerary.id}`)}
+              >
+                <img
+                  src={itinerary.images[0]}
+                  alt="Itinerary"
+                  className="h-56 w-full object-cover"
+                />
+                <div className="bg-white p-4">
+                  <h3 className="text-xl font-light text-gray-900">
+                    {itinerary.name}
+                  </h3>
+                  <p className="text-gray-600">{itinerary.city}</p>
+                  <p className="font-light text-gray-800">
+                    Total Price: ${itinerary.totalPrice}
+                  </p>
+                  {/* Display the calculated average rating as acalculated average rating as a star on the bottom right */}
+                  <div
+                    style={{
+                      position: 'absolute',
+                      bottom: '10px',
+                      right: '10px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                      padding: '5px 10px',
+                      borderRadius: '10px',
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <span style={{ color: '#FFD700', marginRight: '5px' }}>
+                      ★
+                    </span>
+                    <span style={{ fontWeight: 'bold', color: '#333' }}>
+                      {calculateAverageRating(itinerary)}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      ) : (
+        <p className="text-lg text-red-500">
+          No search results found for {query}
+        </p>
+      )}
     </div>
   );
 };

@@ -1,203 +1,395 @@
 [
   {
-    "id": 1,
-    "title": "Philippines Itinerary",
-    "location": "Boracay, Philippines",
-    "tripLength": 6,
-    "likes": 1234,
-    "comments": 32,
-    "price": 4304,
+    "id": "1LA4OFGs9TqRSt5nPRXN",
+    "date": "2024-03-26T21:45:17.988Z",
     "images": [
-      "https://i.natgeofe.com/n/04505c35-858b-4e95-a1a7-d72e5418b7fc/steep-karst-cliffs-of-el-nido-in-palawan_3x2.jpg",
-      "https://lp-cms-production.imgix.net/2022-01/The%20Philippines%2C%20Palawan%2C%20El%20Nido%2C%20sea%20kayaking%20in%20Bacuit%20Bay_1.jpg",
-      "https://wanderingwagars.com/wp-content/uploads/2020/05/Wandering-Wagars-in-Coron-Philippines.jpg"
+      "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1711489730/GOGO/cw50vhzppjttlltiy8bt.jpg"
+    ],
+    "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocIoAioWWpGogU_6kBG0tVoOiuDK_m9IV-OpgRr154R2K4k=s96-c",
+    "city": "Calgary",
+    "totalPrice": 320,
+    "name": "Dummy FunTime In Calgary",
+    "restaurants": [
+      {
+        "locationRestaurant": " 4604 37 SE 3C9",
+        "restaurant": "Masala Bhisine",
+        "rating": "4.3",
+        "cuisine": "indian",
+        "time": "20:46",
+        "restaurantID": {
+          "_firestore": {
+            "projectId": "gogogetaway-9aefd"
+          },
+          "_path": {
+            "segments": ["restaurants", "id_1711489637039_9uqw7budi"]
+          },
+          "_converter": {}
+        },
+        "priceRestaurant": 40
+      }
+    ],
+    "hotel": {
+      "bookingURL": "https://www.marriott.com/en-us/hotels/yycbv-delta-hotels-calgary-downtown/overview/?scid=f2ae0541-1279-4f24-b197-a979c79310b0",
+      "rating": "4.5",
+      "priceHotel": 280,
+      "hotel": "Delta",
+      "hotelID": {
+        "_firestore": {
+          "projectId": "gogogetaway-9aefd"
+        },
+        "_path": {
+          "segments": ["hotels", "id_1711489705769_1uje7ofhr"]
+        },
+        "_converter": {}
+      },
+      "time": "23:47",
+      "locationHotel": "Downtown"
+    },
+    "userId": "Of3i5hOxWvZisMqrZF1qbMLXznE2",
+    "events": [
+      {
+        "eventID": {
+          "_firestore": {
+            "projectId": "gogogetaway-9aefd"
+          },
+          "_path": {
+            "segments": ["events", "id_1711489581475_j9lzgoz03"]
+          },
+          "_converter": {}
+        },
+        "typeOfActivity": "sightseeing",
+        "rating": "3.4",
+        "locationEvent": "Bow River",
+        "time": "16:46",
+        "event": "Bow River",
+        "priceEvent": 0
+      }
+    ],
+    "commentCount": 3,
+    "likeCount": 3
+  },
+  {
+    "id": "8LHz7nZB0aDpTV0ZZQhs",
+    "date": "2024-03-26T04:34:13.773Z",
+    "images": [
+      "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1711427767/GOGO/mbkkkbtdygrvw2xwzuk9.png",
+      "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1711427767/GOGO/prxaqrdrg2alzvdjdelu.png",
+      "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1711427765/GOGO/njz3uja1vqx2atndxfah.png",
+      "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1711427765/GOGO/vue1l5qpvygjz10b6kjw.png",
+      "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1711427764/GOGO/p4hwrwlixtt1nma6or5q.png"
+    ],
+    "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocJpzkrfk58dSs6vvziVOqEBr6D7pgNaxN5M80PP3UkN=s96-c",
+    "city": "Fort Mcmurray",
+    "totalPrice": 500,
+    "name": "dummy best trip ever",
+    "restaurants": [
+      {
+        "locationRestaurant": "somewhere",
+        "restaurant": "Mary Browns",
+        "rating": "5",
+        "cuisine": "chinese",
+        "time": "00:34",
+        "restaurantID": {
+          "_firestore": {
+            "projectId": "gogogetaway-9aefd"
+          },
+          "_path": {
+            "segments": ["restaurants", "id_1711427701015_9lifhfz5p"]
+          },
+          "_converter": {}
+        },
+        "priceRestaurant": 34
+      }
+    ],
+    "hotel": {
+      "bookingURL": "https://www.youtube.com/watch?v=vH5MJgU7eY8&ab_channel=CBCNews",
+      "rating": "4",
+      "priceHotel": 432,
+      "hotel": "Hotel fortmac",
+      "hotelID": {
+        "_firestore": {
+          "projectId": "gogogetaway-9aefd"
+        },
+        "_path": {
+          "segments": ["hotels", "id_1711427734770_y56ufrrlm"]
+        },
+        "_converter": {}
+      },
+      "time": "22:36",
+      "locationHotel": "everywhere"
+    },
+    "userId": "W2G2CGCkI1bXL7dpKx3guPTaCd63",
+    "events": [
+      {
+        "eventID": {
+          "_firestore": {
+            "projectId": "gogogetaway-9aefd"
+          },
+          "_path": {
+            "segments": ["events", "id_1711427684085_spxz1sdf8"]
+          },
+          "_converter": {}
+        },
+        "typeOfActivity": "outdoors",
+        "rating": "3",
+        "locationEvent": "Downtown",
+        "time": "23:34",
+        "event": "Stampede for Fortmac",
+        "priceEvent": 34
+      }
+    ],
+    "likeCount": 6,
+    "commentCount": 1
+  },
+  {
+    "id": "JgdKpIZbVE4yst21SAT7",
+    "date": "2024-03-26T02:22:12.814Z",
+
+    "images": [
+      "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1711420161/GOGO/ed2pqorbvxevwtomfkoy.png",
+      "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1711420161/GOGO/doz6eceyzqazv1fqiqjf.png",
+      "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1711420161/GOGO/ftetqm9iyesroymfvns4.png",
+      "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1711420161/GOGO/kcfmordwys57ta678utk.png"
+    ],
+    "city": "Edmonton",
+    "totalPrice": 341,
+    "name": "dummy Dedmonton",
+    "restaurants": [
+      {
+        "locationRestaurant": "Northwest",
+        "restaurant": "POEB",
+        "rating": "4",
+        "cuisine": "chinese",
+        "time": "10:22",
+        "restaurantID": {
+          "_firestore": {
+            "projectId": "gogogetaway-9aefd"
+          },
+          "_path": {
+            "segments": ["restaurants", "id_1711419787546_rj0ecdra0"]
+          },
+          "_converter": {}
+        },
+        "priceRestaurant": 43
+      },
+      {
+        "locationRestaurant": "Calgary West",
+        "restaurant": "Breaky",
+        "rating": "3",
+        "cuisine": "french",
+        "time": "11:23",
+        "restaurantID": {
+          "_firestore": {
+            "projectId": "gogogetaway-9aefd"
+          },
+          "_path": {
+            "segments": ["restaurants", "id_1711419814417_fr93i2teb"]
+          },
+          "_converter": {}
+        },
+        "priceRestaurant": 123
+      }
+    ],
+    "hotel": {
+      "bookingURL": "https://www.booking.com/city/ca/edmonton.en.html?aid=306395;label=edmonton-y67lTJ3HxYtYj_hrmuzugAS392865643381:pl:ta:p195:p2:ac:ap:neg:fi:tikwd-114732060:lp9001342:li:dec:dm:ppccp=UmFuZG9tSVYkc2RlIyh9YZVcNNsENnH02-pWD53qm9c;ws=&gad_source=1&gclid=Cj0KCQjwwYSwBhDcARIsAOyL0fiKRCdVqz2bGABB6LMdMZXISSgY7DczcxeZ07K8UUDvB4W70Ltu_9saAgkWEALw_wcB",
+      "rating": "4",
+      "priceHotel": 100,
+      "hotel": "Edmonton Hotel",
+      "hotelID": {
+        "_firestore": {
+          "projectId": "gogogetaway-9aefd"
+        },
+        "_path": {
+          "segments": ["hotels", "id_1711419850148_vnlip4hyt"]
+        },
+        "_converter": {}
+      },
+      "time": "20:23",
+      "locationHotel": "Northeast"
+    },
+    "events": [
+      {
+        "eventID": {
+          "_firestore": {
+            "projectId": "gogogetaway-9aefd"
+          },
+          "_path": {
+            "segments": ["events", "id_1711419758482_jbillwt13"]
+          },
+          "_converter": {}
+        },
+        "typeOfActivity": "sightseeing",
+        "rating": "5",
+        "locationEvent": "Downtown",
+        "time": "08:22",
+        "event": "Ice Skating",
+        "priceEvent": 43
+      },
+      {
+        "eventID": {
+          "_firestore": {
+            "projectId": "gogogetaway-9aefd"
+          },
+          "_path": {
+            "segments": ["events", "id_1711419770951_jtf9o5y4a"]
+          },
+          "_converter": {}
+        },
+        "typeOfActivity": "sightseeing",
+        "rating": "4",
+        "locationEvent": "34",
+        "time": "09:22",
+        "event": "Scooter",
+        "priceEvent": 32
+      }
+    ],
+    "userId": "XwHzucR0fkaTgpnOFemLYCqIFTE3",
+    "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocK1GWofJI_8YEKUj7wzfD_mD2LKxQ5sCZkaYbODhbu_K4M=s96-c",
+    "commentCount": 1,
+    "likeCount": 2
+  },
+  {
+    "id": "WeARHXw443QB1Os8F2gc",
+    "date": "2024-02-24T17:27:05.756Z",
+    "images": [
+      "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795705/your_folder_name/gmzxfqjlqsdhxjyluaza.webp",
+      "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795704/your_folder_name/zhflfgrvfitot9tsjcet.jpg",
+      "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795704/your_folder_name/u2mxschbqzce4lf71sdj.jpg",
+      "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795704/your_folder_name/x7inlmyikse9gjqdgduc.jpg"
+    ],
+    "city": "Philippines",
+    "name": "Philippiens Itinerary",
+    "userId": "W2G2CGCkI1bXL7dpKx3guPTaCd63",
+    "commentCount": 8,
+    "likeCount": 6,
+    "events": [
+      {
+        "eventID": {
+          "_firestore": {
+            "projectId": "gogogetaway-9aefd"
+          },
+          "_path": {
+            "segments": ["events", "id_1708795663463_6tm4lh5m7"]
+          },
+          "_converter": {}
+        },
+        "typeOfActivity": "sightseeing",
+        "rating": "3",
+        "locationEvent": "23",
+        "time": "11:27",
+        "event": "Banan boat",
+        "priceEvent": 23
+      }
+    ],
+    "restaurants": [
+      {
+        "locationRestaurant": "42",
+        "restaurant": "Jollibee",
+        "rating": "5",
+        "cuisine": "indian",
+        "time": "11:27",
+        "restaurantID": {
+          "_firestore": {
+            "projectId": "gogogetaway-9aefd"
+          },
+          "_path": {
+            "segments": ["restaurants", "id_1708795677600_vm9fnqezu"]
+          },
+          "_converter": {}
+        },
+        "priceRestaurant": 23
+      }
+    ],
+    "hotel": {
+      "bookingURL": "12",
+      "hotelID": {
+        "_firestore": {
+          "projectId": "gogogetaway-9aefd"
+        },
+        "_path": {
+          "segments": ["hotels", "id_1708795692231_vkfx09jib"]
+        },
+        "_converter": {}
+      },
+      "time": "00:28",
+      "locationHotel": "312",
+      "hotel": "Canyon Cove",
+      "rating": "4",
+      "priceHotel": 564
+    },
+    "totalPrice": 610,
+    "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocJpzkrfk58dSs6vvziVOqEBr6D7pgNaxN5M80PP3UkN=s96-c"
+  },
+  {
+    "id": "kGmXtDKYPQhqHCiQb83e",
+    "date": "2024-02-24T16:51:04.127Z",
+    "images": [
+      "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795259/your_folder_name/w59ai3zc9ypdxjwoh4rb.webp",
+      "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795259/your_folder_name/l1kbwrna8vxojfo8fzgz.jpg",
+      "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795259/your_folder_name/iqvxt7gvwicdhvhp7utt.png",
+      "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795259/your_folder_name/nqbdqcqtama74lquisgo.jpg"
+    ],
+    "city": "Calgary",
+    "totalPrice": 199,
+    "name": "CalgaryItinear",
+    "commentCount": 0,
+    "likeCount": 2,
+    "userId": "XwHzucR0fkaTgpnOFemLYCqIFTE3",
+    "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocK1GWofJI_8YEKUj7wzfD_mD2LKxQ5sCZkaYbODhbu_K4M=s96-c",
+    "events": [
+      {
+        "eventID": {
+          "_firestore": {
+            "projectId": "gogogetaway-9aefd"
+          },
+          "_path": {
+            "segments": ["events", "id_1708793574772_zusabe1kd"]
+          },
+          "_converter": {}
+        },
+        "typeOfActivity": "sightseeing",
+        "rating": "2",
+        "locationEvent": "d",
+        "time": "10:52",
+        "event": "Scooter",
+        "priceEvent": 52
+      }
+    ],
+    "hotel": {
+      "bookingURL": "12",
+      "priceHotel": 124,
+      "hotelID": {
+        "_firestore": {
+          "projectId": "gogogetaway-9aefd"
+        },
+        "_path": {
+          "segments": ["hotels", "id_1708793603208_4hzk95ufe"]
+        },
+        "_converter": {}
+      },
+      "time": "23:53",
+      "locationHotel": "123",
+      "hotel": "Days Inn",
+      "rating": "2"
+    },
+    "restaurants": [
+      {
+        "locationRestaurant": "12",
+        "restaurant": "McDonalds",
+        "rating": "1",
+        "cuisine": "mexican",
+        "time": "10:52",
+        "restaurantID": {
+          "_firestore": {
+            "projectId": "gogogetaway-9aefd"
+          },
+          "_path": {
+            "segments": ["restaurants", "id_1708793590489_qngt3yq8d"]
+          },
+          "_converter": {}
+        },
+        "priceRestaurant": 23
+      }
     ]
-  },
-  {
-    "id": 2,
-    "title": "Vancouver Itinerary",
-    "location": "Vancouver, British Columbia",
-    "tripLength": 6,
-    "likes": 1231,
-    "comments": 323,
-    "price": 1320,
-    "images": [
-      "https://www.travel-british-columbia.com/wp-content/uploads/2018/07/manning-park-family-canoe-lost-lake-header.jpg",
-      "https://lp-cms-production.imgix.net/2022-01/The%20Philippines%2C%20Palawan%2C%20El%20Nido%2C%20sea%20kayaking%20in%20Bacuit%20Bay_1.jpg",
-      "https://wanderingwagars.com/wp-content/uploads/2020/05/Wandering-Wagars-in-Coron-Philippines.jpg"
-    ]
-  },
-  {
-    "id": 3,
-    "title": "Maldives Itinerary",
-    "location": "Maldives",
-    "tripLength": 18,
-    "likes": 1234,
-    "comments": 32,
-    "price": 1304,
-    "images": [
-      "https://static1.evcdn.net/images/reduction/355607_w-3840_h-2160_q-70_m-crop.jpg",
-      "https://lp-cms-production.imgix.net/2022-01/The%20Philippines%2C%20Palawan%2C%20El%20Nido%2C%20sea%20kayaking%20in%20Bacuit%20Bay_1.jpg",
-      "https://wanderingwagars.com/wp-content/uploads/2020/05/Wandering-Wagars-in-Coron-Philippines.jpg"
-    ]
-  },
-  {
-    "id": 4,
-    "title": "Lebanon Itinerary",
-    "location": "Lebanon",
-    "tripLength": 23,
-    "likes": 4234,
-    "comments": 32,
-    "price": 6304,
-    "images": [
-      "https://i2.wp.com/rachelsruminations.com/wp-content/uploads/2022/04/Saida-souk.jpg",
-      "https://lp-cms-production.imgix.net/2022-01/The%20Philippines%2C%20Palawan%2C%20El%20Nido%2C%20sea%20kayaking%20in%20Bacuit%20Bay_1.jpg",
-      "https://wanderingwagars.com/wp-content/uploads/2020/05/Wandering-Wagars-in-Coron-Philippines.jpg"
-    ]
-  },
-  {
-    "id": 5,
-    "title": "Japanese Itinerary",
-    "location": "Tokyo, Japan",
-    "tripLength": 27,
-    "likes": 13234,
-    "comments": 32,
-    "price": 4304,
-    "images": [
-      "https://media.nomadicmatt.com/2022/tokyoguide1.jpeg",
-      "https://lp-cms-production.imgix.net/2022-01/The%20Philippines%2C%20Palawan%2C%20El%20Nido%2C%20sea%20kayaking%20in%20Bacuit%20Bay_1.jpg",
-      "https://wanderingwagars.com/wp-content/uploads/2020/05/Wandering-Wagars-in-Coron-Philippines.jpg"
-    ]
-  },
-  {
-    "id": 6,
-    "title": "Bali Itinerary",
-    "location": "Bali, Indonesia",
-    "tripLength": 14,
-    "likes": 1334,
-    "comments": 32,
-    "price": 4304,
-    "images": [
-      "https://www.traveloffpath.com/wp-content/uploads/2022/06/Bali-Top-10-Things-Travelers-Need-To-Know-Before-Visiting.jpg",
-      "https://lp-cms-production.imgix.net/2022-01/The%20Philippines%2C%20Palawan%2C%20El%20Nido%2C%20sea%20kayaking%20in%20Bacuit%20Bay_1.jpg",
-      "https://wanderingwagars.com/wp-content/uploads/2020/05/Wandering-Wagars-in-Coron-Philippines.jpg"
-    ]
-  },
-  {
-    "id": 7,
-    "title": "Philippines Itinerary",
-    "user": "Abdul Rahman Khan",
-    "posted": "2024-1-23",
-    "images": [
-      "https://i.natgeofe.com/n/04505c35-858b-4e95-a1a7-d72e5418b7fc/steep-karst-cliffs-of-el-nido-in-palawan_3x2.jpg",
-      "https://lp-cms-production.imgix.net/2022-01/The%20Philippines%2C%20Palawan%2C%20El%20Nido%2C%20sea%20kayaking%20in%20Bacuit%20Bay_1.jpg",
-      "https://wanderingwagars.com/wp-content/uploads/2020/05/Wandering-Wagars-in-Coron-Philippines.jpg"
-    ],
-    "likes": 1234,
-    "comments": 32
-  },
-  {
-    "id": 8,
-    "title": "Philippines Itinerary",
-    "user": "Abdul Rahman Khan",
-    "posted": "2024-1-23",
-    "images": [
-      "https://i.natgeofe.com/n/04505c35-858b-4e95-a1a7-d72e5418b7fc/steep-karst-cliffs-of-el-nido-in-palawan_3x2.jpg",
-      "https://lp-cms-production.imgix.net/2022-01/The%20Philippines%2C%20Palawan%2C%20El%20Nido%2C%20sea%20kayaking%20in%20Bacuit%20Bay_1.jpg",
-      "https://wanderingwagars.com/wp-content/uploads/2020/05/Wandering-Wagars-in-Coron-Philippines.jpg"
-    ],
-    "likes": 1234,
-    "comments": 32
-  },
-  {
-    "id": 9,
-    "title": "Philippines Itinerary",
-    "user": "Abdul Rahman Khan",
-    "posted": "2024-1-23",
-    "images": [
-      "https://i.natgeofe.com/n/04505c35-858b-4e95-a1a7-d72e5418b7fc/steep-karst-cliffs-of-el-nido-in-palawan_3x2.jpg",
-      "https://lp-cms-production.imgix.net/2022-01/The%20Philippines%2C%20Palawan%2C%20El%20Nido%2C%20sea%20kayaking%20in%20Bacuit%20Bay_1.jpg",
-      "https://wanderingwagars.com/wp-content/uploads/2020/05/Wandering-Wagars-in-Coron-Philippines.jpg"
-    ],
-    "likes": 1234,
-    "comments": 32
-  },
-  {
-    "id": 10,
-    "title": "Philippines Itinerary",
-    "user": "Abdul Rahman Khan",
-    "posted": "2024-1-23",
-    "images": [
-      "https://i.natgeofe.com/n/04505c35-858b-4e95-a1a7-d72e5418b7fc/steep-karst-cliffs-of-el-nido-in-palawan_3x2.jpg",
-      "https://lp-cms-production.imgix.net/2022-01/The%20Philippines%2C%20Palawan%2C%20El%20Nido%2C%20sea%20kayaking%20in%20Bacuit%20Bay_1.jpg",
-      "https://wanderingwagars.com/wp-content/uploads/2020/05/Wandering-Wagars-in-Coron-Philippines.jpg"
-    ],
-    "likes": 1234,
-    "comments": 32
-  },
-  {
-    "id": 11,
-    "title": "Philippines Itinerary",
-    "user": "Abdul Rahman Khan",
-    "posted": "2024-1-23",
-    "images": [
-      "https://i.natgeofe.com/n/04505c35-858b-4e95-a1a7-d72e5418b7fc/steep-karst-cliffs-of-el-nido-in-palawan_3x2.jpg",
-      "https://lp-cms-production.imgix.net/2022-01/The%20Philippines%2C%20Palawan%2C%20El%20Nido%2C%20sea%20kayaking%20in%20Bacuit%20Bay_1.jpg",
-      "https://wanderingwagars.com/wp-content/uploads/2020/05/Wandering-Wagars-in-Coron-Philippines.jpg"
-    ],
-    "likes": 1234,
-    "comments": 32
-  },
-  {
-    "id": 12,
-    "title": "Philippines Itinerary",
-    "user": "Abdul Rahman Khan",
-    "posted": "2024-1-23",
-    "images": [
-      "https://i.natgeofe.com/n/04505c35-858b-4e95-a1a7-d72e5418b7fc/steep-karst-cliffs-of-el-nido-in-palawan_3x2.jpg",
-      "https://lp-cms-production.imgix.net/2022-01/The%20Philippines%2C%20Palawan%2C%20El%20Nido%2C%20sea%20kayaking%20in%20Bacuit%20Bay_1.jpg",
-      "https://wanderingwagars.com/wp-content/uploads/2020/05/Wandering-Wagars-in-Coron-Philippines.jpg"
-    ],
-    "likes": 1234,
-    "comments": 32
-  },
-  {
-    "id": 13,
-    "title": "Philippines Itinerary",
-    "user": "Abdul Rahman Khan",
-    "posted": "2024-1-23",
-    "images": [
-      "https://i.natgeofe.com/n/04505c35-858b-4e95-a1a7-d72e5418b7fc/steep-karst-cliffs-of-el-nido-in-palawan_3x2.jpg",
-      "https://lp-cms-production.imgix.net/2022-01/The%20Philippines%2C%20Palawan%2C%20El%20Nido%2C%20sea%20kayaking%20in%20Bacuit%20Bay_1.jpg",
-      "https://wanderingwagars.com/wp-content/uploads/2020/05/Wandering-Wagars-in-Coron-Philippines.jpg"
-    ],
-    "likes": 1234,
-    "comments": 32
-  },
-  {
-    "id": 14,
-    "title": "Philippines Itinerary",
-    "user": "Abdul Rahman Khan",
-    "posted": "2024-1-23",
-    "images": [
-      "https://i.natgeofe.com/n/04505c35-858b-4e95-a1a7-d72e5418b7fc/steep-karst-cliffs-of-el-nido-in-palawan_3x2.jpg",
-      "https://lp-cms-production.imgix.net/2022-01/The%20Philippines%2C%20Palawan%2C%20El%20Nido%2C%20sea%20kayaking%20in%20Bacuit%20Bay_1.jpg",
-      "https://wanderingwagars.com/wp-content/uploads/2020/05/Wandering-Wagars-in-Coron-Philippines.jpg"
-    ],
-    "likes": 1234,
-    "comments": 32
-  },
-  {
-    "id": 15,
-    "title": "Philippines Itinerary",
-    "user": "Abdul Rahman Khan",
-    "posted": "2024-1-23",
-    "images": [
-      "https://i.natgeofe.com/n/04505c35-858b-4e95-a1a7-d72e5418b7fc/steep-karst-cliffs-of-el-nido-in-palawan_3x2.jpg",
-      "https://lp-cms-production.imgix.net/2022-01/The%20Philippines%2C%20Palawan%2C%20El%20Nido%2C%20sea%20kayaking%20in%20Bacuit%20Bay_1.jpg",
-      "https://wanderingwagars.com/wp-content/uploads/2020/05/Wandering-Wagars-in-Coron-Philippines.jpg"
-    ],
-    "likes": 1234,
-    "comments": 32
   }
 ]

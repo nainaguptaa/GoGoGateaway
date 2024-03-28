@@ -35,7 +35,9 @@ const Restaurant = ({ handleChange, resState, setResState }) => {
           className="block h-12 w-full rounded-md border-gray-300 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 "
           value={resState.restaurant}
           onChange={handleChange}
+          maxLength="40"
         />
+        <p className="text-xs text-gray-500">Max 40 characters</p>
       </div>
 
       <div className="mb-3">
@@ -92,6 +94,23 @@ const Restaurant = ({ handleChange, resState, setResState }) => {
           placeholder="Location"
           className="block h-12 w-full rounded-md border-gray-300 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
           value={resState.locationRestaurant}
+          onChange={handleChange}
+        />
+      </div>
+      <div className="mb-3">
+        <label
+          htmlFor="price"
+          className="mb-1 block text-sm font-medium text-gray-700 md:text-xl"
+        >
+          Price
+        </label>
+        <input
+          type="number"
+          id="price"
+          name="priceRestaurant"
+          placeholder="Price"
+          className="block h-12 w-full rounded-md border-gray-300 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500  sm:text-sm md:text-xl"
+          value={resState.priceRestaurant}
           onChange={handleChange}
         />
       </div>

@@ -1,0 +1,151 @@
+{
+  "id": "5337b439-60c4-4a04-82d2-cbdfc3263bf2",
+  "version": "2.0",
+  "name": "User Authentication Tests",
+  "url": "https://gogogateaway-3yvuhaorjq-uc.a.run.app/",
+  "tests": [{
+    "id": "2cf37681-9137-4e77-92ca-25e86efa482c",
+    "name": "Logging In through Google",
+    "commands": [{
+      "id": "665a64af-128f-4ba2-a8ce-8fa1d675b128",
+      "comment": "",
+      "command": "open",
+      "target": "https://gogogateaway-3yvuhaorjq-uc.a.run.app/foryou",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "4b5cfdd6-bd1c-4c39-8e3e-ab858aeb9703",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1440x814",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "462fc1cb-0a82-455e-9121-400cd9061540",
+      "comment": "",
+      "command": "click",
+      "target": "css=.btn-fill",
+      "targets": [
+        ["css=.btn-fill", "css:finder"],
+        ["xpath=//div[@id='root']/div/div[2]/button[2]", "xpath:idRelative"],
+        ["xpath=//button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'Sign Up')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "d29b82b5-7a3a-4fd3-83ff-521e786d6b9e",
+      "comment": "",
+      "command": "click",
+      "target": "css=.text-primary",
+      "targets": [
+        ["css=.text-primary", "css:finder"],
+        ["xpath=//div[@id='root']/div/div[2]/div[2]/div[2]/div[2]", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div[2]/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "f1cbbbd6-2fc7-4eb9-b131-e0afacb4aa04",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mt-4 > .text-lg",
+      "targets": [
+        ["css=.mt-4 > .text-lg", "css:finder"],
+        ["xpath=//div[@id='root']/div/div[2]/div[2]/button/div", "xpath:idRelative"],
+        ["xpath=//button/div", "xpath:position"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win2516",
+      "windowTimeout": 2000
+    }, {
+      "id": "a431f2b7-dcfe-4d96-a4e8-733c555fc74d",
+      "comment": "",
+      "command": "selectWindow",
+      "target": "handle=${win2516}",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "74558716-c137-4205-8078-b2b4afe37d60",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=#headingText > span",
+      "targets": [
+        ["css=#headingText > span", "css:finder"],
+        ["xpath=//h1[@id='headingText']/span", "xpath:idRelative"],
+        ["xpath=//h1/span", "xpath:position"],
+        ["xpath=//span[contains(.,'Choose an account')]", "xpath:innerText"]
+      ],
+      "value": "Choose an account"
+    }]
+  }, {
+    "id": "9cecdcdf-e0f9-4247-bd0e-97e17cd3e0b8",
+    "name": "Signing Up through Google",
+    "commands": [{
+      "id": "6e9c6e6c-2825-41bf-947c-8397ec04df64",
+      "comment": "",
+      "command": "open",
+      "target": "https://gogogateaway-3yvuhaorjq-uc.a.run.app/foryou",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "1e270c10-717d-44e6-b86a-449d027852e3",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1440x814",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "100a2723-8bfd-4a37-b6f7-b06be9d11e23",
+      "comment": "",
+      "command": "click",
+      "target": "css=.btn-fill",
+      "targets": [
+        ["css=.btn-fill", "css:finder"],
+        ["xpath=//div[@id='root']/div/div[2]/button[2]", "xpath:idRelative"],
+        ["xpath=//button[2]", "xpath:position"],
+        ["xpath=//button[contains(.,'Sign Up')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "273f2e80-9440-4cfe-a4fb-0102d9fb0188",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mr-6",
+      "targets": [
+        ["css=.mr-6", "css:finder"]
+      ],
+      "value": "",
+      "opensWindow": true,
+      "windowHandleName": "win2418",
+      "windowTimeout": 2000
+    }, {
+      "id": "15ccb1e3-2224-4b5d-aaa8-f16624a4156b",
+      "comment": "",
+      "command": "selectWindow",
+      "target": "handle=${win2418}",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d8f7e5fe-5a62-49cb-93f5-e16b0cf34768",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.kHn9Lb",
+      "targets": [
+        ["css=.kHn9Lb", "css:finder"],
+        ["xpath=//body[@id='yDmH0d']/div[4]/div/div[2]/div/div/div/div/div/div[2]", "xpath:idRelative"],
+        ["xpath=//div/div/div/div/div/div[2]", "xpath:position"]
+      ],
+      "value": "Sign in with Google"
+    }]
+  }],
+  "suites": [{
+    "id": "60ce600a-e64c-4772-9796-bd9b3619715f",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": []
+  }],
+  "urls": ["https://gogogateaway-3yvuhaorjq-uc.a.run.app/"],
+  "plugins": []
+}

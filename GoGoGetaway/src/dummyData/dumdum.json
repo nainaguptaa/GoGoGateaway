@@ -1,0 +1,72 @@
+{
+  "id": "WeARHXw443QB1Os8F2gc",
+  "date": "2024-02-24T17:27:05.756Z",
+  "images": [
+    "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795705/your_folder_name/gmzxfqjlqsdhxjyluaza.webp",
+    "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795704/your_folder_name/zhflfgrvfitot9tsjcet.jpg",
+    "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795704/your_folder_name/u2mxschbqzce4lf71sdj.jpg",
+    "http://res.cloudinary.com/dx0n3s9h4/image/upload/v1708795704/your_folder_name/x7inlmyikse9gjqdgduc.jpg"
+  ],
+  "city": "Philippines",
+  "name": "Philippiens Itinerary",
+  "userId": "W2G2CGCkI1bXL7dpKx3guPTaCd63",
+  "commentCount": 8,
+  "likeCount": 6,
+  "events": [
+    {
+      "eventID": {
+        "_firestore": {
+          "projectId": "gogogetaway-9aefd"
+        },
+        "_path": {
+          "segments": ["events", "id_1708795663463_6tm4lh5m7"]
+        },
+        "_converter": {}
+      },
+      "typeOfActivity": "sightseeing",
+      "rating": "3",
+      "locationEvent": "23",
+      "time": "11:27",
+      "event": "Banan boat",
+      "priceEvent": 23
+    }
+  ],
+  "restaurants": [
+    {
+      "locationRestaurant": "42",
+      "restaurant": "Jollibee",
+      "rating": "5",
+      "cuisine": "indian",
+      "time": "11:27",
+      "restaurantID": {
+        "_firestore": {
+          "projectId": "gogogetaway-9aefd"
+        },
+        "_path": {
+          "segments": ["restaurants", "id_1708795677600_vm9fnqezu"]
+        },
+        "_converter": {}
+      },
+      "priceRestaurant": 23
+    }
+  ],
+  "hotel": {
+    "bookingURL": "12",
+    "hotelID": {
+      "_firestore": {
+        "projectId": "gogogetaway-9aefd"
+      },
+      "_path": {
+        "segments": ["hotels", "id_1708795692231_vkfx09jib"]
+      },
+      "_converter": {}
+    },
+    "time": "00:28",
+    "locationHotel": "312",
+    "hotel": "Canyon Cove",
+    "rating": "4",
+    "priceHotel": 564
+  },
+  "totalPrice": 610,
+  "userPhoto": "https://lh3.googleusercontent.com/a/ACg8ocJpzkrfk58dSs6vvziVOqEBr6D7pgNaxN5M80PP3UkN=s96-c"
+}

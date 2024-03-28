@@ -1,0 +1,14 @@
+steps:
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+    - '-c'
+    - |
+      echo "Retrieving secret..."
+      gcloud secrets versions access latest --secret=gogogetaway_key > backend/firebaseKey.json
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/fl2f-1/github.com/santigf12/gogogateaway-backend:latest', '-f', 'backend/Dockerfile.backend', 'backend']
+
+images:
+- 'gcr.io/fl2f-1/github.com/santigf12/gogogateaway-backend:latest'
