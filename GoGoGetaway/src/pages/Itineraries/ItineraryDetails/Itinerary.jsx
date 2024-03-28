@@ -34,9 +34,6 @@ export default function Itinerary({ iconSize }) {
   };
   // console.log(itinerary);
   useEffect(() => {
-    setLoading(true);
-    setLoadingAuthState(true);
-
     const fetchItinerary = async () => {
       const queryParams = new URLSearchParams(location.search);
 
@@ -58,8 +55,6 @@ export default function Itinerary({ iconSize }) {
         console.error('Error fetching itinerary:', error);
         // Handle error or set some state to show an error message
       }
-      setLoading(false);
-      setLoadingAuthState(false);
     };
 
     if (location.search) {
