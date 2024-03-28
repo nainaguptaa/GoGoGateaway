@@ -75,11 +75,11 @@ const SearchResults = () => {
 
   return (
     <div className="flex h-screen flex-col items-center justify-start pt-2">
-      <div className="mb-4 flex w-full max-w-6xl items-center justify-between px-4 py-2">
-        <h2 className="mb-4 text-4xl font-extrabold leading-none tracking-tight text-gray-900 dark:text-white">
+      <div className="mb-4 flex w-full max-w-6xl flex-col items-center justify-between px-4 py-2 pt-10 sm:flex-row">
+        <h2 className="mb-4 text-2xl font-extrabold leading-none tracking-tight text-gray-900 dark:text-white sm:text-4xl">
           Search Results for: {query}
         </h2>
-        <div className="sort-dropdown flex items-center">
+        <div className="sort-dropdown flex w-full items-center  sm:justify-end">
           <label htmlFor="sortCriteria" className="mr-2 text-gray-400">
             Sort by:
           </label>
@@ -87,7 +87,7 @@ const SearchResults = () => {
             id="sortCriteria"
             value={sortCriteria}
             onChange={(e) => setSortCriteria(e.target.value)}
-            className="rounded-lg border border-gray-400 bg-gray-200 px-5 py-3 text-center text-base font-medium text-gray-900 shadow-sm dark:bg-gray-700 dark:text-white"
+            className="rounded-lg border border-gray-400 bg-gray-200 px-3 py-2 text-center text-base font-medium text-gray-900 shadow-sm dark:bg-gray-700 dark:text-white sm:px-5 sm:py-3"
           >
             <option value="rating">Highest Rated</option>
             <option value="price">Price (Lowest to Highest)</option>
@@ -98,7 +98,7 @@ const SearchResults = () => {
         <p className="text-lg text-blue-500">Loading...</p>
       ) : sortedResults.length > 0 ? (
         <div className="w-full max-w-6xl">
-          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          <div className="mb-16 grid grid-cols-1  gap-4 px-2 md:grid-cols-2 lg:grid-cols-3">
             {sortedResults.map((itinerary) => (
               <div
                 key={itinerary.id}
