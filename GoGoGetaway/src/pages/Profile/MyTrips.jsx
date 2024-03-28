@@ -14,7 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useUserContext } from '@/context/userContext';
 import React, { useEffect, useState } from 'react';
 import { FaRegBookmark } from 'react-icons/fa6';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 export default function UserProfile() {
   const { currentUser, updateCurrentUser } = useUserContext();
   const { username } = useParams();
@@ -168,17 +168,24 @@ export default function UserProfile() {
                 <h1>Followers</h1>
               </div>
             </div>
-            <Button
-              variant="secondary"
-              className={`md:text-md ${isCurrentUser ? 'w-2/3' : 'w-1/2'}`}
-              onClick={() => handleFollowButton(user.id)}
-            >
-              {isCurrentUser ? (
-                'Edit Profile'
-              ) : (
-                following ? 'Followed' : 'Follow'
-              )}
-            </Button>
+            {isCurrentUser ?
+              <Button asChild
+                variant="secondary"
+                className={`md:text-md ${isCurrentUser ? 'w-2/3' : 'w-1/2'}`}
+
+              >
+                <Link to="/profile">Edit Profile</Link>
+              </Button> :
+              <Button
+                variant="secondary"
+                className={`md:text-md ${isCurrentUser ? 'w-2/3' : 'w-1/2'}`}
+                onClick={() => handleFollowButton(user.id)}
+              >
+                {
+                  following ? 'Followed' : 'Follow'
+                }
+              </Button>
+            }
           </CardDescription>
         </CardHeader>
         {/* <CardContent>

@@ -23,6 +23,42 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.put("/:id/profile", async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const { firstName, lastName } = req.body;
+    
+    // Get user document reference
+    const userRef = db.collection("users").doc(userId);
+    
+    // Get user document data
+    const userSnapshot = await userRef.get();
+    
+    // Check if user exists
+    if (!userSnapshot.exists) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    // Extract user data from snapshot
+    const userData = userSnapshot.data();
+    
+    // Update user data
+    await userRef.update({
+      firstName: firstName || userData.firstName,
+      lastName: lastName || userData.lastName
+    });
+
+    // Fetch updated user data
+    const updatedUser = await userRef.get();
+    
+    return res.json(updatedUser.data());
+  } catch (error) {
+    console.error("Error updating user:", error);
+    return res.status(500).json({ error: "Something went wrong" });
+  }
+});
+
+
 router.get("/username/:username", async (req, res) => {
   try {
     const username = req.params.username;

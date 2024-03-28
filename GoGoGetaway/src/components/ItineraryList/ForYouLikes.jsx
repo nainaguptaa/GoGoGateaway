@@ -292,7 +292,6 @@ export default function ForYouLikes({
   const handleProfileLink = async (userId) => {
     //get the user id and navigate to the user's profile from this url `http://localhost:8080/users/${userId}`
     try {
-      console.log(userId);
       const response = await fetch(`${apiURL}/users/${userId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch user');
@@ -305,6 +304,7 @@ export default function ForYouLikes({
       // Handle error appropriately, such as displaying an error message
     }
   };
+
   if (index >= itineraries.length) return <div>Loading...</div>;
   return (
     <div className="h-70 absolute bottom-40 right-6 z-10 mb-12 flex flex-col gap-6 rounded-xl  bg-white/60 px-2 py-4 text-sm sm:mb-8 sm:ml-4 sm:text-lg lg:static lg:right-16 lg:bg-transparent">
