@@ -14,7 +14,7 @@ const ItineraryList = ({ itineraries, isMobile, iconSize, itemSize }) => {
             className="flex cursor-pointer flex-col gap-2 overflow-hidden sm:h-[47rem] md:h-[46rem] md:w-[55rem] lg:w-[65rem] lg:rounded-2xl lg:border-2 lg:bg-card lg:dark:bg-card 2xl:w-[75rem]"
             onClick={() => navigate(`/itineraries?id=${itineraries[index].id}`)}
           >
-            <div className="h-[39rem] bg-red-300 sm:h-[39rem] sm:w-full md:h-[38rem] lg:h-[38rem] 2xl:max-h-[38rem]">
+            <div className="h-[39rem]  sm:h-[39rem] sm:w-full md:h-[38rem] lg:h-[38rem] 2xl:max-h-[38rem]">
               <img
                 src={itineraries[index].images[0]}
                 loading="lazy"
