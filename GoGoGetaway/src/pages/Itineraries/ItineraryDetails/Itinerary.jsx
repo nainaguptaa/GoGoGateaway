@@ -119,7 +119,7 @@ export default function Itinerary({ iconSize }) {
   return (
     <>
       <div className="lg:flex lg:flex-col lg:px-40 lg:py-8">
-        <div className="hidden text-4xl font-semibold lg:block">
+        <div className="mb-4 hidden text-4xl font-semibold lg:block">
           {itinerary.name}
         </div>
 
