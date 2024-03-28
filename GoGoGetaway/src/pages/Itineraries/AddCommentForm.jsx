@@ -6,6 +6,7 @@ const AddCommentForm = ({ itineraryId }) => {
   const apiURL = import.meta.env.VITE_API_URL;
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log('comment');
     try {
       await axios.post(`${apiURL}/itineraries/${itineraryId}/comments`, {
         userId: 'user123', // This should be dynamically set based on the logged-in user

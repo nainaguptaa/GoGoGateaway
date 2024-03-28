@@ -29,6 +29,11 @@ const ItineraryComments = ({ itineraryId }) => {
   const handleAddComment = async (e) => {
     e.preventDefault();
     if (!newCommentText.trim()) return;
+    console.log('test');
+    // if (containsProfanity(newCommentText)) {
+    //   alert('Your comment contains prohibited words. Please remove them before submitting.');
+    //   return; // Prevent the comment from being submitted
+    // }
     try {
       const { data } = await axios.post(
         `/itineraries/${itineraryId}/comments`,
