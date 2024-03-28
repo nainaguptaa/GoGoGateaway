@@ -94,7 +94,6 @@ const Event = ({ handleChange, eventState, setEventState }) => {
           ))}
         </div>
       </div>
-
       <div className="mb-3">
         <label
           htmlFor="typeOfActivity"
