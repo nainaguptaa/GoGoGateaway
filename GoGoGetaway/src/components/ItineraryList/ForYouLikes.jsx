@@ -320,10 +320,11 @@ export default function ForYouLikes({
             <CgProfile className="mb-1 h-12 w-12" />
           )}
         </Link>
-        {currentUser.id !== itineraries[index].userId && (
+        {(!currentUser || currentUser.id !== itineraries[index].userId) && (
           <Button
-            className={`absolute -bottom-0.5 h-5 max-w-5 rounded-full bg-rose-400 px-1 text-justify text-white transition-all duration-300 ease-in-out hover:bg-rose-500 ${following ? 'animate-bounce-2' : animate ? 'animate-shake' : ''
-              }`}
+            className={`absolute -bottom-0.5 h-5 max-w-5 rounded-full bg-rose-400 px-1 text-justify text-white transition-all duration-300 ease-in-out hover:bg-rose-500 ${
+              following ? 'animate-bounce-2' : animate ? 'animate-shake' : ''
+            }`}
             onClick={() => handleFollowButton(itineraries[index].userId)}
           >
             {following ? <IoMdCheckmark /> : <GoPlus />}
