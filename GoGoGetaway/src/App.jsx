@@ -113,8 +113,8 @@ function App() {
             />{' '}
             <Route path="/create" element={<Create />} />
             <Route path="/test" element={<Test />} />
-            {/* <Route path="*" element={<Navigate to="/foryou " replace />} /> */}
-            {/* <Route path="/" element={<Navigate to="/foryou " replace />} /> */}
+            <Route path="*" element={<Navigate to="/foryou " replace />} />
+            <Route path="/" element={<Navigate to="/foryou " replace />} />
             <Route path="/my-trips" element={<MyTrips />} />
             <Route path="/user/:username" element={<MyTrips />} />
           </Routes>
