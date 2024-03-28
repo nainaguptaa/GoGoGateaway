@@ -42,7 +42,7 @@ const Event = ({ handleChange, eventState, setEventState }) => {
         <p className="text-xs text-gray-500">Max 40 characters</p>
       </div>
 
-      <div className="mb-3">
+      {/* <div className="mb-3">
         <label
           htmlFor="rating"
           className="mb-1 block text-sm font-medium text-gray-700 md:text-xl md:text-xl"
@@ -57,8 +57,44 @@ const Event = ({ handleChange, eventState, setEventState }) => {
           className="block h-12 w-full rounded-md border-gray-300 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500  sm:text-sm md:text-xl"
           value={eventState.ratingEvent}
           onChange={handleChange}
+          readOnly
+          max={3}
         />
+      </div> */}
+      <div className="mb-3">
+        <label
+          htmlFor="rating"
+          className="mb-1 block text-sm font-medium text-gray-700 md:text-xl"
+        >
+          Rating
+        </label>
+        <div id="rating" className="flex gap-2">
+          {[1, 2, 3, 4, 5].map((rating) => (
+            <div key={rating} className="flex items-center">
+              <input
+                type="radio"
+                id={`rating-${rating}`}
+                name="ratingEvent"
+                value={rating}
+                checked={eventState.ratingEvent == rating} // Make sure to compare with '==' unless your state is strictly typed
+                onChange={handleChange}
+                className="sr-only" // Hide the radio button itself
+              />
+              <label
+                htmlFor={`rating-${rating}`}
+                className={`block h-6 w-6 cursor-pointer rounded-full border-2 ${
+                  eventState.ratingEvent == rating
+                    ? 'border-amber-600 bg-amber-500'
+                    : 'border-gray-300 bg-white'
+                }`}
+              >
+                {/* Optional: Add an icon or element inside the label to indicate checked state */}
+              </label>
+            </div>
+          ))}
+        </div>
       </div>
+
       <div className="mb-3">
         <label
           htmlFor="typeOfActivity"

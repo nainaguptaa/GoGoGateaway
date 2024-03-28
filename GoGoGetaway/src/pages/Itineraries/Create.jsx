@@ -567,7 +567,7 @@ const Create = () => {
         </div>
         <div className="flex flex-col-reverse px-2 pb-64   sm:px-8 lg:flex-row">
           <div className="w-full sm:w-9/12 ">
-            <div className="border-2  bg-card px-5 py-6 sm:rounded-xl">
+            <div className="w-full  border-2 bg-card  px-5 py-6 sm:rounded-xl">
               <div className="text-4xl font-normal">
                 {toTitleCase(itineraries.city)} Trip
               </div>
