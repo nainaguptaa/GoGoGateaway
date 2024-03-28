@@ -30,7 +30,7 @@ import { PiShareFat } from 'react-icons/pi';
 import ForYouLikes from '../../components/ItineraryList/ForYouLikes';
 import ItineraryList from '@/components/ItineraryList/ItineraryList';
 const ForYou = ({ isMobile, iconSize }) => {
-  const { currentUser } = useUserContext();
+  const { currentUser, setLoadingAuthState } = useUserContext();
   const [itineraries, setItineraries] = useState([]);
   const navigate = useNavigate();
   const [displayedPosts, setDisplayedPosts] = useState([]);
@@ -42,6 +42,7 @@ const ForYou = ({ isMobile, iconSize }) => {
   const apiURLDeploy = import.meta.env.VITE_API_URL_DEPLOY;
   const apiURL = import.meta.env.VITE_API_URL;
   useEffect(() => {
+    setLoadingAuthState(true);
     const fetchItineraries = async () => {
       try {
         // Define the API URL
@@ -65,6 +66,7 @@ const ForYou = ({ isMobile, iconSize }) => {
       }
     };
     fetchItineraries();
+    setLoadingAuthState(false);
   }, [apiURL, postsPerPage]); // Added apiURL as a dependency
 
   useEffect(() => {
@@ -105,13 +107,13 @@ const ForYou = ({ isMobile, iconSize }) => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-  if (!itineraries.length > 0) {
-    return (
-      <>
-        <div className="z-100 ml-20 mt-20">Loading</div>
-      </>
-    );
-  }
+  // if (!itineraries.length > 0) {
+  //   return (
+  //     <>
+  //       <div className="z-100 ml-20 mt-20">Loading</div>
+  //     </>
+  //   );
+  // }
   return (
     <div className="flex h-screen">
       {!isMobile && <ForYouLeft />}
