@@ -17,16 +17,18 @@ const Event = ({ handleChange, eventState, setEventState }) => {
           className="block h-12 w-full rounded-md border-gray-300 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm md:text-xl"
           value={eventState.time}
           onChange={handleChange}
+          step="300"
         />
       </div>
-
       <div className="mb-3">
         <label
           htmlFor="event"
           className="mb-1 block text-sm font-medium text-gray-700 md:text-xl"
         >
+          {' '}
           Event Name
         </label>
+
         <input
           type="text"
           id="event"
@@ -35,7 +37,9 @@ const Event = ({ handleChange, eventState, setEventState }) => {
           className="block h-12 w-full rounded-md border-gray-300 px-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500  sm:text-sm md:text-xl"
           value={eventState.event}
           onChange={handleChange}
+          maxLength="40"
         />
+        <p className="text-xs text-gray-500">Max 40 characters</p>
       </div>
 
       <div className="mb-3">
@@ -55,7 +59,6 @@ const Event = ({ handleChange, eventState, setEventState }) => {
           onChange={handleChange}
         />
       </div>
-
       <div className="mb-3">
         <label
           htmlFor="typeOfActivity"
@@ -77,7 +80,6 @@ const Event = ({ handleChange, eventState, setEventState }) => {
           <option value="entertainment">Entertainment</option>
         </select>
       </div>
-
       <div className="mb-3">
         <label
           htmlFor="location"

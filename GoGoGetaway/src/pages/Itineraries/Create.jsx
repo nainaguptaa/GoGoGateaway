@@ -250,7 +250,7 @@ const Create = () => {
 
   const handleChange = (type) => (e) => {
     const { name, value } = e.target;
-    let roundedTime = roundTimeToNearestFive(value); // Round time to nearest multiple of five
+
     if (type === 'Event') {
       setEventState((prev) => ({
         ...prev,
@@ -267,14 +267,6 @@ const Create = () => {
         [name]: value,
       }));
     }
-  };
-  const roundTimeToNearestFive = (time) => {
-    const [hours, minutes] = time.split(':').map(Number);
-    const roundedMinutes = Math.round(minutes / 5) * 5; // Round minutes to nearest multiple of five
-    const roundedHours = hours + Math.floor(roundedMinutes / 60);
-    const formattedHours = String(roundedHours).padStart(2, '0');
-    const formattedMinutes = String(roundedMinutes % 60).padStart(2, '0');
-    return `${formattedHours}:${formattedMinutes}`;
   };
 
   // Submit handlers for events and restaurants
@@ -583,13 +575,13 @@ const Create = () => {
                 Add To Your Itinerary -- {itineraries.totalPrice}
               </div>
 
-              <div className="ml-7 mt-6 w-4/6">
-                <ol className="relative  w-4/5 border-l border-neutral-300 dark:border-neutral-500">
+              <div className="ml-7 mt-6 w-full">
+                <ol className="relative  mb-5 w-11/12 border-l border-neutral-300 dark:border-neutral-500">
                   {getSortedItineraries().map((item, index) => (
                     <>
                       <div
                         key={item.id || index}
-                        className="ease flex cursor-pointer justify-between py-5 pr-4 transition duration-500 hover:bg-slate-100 dark:hover:bg-stone-600"
+                        className="ease flex w-full cursor-pointer justify-between py-5 pr-4 transition duration-500 hover:bg-slate-100 dark:hover:bg-stone-600"
                         onClick={() => handleEditItemClick(item)}
                       >
                         {' '}
@@ -605,8 +597,17 @@ const Create = () => {
                             </p>
                           </div>
                           <div className="flex flex-col justify-center ">
-                            <h4 className=" text-xl font-semibold">
-                              {item.event || item.hotel || item.restaurant}
+                            <h4 className="text-xl font-semibold">
+                              {(
+                                (item.event || item.hotel || item.restaurant) +
+                                ''
+                              ).length > 20
+                                ? (
+                                    (item.event ||
+                                      item.hotel ||
+                                      item.restaurant) + ''
+                                  ).slice(0, 20) + '...'
+                                : item.event || item.hotel || item.restaurant}
                             </h4>
                             <p className=" text-neutral-500 dark:text-neutral-300">
                               {item.category}
@@ -615,7 +616,7 @@ const Create = () => {
                           </div>
                         </li>
                         {editingItem.id === item.id && (
-                          <div className="ml-9 flex items-center justify-center gap-2 text-lg">
+                          <div className="ml-50 flex items-center justify-center gap-2 text-lg">
                             <Button
                               onClick={() => {
                                 //   setOpenEditor((prev) => !prev);
