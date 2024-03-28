@@ -25,6 +25,7 @@ import BottomBar from './components/BottomBar';
 import Signup from './pages/Auth/Signup';
 import MyTrips from './pages/Profile/MyTrips';
 import { Toaster } from './components/ui/toaster';
+import Search from './pages/Search/Search';
 function App() {
   const [isMobile, setIsMobile] = useState(window.innerWidth < 1024);
   const location = useLocation();
@@ -74,12 +75,18 @@ function App() {
   // if (isMobile) {
   //   return <Navigate to="/foryou" replace />;
   // }
-
+  const conditionalPaddingClass = location.pathname.startsWith(
+    '/search-itineraries',
+  )
+    ? ''
+    : 'pt-[3rem] lg:pt-[6.25rem]';
   return (
     <>
       {signPopup && <Signup />}
-      <Navbar isMobile={isMobile} iconSize={iconSize} />
-      <div className=" pt-[3rem] lg:pt-[6.25rem]">
+      {!location.pathname.startsWith('/search-itineraries') && (
+        <Navbar isMobile={isMobile} iconSize={iconSize} />
+      )}
+      <div className={`${conditionalPaddingClass}`}>
         {/* <ForYouLeft className="" />{' '} */}
         <Suspense fallback={<Loading />}>
           <Routes>
@@ -90,6 +97,10 @@ function App() {
             <Route
               path="/foryou"
               element={<ForYou isMobile={isMobile} iconSize={iconSize} />}
+            />
+            <Route
+              path="/search-itineraries"
+              element={<Search isMobile={isMobile} />}
             />
             <Route path="/search" element={<SearchResults />} />
             <Route
@@ -102,18 +113,20 @@ function App() {
             />{' '}
             <Route path="/create" element={<Create />} />
             <Route path="/test" element={<Test />} />
-            <Route path="*" element={<Navigate to="/foryou " replace />} />
-            <Route path="/" element={<Navigate to="/foryou " replace />} />
+            {/* <Route path="*" element={<Navigate to="/foryou " replace />} /> */}
+            {/* <Route path="/" element={<Navigate to="/foryou " replace />} /> */}
             <Route path="/my-trips" element={<MyTrips />} />
             <Route path="/user/:username" element={<MyTrips />} />
           </Routes>
         </Suspense>
       </div>
-      {isMobile && !location.pathname.startsWith('/itineraries') && (
-        <div className="fixed bottom-0 w-full">
-          <BottomBar iconSize={iconSize} />
-        </div>
-      )}
+      {isMobile &&
+        !location.pathname.startsWith('/itineraries') &&
+        !location.pathname.startsWith('/search-itineraries') && (
+          <div className="fixed bottom-0 w-full">
+            <BottomBar iconSize={iconSize} />
+          </div>
+        )}
 
       <Toaster />
     </>

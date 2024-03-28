@@ -2,6 +2,8 @@ import React, { useState, useEffect, lazy } from 'react';
 import { useUserContext } from '../context/userContext';
 import { useNavigate } from 'react-router-dom';
 import SearchBar from './SearchBar';
+import { FaSearch } from 'react-icons/fa';
+
 import ProfilePicture from './ProfilePicture';
 import { CgProfile } from 'react-icons/cg';
 import { IoPersonOutline } from 'react-icons/io5';
@@ -50,7 +52,11 @@ const Navbar = ({ isMobile, iconSize }) => {
             size={iconSize}
             onClick={() => setSidebarOpen((prev) => !prev)}
           />
-          <SearchBar isMobile={isMobile} iconSize={iconSize} />
+          {/* <SearchBar isMobile={isMobile} iconSize={iconSize} /> */}
+          <FaSearch
+            size={iconSize}
+            onClick={() => navigate('/search-itineraries')}
+          />
         </div>
         <MobileSidebar
           isOpen={sidebarOpen}
