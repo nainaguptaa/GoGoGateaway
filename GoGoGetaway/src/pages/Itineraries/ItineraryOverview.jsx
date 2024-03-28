@@ -31,7 +31,10 @@ export default function ItineraryOverview({ itineraries }) {
                       <strong>Type of Activity:</strong> {event.typeOfActivity}
                     </p>
                     <p className=" flex gap-2  px-3 py-2 text-lg">
-                      <strong>Location:</strong> {event.locationEvent}
+                      <strong>Location:</strong>{' '}
+                      <div className="overflow-x-auto">
+                        {event.locationEvent}
+                      </div>
                     </p>
                   </div>
                 </div>
