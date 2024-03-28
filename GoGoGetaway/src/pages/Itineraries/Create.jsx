@@ -48,7 +48,7 @@ import Footer from '@/components/Footer';
 const Create = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { currentUser, signPopup } = useUserContext();
+  const { currentUser, signPopup, setLoadingAuthState } = useUserContext();
   const [formData, setFormData] = useState({});
   const [editingIndex, setEditingIndex] = useState({ id: null, type: null });
   const [editingItem, setEditingItem] = useState({ id: null, type: null });
