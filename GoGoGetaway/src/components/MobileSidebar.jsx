@@ -66,7 +66,7 @@ export default function MobileSidebar({ isOpen, closeSidebar, iconSize }) {
               <p className="px-5 py-2 text-sm uppercase">Following accounts</p>
               {/* Dynamically render following accounts here */}
               {/* Example of a single account link */}
-              {followingList.length <= 0 ? (
+              {followingList.length >= 0 ? (
                 <>
                   {' '}
                   {followingList.map((following) => (
