@@ -36,9 +36,9 @@ export default function BottomBar({ iconSize }) {
       >
         <IoHome size={iconSize} />
       </div>
-      <div className="  py-2 sm:px-4 sm:py-4">
+      {/* <div className="  py-2 sm:px-4 sm:py-4">
         <FaCompass size={iconSize} />
-      </div>
+      </div> */}
       <div
         className=" py-2 sm:px-4 sm:py-4"
         onClick={() => navigate('/create')}
