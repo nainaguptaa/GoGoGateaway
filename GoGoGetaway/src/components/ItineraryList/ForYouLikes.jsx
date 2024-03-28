@@ -320,15 +320,15 @@ export default function ForYouLikes({
             <CgProfile className="mb-1 h-12 w-12" />
           )}
         </Link>
-
-        <Button
-          className={`absolute -bottom-0.5 h-5 max-w-5 rounded-full bg-rose-400 px-1 text-justify text-white transition-all duration-300 ease-in-out hover:bg-rose-500 ${
-            following ? 'animate-bounce-2' : animate ? 'animate-shake' : ''
-          }`}
-          onClick={() => handleFollowButton(itineraries[index].userId)}
-        >
-          {following ? <IoMdCheckmark /> : <GoPlus />}
-        </Button>
+        {currentUser.id !== itineraries[index].userId && (
+          <Button
+            className={`absolute -bottom-0.5 h-5 max-w-5 rounded-full bg-rose-400 px-1 text-justify text-white transition-all duration-300 ease-in-out hover:bg-rose-500 ${following ? 'animate-bounce-2' : animate ? 'animate-shake' : ''
+              }`}
+            onClick={() => handleFollowButton(itineraries[index].userId)}
+          >
+            {following ? <IoMdCheckmark /> : <GoPlus />}
+          </Button>
+        )}
       </div>
 
       <div className="flex flex-col items-center gap-2">

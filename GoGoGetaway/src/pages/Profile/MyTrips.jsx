@@ -16,13 +16,14 @@ import React, { useEffect, useState } from 'react';
 import { FaRegBookmark } from 'react-icons/fa6';
 import { useParams } from 'react-router-dom';
 export default function UserProfile() {
-  const { currentUser } = useUserContext();
+  const { currentUser, updateCurrentUser } = useUserContext();
   const { username } = useParams();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [postedItineraries, setPostedItineraries] = useState([]);
   const [savedItineraries, setSavedItineraries] = useState([]);
   const [likedItineraries, setLikedItineraries] = useState([]);
+  const [following, setFollowing] = useState(false);
   const isCurrentUser = currentUser && currentUser.username === username;
   const apiURL = import.meta.env.VITE_API_URL;
   useEffect(() => {
@@ -36,6 +37,9 @@ export default function UserProfile() {
         }
         const user = await response.json();
         setUser(user);
+        if (currentUser) {
+          setFollowing(user.followers.some((follower) => follower.userId === currentUser.id));
+        }
       } catch (error) {
         console.error('Error:', error);
         // Handle error appropriately, such as displaying an error message
@@ -59,7 +63,6 @@ export default function UserProfile() {
         setLikedItineraries(liked);
 
         setSavedItineraries(saved);
-        console.log(savedItineraries);
       } catch (error) {
         console.error('Error:', error);
         // Handle error appropriately, such as displaying an error message
@@ -71,6 +74,62 @@ export default function UserProfile() {
     fetchData(); // Call the async function immediately
     fetchItineraries();
   }, [username]);
+
+  const handleFollowButton = async (userId) => {
+    if (!currentUser) {
+      setSignPopup(true);
+      return;
+    }
+    try {
+      if (following) {
+        // Unfollow logic
+        const response = await fetch(`${apiURL}/users/unfollow/${userId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ currentUser: currentUser.id }),
+        });
+        if (!response.ok) {
+          throw new Error('Failed to unfollow user');
+        }
+        //Update the current user's with the response
+        const updatedUser = await response.json();
+        if (updatedUser) {
+          // Update the current user context with the updated user data
+          updateCurrentUser(updatedUser);
+        }
+
+        console.log('User unfollowed successfully');
+      } else {
+        // Follow logic
+        const response = await fetch(`${apiURL}/users/follow/${userId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ currentUser: currentUser.id }),
+        });
+        //Update the current user's with the response
+        const updatedUser = await response.json();
+        if (updatedUser) {
+          // Update the current user context with the updated user data
+          updateCurrentUser(updatedUser);
+        }
+        if (!response.ok) {
+          throw new Error('Failed to follow user');
+        }
+        console.log('User followed successfully');
+      }
+
+      // Toggle following state
+      setFollowing(!following);
+    } catch (error) {
+      console.error('Error:', error);
+      // Handle error appropriately, such as displaying an error message
+    }
+  };
+
 
   // Render loading indicator if user is still loading
   if (loading || !user) {
@@ -109,15 +168,17 @@ export default function UserProfile() {
                 <h1>Followers</h1>
               </div>
             </div>
-            {isCurrentUser ? (
-              <Button variant="secondary" className="md:text-md w-2/3">
-                Edit Profile
-              </Button>
-            ) : (
-              <Button variant="secondary" className="md:text-md w-1/2">
-                Follow
-              </Button>
-            )}
+            <Button
+              variant="secondary"
+              className={`md:text-md ${isCurrentUser ? 'w-2/3' : 'w-1/2'}`}
+              onClick={() => handleFollowButton(user.id)}
+            >
+              {isCurrentUser ? (
+                'Edit Profile'
+              ) : (
+                following ? 'Followed' : 'Follow'
+              )}
+            </Button>
           </CardDescription>
         </CardHeader>
         {/* <CardContent>
