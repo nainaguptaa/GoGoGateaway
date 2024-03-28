@@ -1,0 +1,594 @@
+{
+  "id": "069e6c1e-36a7-451b-ab59-3fb256174fe8",
+  "version": "2.0",
+  "name": "User Reviews and Ratings",
+  "url": "https://gogogateaway-3yvuhaorjq-uc.a.run.app/",
+  "tests": [{
+    "id": "90e973b7-e84b-43b9-b9c6-c554bb53dae0",
+    "name": "following another user logged in",
+    "commands": [{
+      "id": "5dda6c8a-0580-4773-8acd-0f846b574ac8",
+      "comment": "",
+      "command": "open",
+      "target": "https://gogogateaway-3yvuhaorjq-uc.a.run.app/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "2cb3c425-f593-4bb0-8812-07616ea459a8",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1552x832",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8843fcab-38c8-4722-8abb-2b4e0b2b193b",
+      "comment": "",
+      "command": "click",
+      "target": "css=.w-44",
+      "targets": [
+        ["css=.w-44", "css:finder"],
+        ["xpath=//img[@alt='logo']", "xpath:img"],
+        ["xpath=//div[@id='root']/div/div/img", "xpath:idRelative"],
+        ["xpath=//img", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "19424a5e-c633-496d-b97c-16835c88ad11",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "640a1b15-f148-4ef8-9810-c087b182d9c0",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "18d76f4c-8c81-4e22-964f-451361642027",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mx\\3Apx-20:nth-child(2) .relative svg",
+      "targets": [
+        ["css=.mx\\3Apx-20:nth-child(2) .relative svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "798e7c0d-d29d-4f7f-b9c4-6e91231d4e05",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.mx\\3Apx-20:nth-child(2) .relative svg",
+      "targets": [
+        ["css=.mx\\3Apx-20:nth-child(2) .relative svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "9ddd78c2-55a6-4209-82c3-a8ef5194ac94",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mx\\3Apx-20:nth-child(2) .mb-1",
+      "targets": [
+        ["css=.mx\\3Apx-20:nth-child(2) .mb-1", "css:finder"],
+        ["xpath=(//img[@alt='Profile'])[3]", "xpath:img"],
+        ["xpath=//div[@id='root']/div[2]/div/div[2]/div/div/div[2]/div/div[2]/div/a/img", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div[2]/div/a/img", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "9fe90777-0280-4ecf-85c5-af419d4e9da3",
+      "comment": "Should be Following ",
+      "command": "assertText",
+      "target": "css=.rounded-md",
+      "targets": [],
+      "value": "Following"
+    }]
+  }, {
+    "id": "9e149d97-fe68-4a10-a387-26fa7e317fde",
+    "name": "following another user not logged in",
+    "commands": [{
+      "id": "cf8a54a1-fe27-4c63-be24-7c453bcb8816",
+      "comment": "",
+      "command": "open",
+      "target": "https://gogogateaway-3yvuhaorjq-uc.a.run.app/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "03966838-41d2-4c8f-a608-032404f83ec3",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1536x816",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "103447b6-d200-4011-99bf-73993d160496",
+      "comment": "",
+      "command": "click",
+      "target": "css=.w-44",
+      "targets": [
+        ["css=.w-44", "css:finder"],
+        ["xpath=//img[@alt='logo']", "xpath:img"],
+        ["xpath=//div[@id='root']/div/div/img", "xpath:idRelative"],
+        ["xpath=//img", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "7c92163c-d347-4f6b-8c5c-e6334d9a5872",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "6bf807e9-f72a-4b78-91e9-0886db461259",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e2d07050-0802-4341-a80f-3f8dbe042c42",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "fb0e2207-a17e-436d-8724-f5d8d3c49d0d",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mx\\3Apx-20:nth-child(1) .relative svg",
+      "targets": [
+        ["css=.mx\\3Apx-20:nth-child(1) .relative svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "56a00d77-f010-4ab3-9e6b-62f495759a63",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.text-primary",
+      "targets": [
+        ["css=.text-primary", "css:finder"],
+        ["xpath=//div[@id='root']/div/div[2]/div[2]/div[2]/div[2]", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div[2]/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "5349ac1a-4ac9-42fb-987b-c91907bd2e48",
+    "name": "Commenting on others posts (not logged in)",
+    "commands": [{
+      "id": "5cc4bf32-d4b7-4f96-94c7-a4c108718bcd",
+      "comment": "",
+      "command": "open",
+      "target": "https://gogogateaway-3yvuhaorjq-uc.a.run.app/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "2d1f038a-8b3e-4254-89c8-ff27e30e96ef",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1552x832",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "400ebbbe-3407-4855-ae82-811fa1d5bd19",
+      "comment": "",
+      "command": "click",
+      "target": "css=.w-44",
+      "targets": [
+        ["css=.w-44", "css:finder"],
+        ["xpath=//img[@alt='logo']", "xpath:img"],
+        ["xpath=//div[@id='root']/div/div/img", "xpath:idRelative"],
+        ["xpath=//img", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "d25863aa-fcec-4286-82e1-44d17c49be26",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f8541c09-4ca0-4ece-8eae-0364cde5f1f8",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mx\\3Apx-20:nth-child(1) .flex:nth-child(3) svg",
+      "targets": [
+        ["css=.mx\\3Apx-20:nth-child(1) .flex:nth-child(3) svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "994d02ee-1d5b-44e0-9e8f-35724976dcf3",
+      "comment": "",
+      "command": "mouseOver",
+      "target": "css=.mx\\3Apx-20:nth-child(1) .flex:nth-child(3) svg",
+      "targets": [
+        ["css=.mx\\3Apx-20:nth-child(1) .flex:nth-child(3) svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "465cb540-0195-4735-8c39-fda836b441d1",
+      "comment": "",
+      "command": "mouseOut",
+      "target": "css=.mx\\3Apx-20:nth-child(1) .flex:nth-child(3) svg",
+      "targets": [
+        ["css=.mx\\3Apx-20:nth-child(1) .flex:nth-child(3) svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "c551d148-3ee4-4ba5-8c26-ea355cf612f5",
+      "comment": "",
+      "command": "click",
+      "target": "css=.sm\\3Atext-md",
+      "targets": [
+        ["css=.sm\\3Atext-md", "css:finder"],
+        ["xpath=(//input[@value=''])[2]", "xpath:attributes"],
+        ["xpath=//div[@id='radix-:r0:']/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "1089dd41-f9e9-4766-8af1-59e24c6dea42",
+      "comment": "",
+      "command": "click",
+      "target": "css=.sm\\3Atext-md",
+      "targets": [
+        ["css=.sm\\3Atext-md", "css:finder"],
+        ["xpath=//input[@value='Hi there I really like this place']", "xpath:attributes"],
+        ["xpath=//div[@id='radix-:r0:']/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "7d23e582-4b66-40d4-a208-01b753eddfe3",
+      "comment": "",
+      "command": "click",
+      "target": "css=.bg-primary",
+      "targets": [
+        ["css=.bg-primary", "css:finder"],
+        ["xpath=//div[@id='radix-:r0:']/div[4]/button", "xpath:idRelative"],
+        ["xpath=//div[4]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Comment')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "d611297e-0722-46a2-b419-577277e2098e",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.text-primary",
+      "targets": [
+        ["css=.text-primary", "css:finder"],
+        ["xpath=//div[@id='root']/div/div[2]/div[2]/div[2]/div[2]", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div[2]/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "1f7a8e33-63d8-4b9f-92b9-d97c650cfc36",
+    "name": "Commenting on other posts (logged in)",
+    "commands": [{
+      "id": "f6e55127-acb1-444a-8359-6949498b8867",
+      "comment": "",
+      "command": "open",
+      "target": "https://gogogateaway-3yvuhaorjq-uc.a.run.app/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "7a40b491-a141-4503-8592-10bae6439555",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1536x816",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "7d0a429a-b098-4e42-b4e4-a53d7c03b5a2",
+      "comment": "",
+      "command": "click",
+      "target": "css=.w-44",
+      "targets": [
+        ["css=.w-44", "css:finder"],
+        ["xpath=//img[@alt='logo']", "xpath:img"],
+        ["xpath=//div[@id='root']/div/div/img", "xpath:idRelative"],
+        ["xpath=//img", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "c69e8c4b-ec3e-4c59-b166-9a2b99194a94",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "9876bea6-f75e-4ea8-9c04-b8c3e79073a6",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mx\\3Apx-20:nth-child(1) .flex:nth-child(3) svg",
+      "targets": [
+        ["css=.mx\\3Apx-20:nth-child(1) .flex:nth-child(3) svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "4a735b22-df49-4317-8e6e-b0b5ef7815f1",
+      "comment": "",
+      "command": "click",
+      "target": "css=.sm\\3Atext-md",
+      "targets": [
+        ["css=.sm\\3Atext-md", "css:finder"],
+        ["xpath=(//input[@value=''])[2]", "xpath:attributes"],
+        ["xpath=//div[@id='radix-:r2:']/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "2d60820a-83a0-4ff6-832a-b0ca19d75bc1",
+      "comment": "",
+      "command": "type",
+      "target": "css=.sm\\3Atext-md",
+      "targets": [
+        ["css=.sm\\3Atext-md", "css:finder"],
+        ["xpath=//input[@value='I like!']", "xpath:attributes"],
+        ["xpath=//div[@id='radix-:r2:']/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/input", "xpath:position"]
+      ],
+      "value": "I like!"
+    }, {
+      "id": "d5c35d65-8a81-4b1c-a356-a34a80f80969",
+      "comment": "",
+      "command": "click",
+      "target": "css=.bg-primary",
+      "targets": [
+        ["css=.bg-primary", "css:finder"],
+        ["xpath=//div[@id='radix-:r2:']/div[4]/button", "xpath:idRelative"],
+        ["xpath=//div[4]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Comment')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "2a2bac23-cb00-41ab-8a35-1f90d8c8bea2",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.flex:nth-child(7) .overflow-hidden",
+      "targets": [
+        ["css=.flex:nth-child(7) .overflow-hidden", "css:finder"],
+        ["xpath=//div[@id='radix-:r2:']/div[3]/div[7]/div/div/div/p", "xpath:idRelative"],
+        ["xpath=//div[7]/div/div/div/p", "xpath:position"]
+      ],
+      "value": "I like!"
+    }]
+  }, {
+    "id": "547f34ae-d36a-41c9-bdb4-98507e43ee94",
+    "name": "rating an itinerary logged in ",
+    "commands": [{
+      "id": "515f39a1-a771-4e7b-83bc-0a71c5f5c889",
+      "comment": "",
+      "command": "open",
+      "target": "https://gogogateaway-3yvuhaorjq-uc.a.run.app/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f8d97059-4ecb-4355-83ed-38ad96fdb48e",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1552x832",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e9793730-aea9-4e7e-adbf-5d189e4333a3",
+      "comment": "",
+      "command": "click",
+      "target": "css=.w-44",
+      "targets": [
+        ["css=.w-44", "css:finder"],
+        ["xpath=//img[@alt='logo']", "xpath:img"],
+        ["xpath=//div[@id='root']/div/div/img", "xpath:idRelative"],
+        ["xpath=//img", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "8e8d853b-ab1f-4576-819f-24e19bf5c314",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mx\\3Apx-20:nth-child(1) .ease",
+      "targets": [
+        ["css=.mx\\3Apx-20:nth-child(1) .ease", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "89610fea-1c45-478f-80c0-c8b46b0df612",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.text-rose-500 > path",
+      "targets": [
+        ["css=.text-rose-500 > path", "css:finder"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "8443acad-3388-405d-84c0-c3ad6d44b02e",
+    "name": "rating an itinerary not logged in",
+    "commands": [{
+      "id": "4c717cce-fb9b-4c37-9f89-1acab96f4633",
+      "comment": "",
+      "command": "open",
+      "target": "https://gogogateaway-3yvuhaorjq-uc.a.run.app/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "8f2f9064-8412-4268-91b6-4e330067f88a",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1552x832",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "abe5d8dd-78c3-4ec2-8258-f27e839659f5",
+      "comment": "",
+      "command": "click",
+      "target": "css=.w-44",
+      "targets": [
+        ["css=.w-44", "css:finder"],
+        ["xpath=//img[@alt='logo']", "xpath:img"],
+        ["xpath=//div[@id='root']/div/div/img", "xpath:idRelative"],
+        ["xpath=//img", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "3d8be2f8-bac0-4c7a-97a7-3c2b22b71fa8",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mx\\3Apx-20:nth-child(1) .ease > path",
+      "targets": [
+        ["css=.mx\\3Apx-20:nth-child(1) .ease > path", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "b0137746-fb84-40f2-a24f-7d88b6362bab",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.text-primary",
+      "targets": [
+        ["css=.text-primary", "css:finder"],
+        ["xpath=//div[@id='root']/div/div[2]/div[2]/div[2]/div[2]", "xpath:idRelative"],
+        ["xpath=//div[2]/div[2]/div[2]/div[2]", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }, {
+    "id": "ec319e8b-90ec-4957-b186-f090d0163f8d",
+    "name": "Commenting on my own post",
+    "commands": [{
+      "id": "4650fae4-db33-4858-94f4-c08e2cbdb224",
+      "comment": "",
+      "command": "open",
+      "target": "https://gogogateaway-3yvuhaorjq-uc.a.run.app/",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "3642c570-943f-4404-aa2e-cafd9bc13ce5",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1552x832",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "f52e3fd6-2dd8-4503-9654-6d554419bb9d",
+      "comment": "",
+      "command": "click",
+      "target": "css=.w-44",
+      "targets": [
+        ["css=.w-44", "css:finder"],
+        ["xpath=//img[@alt='logo']", "xpath:img"],
+        ["xpath=//div[@id='root']/div/div/img", "xpath:idRelative"],
+        ["xpath=//img", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "c3378680-0f5d-404a-ad15-e8d428f2c951",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "20ea2816-5998-4483-86ec-90d6d62a32d3",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ace82ff6-9bcb-4b6f-9615-74cf4d7c3044",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "d74baf94-af56-4096-9e48-8911d15d6caf",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "ded6b1de-8e0f-4776-902b-7f570c8bde1d",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "2c6324b6-06b9-4019-b0b9-ee839789b8e9",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "97fa991e-34a6-4891-af47-825326096bcd",
+      "comment": "",
+      "command": "runScript",
+      "target": "window.scrollTo(0,0)",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e4b2b4f4-50a4-422d-ac61-085425efdbd8",
+      "comment": "",
+      "command": "click",
+      "target": "css=.mx\\3Apx-20:nth-child(3) .flex:nth-child(3) svg",
+      "targets": [
+        ["css=.mx\\3Apx-20:nth-child(3) .flex:nth-child(3) svg", "css:finder"]
+      ],
+      "value": ""
+    }, {
+      "id": "b44928c7-f636-4268-b064-f7af11d28fa1",
+      "comment": "",
+      "command": "click",
+      "target": "css=.sm\\3Atext-md",
+      "targets": [
+        ["css=.sm\\3Atext-md", "css:finder"],
+        ["xpath=(//input[@value=''])[2]", "xpath:attributes"],
+        ["xpath=//div[@id='radix-:rt:']/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/input", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "cd5c6897-c461-45d2-b1d9-42b36c80102b",
+      "comment": "",
+      "command": "type",
+      "target": "css=.sm\\3Atext-md",
+      "targets": [
+        ["css=.sm\\3Atext-md", "css:finder"],
+        ["xpath=//input[@value='Wow, eagle bay sounds mighty fine']", "xpath:attributes"],
+        ["xpath=//div[@id='radix-:rt:']/div[4]/input", "xpath:idRelative"],
+        ["xpath=//div[4]/input", "xpath:position"]
+      ],
+      "value": "Wow, eagle bay sounds mighty fine"
+    }, {
+      "id": "06b906ba-0adb-492d-8d76-01f5b334fbd1",
+      "comment": "",
+      "command": "",
+      "target": "css=.bg-primary",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "e79162bf-7e22-4413-9a7d-10f8ae748db0",
+      "comment": "",
+      "command": "assertText",
+      "target": "css=.flex:nth-child(2) > .flex > .flex .overflow-hidden",
+      "targets": [
+        ["css=.flex:nth-child(2) > .flex > .flex .overflow-hidden", "css:finder"],
+        ["xpath=//div[@id='radix-:r8:']/div[3]/div[2]/div/div/div/p", "xpath:idRelative"],
+        ["xpath=//div[5]/div[3]/div[2]/div/div/div/p", "xpath:position"]
+      ],
+      "value": "Wow, eagle bay sounds mighty fine"
+    }]
+  }],
+  "suites": [],
+  "urls": ["http://localhost:5173/", "https://gogogateaway-3yvuhaorjq-uc.a.run.app/"],
+  "plugins": []
+}
