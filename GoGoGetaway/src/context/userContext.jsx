@@ -144,6 +144,22 @@ export const UserProvider = ({ children }) => {
   };
 
   async function addOrUpdateGoogleUser(result) {
+    // Define the reference to the user document in Firestore
+    const userDocRef = doc(db, 'users', result.user.uid);
+
+    // Try to fetch the existing user document
+    const existingUserDoc = await getDoc(userDocRef);
+
+    let existingFollowing = [];
+    let existingFollowers = [];
+
+    // Check if the document exists and extract following and followers
+    if (existingUserDoc.exists()) {
+      const existingData = existingUserDoc.data();
+      existingFollowing = existingData.following || [];
+      existingFollowers = existingData.followers || [];
+    }
+
     const userDataFromGoogle = {
       username: result.user.email.split('@')[0],
       id: result.user.uid,
@@ -153,15 +169,12 @@ export const UserProvider = ({ children }) => {
       firstName: result.user.displayName?.split(' ')[0] || '', // Optional: Capture first name from displayName
       lastName: result.user.displayName?.split(' ').slice(1).join(' ') || '', // Optional: Capture last name from displayName
       googleUser: true,
-      following: [],
-      followers: [],
+      following: existingFollowing,
+      followers: existingFollowers,
 
       // Include any other user fields you want to capture or update
     };
 
-    const userDocRef = doc(db, 'users', result.user.uid);
-
-    // Use setDoc with { merge: true } to update the existing document or create a new one without overwriting other fields
     await setDoc(userDocRef, userDataFromGoogle, { merge: true });
   }
 

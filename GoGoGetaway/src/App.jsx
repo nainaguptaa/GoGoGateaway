@@ -83,7 +83,7 @@ function App() {
         {/* <ForYouLeft className="" />{' '} */}
         <Suspense fallback={<Loading />}>
           <Routes>
-            <Route path="/" element={<LandingPage />} />
+            {/* <Route path="/" element={<LandingPage />} /> */}
             {/* <Route path="/signup" element={<Signup />} /> */}
             <Route path="/profile" element={<Profile />} />
             <Route path="/search" element={<SearchResults />} />
@@ -102,7 +102,8 @@ function App() {
             />{' '}
             <Route path="/create" element={<Create />} />
             <Route path="/test" element={<Test />} />
-            <Route path="*" element={<Navigate to="/ " replace />} />
+            <Route path="*" element={<Navigate to="/foryou " replace />} />
+            <Route path="/" element={<Navigate to="/foryou " replace />} />
             <Route path="/my-trips" element={<MyTrips />} />
             <Route path="/user/:username" element={<MyTrips />} />
           </Routes>
