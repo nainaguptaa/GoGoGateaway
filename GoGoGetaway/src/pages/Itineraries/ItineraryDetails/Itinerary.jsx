@@ -19,13 +19,14 @@ import { useNavigate } from 'react-router-dom';
 export default function Itinerary({ iconSize }) {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { currentUser, setSignPopup } = useUserContext();
+  const { currentUser, setSignPopup, setLoadingAuthState } = useUserContext();
   const location = useLocation();
   const [itinerary, setItinerary] = useState(null);
   const [restaurants, setRestaurants] = useState([]);
   const [events, setEvents] = useState([]);
   const [showComments, setShowComments] = useState(false);
   const [itineraryId, setItineraryId] = useState('');
+  const [loading, setLoading] = useState(false);
   const apiURL = import.meta.env.VITE_API_URL;
   // Function to toggle comments visibility
   const toggleComments = () => {
@@ -33,6 +34,9 @@ export default function Itinerary({ iconSize }) {
   };
   // console.log(itinerary);
   useEffect(() => {
+    setLoading(true);
+    setLoadingAuthState(true);
+
     const fetchItinerary = async () => {
       const queryParams = new URLSearchParams(location.search);
 
@@ -54,17 +58,31 @@ export default function Itinerary({ iconSize }) {
         console.error('Error fetching itinerary:', error);
         // Handle error or set some state to show an error message
       }
+      setLoading(false);
+      setLoadingAuthState(false);
     };
 
     if (location.search) {
       fetchItinerary();
     }
   }, [location]);
-
-  if (!itinerary) {
-    return <div className="px-32">No itinerary found.</div>;
+  if (loading) {
+    return (
+      <>
+        <>LLoading</>
+      </>
+    );
   }
-  const formattedDate = new Date(itinerary.date).toLocaleDateString('en-US', {
+  if (!itinerary) {
+    return (
+      <div className="mt-8 flex h-screen items-center justify-center bg-red-100">
+        No itinerary found.
+      </div>
+    );
+  }
+  const formattedDate = new Date(
+    itinerary && itinerary.date,
+  ).toLocaleDateString('en-US', {
     year: 'numeric',
     month: 'long',
     day: 'numeric',
