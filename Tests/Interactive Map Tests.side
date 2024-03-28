@@ -1,0 +1,94 @@
+{
+  "id": "2a864595-59a1-4597-8170-dd5ea79fd193",
+  "version": "2.0",
+  "name": "Interactive Map",
+  "url": "https://gogogateaway-3yvuhaorjq-uc.a.run.app/foryou",
+  "tests": [{
+    "id": "6d860f73-5ee9-4c61-a8cb-5c73c2ffd98d",
+    "name": "Map functionality",
+    "commands": [{
+      "id": "eb21033b-a0b6-40a0-85ef-5f07235e5e64",
+      "comment": "",
+      "command": "open",
+      "target": "https://gogogateaway-3yvuhaorjq-uc.a.run.app/foryou",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "1078d1a7-d590-4347-94e7-c0b4754c7639",
+      "comment": "",
+      "command": "setWindowSize",
+      "target": "1440x814",
+      "targets": [],
+      "value": ""
+    }, {
+      "id": "a53825d4-ac65-4fca-bce2-3a2b508d6545",
+      "comment": "",
+      "command": "click",
+      "target": "css=.text-lg:nth-child(1)",
+      "targets": [
+        ["css=.text-lg:nth-child(1)", "css:finder"],
+        ["xpath=//div[@id='root']/div/div[2]/button/div", "xpath:idRelative"],
+        ["xpath=//button/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "ac782fc6-7509-4683-818c-5c6d0988f174",
+      "comment": "",
+      "command": "type",
+      "target": "id=city",
+      "targets": [
+        ["id=city", "id"],
+        ["css=#city", "css:finder"],
+        ["xpath=//input[@id='city']", "xpath:attributes"],
+        ["xpath=//div[@id='radix-:rc:']/div[2]/input", "xpath:idRelative"],
+        ["xpath=//div[2]/input", "xpath:position"]
+      ],
+      "value": "Rome"
+    }, {
+      "id": "8ba4fe27-6fff-4c3d-9820-d9c940efaad8",
+      "comment": "",
+      "command": "click",
+      "target": "css=.flex-col-reverse > .md\\3Atext-xl",
+      "targets": [
+        ["css=.flex-col-reverse > .md\\3Atext-xl", "css:finder"],
+        ["xpath=(//button[@type='button'])[6]", "xpath:attributes"],
+        ["xpath=//div[@id='radix-:rc:']/div[3]/button", "xpath:idRelative"],
+        ["xpath=//div[3]/button", "xpath:position"],
+        ["xpath=//button[contains(.,'Save Changes')]", "xpath:innerText"]
+      ],
+      "value": ""
+    }, {
+      "id": "1c7ecc30-178f-4aee-a0c6-d96c29c31d90",
+      "comment": "",
+      "command": "click",
+      "target": "css=.z-0",
+      "targets": [
+        ["css=.z-0", "css:finder"],
+        ["xpath=//div[@id='root']/div[2]/div/div/div[2]/div[2]/div/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div[2]/div[2]/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }, {
+      "id": "c61f572e-0000-466d-853f-eb0032a92040",
+      "comment": "",
+      "command": "assertElementPresent",
+      "target": "css=.z-0",
+      "targets": [
+        ["css=.z-0", "css:finder"],
+        ["xpath=//div[@id='root']/div[2]/div/div/div[2]/div[2]/div/div", "xpath:idRelative"],
+        ["xpath=//div[2]/div/div/div[2]/div[2]/div/div", "xpath:position"]
+      ],
+      "value": ""
+    }]
+  }],
+  "suites": [{
+    "id": "8de44245-0b3d-4f92-b345-7759a2c01cf0",
+    "name": "Default Suite",
+    "persistSession": false,
+    "parallel": false,
+    "timeout": 300,
+    "tests": ["6d860f73-5ee9-4c61-a8cb-5c73c2ffd98d"]
+  }],
+  "urls": ["https://gogogateaway-3yvuhaorjq-uc.a.run.app/foryou"],
+  "plugins": []
+}
