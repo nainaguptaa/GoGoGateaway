@@ -1,6 +1,6 @@
 # Travel App
 
-Welcome to the Travel App, the perfect companion for travel enthusiasts! This application allows you to create detailed itineraries for destinations around the world and share them with fellow travelers. Discover and get inspired by others' travel plans, and engage with the community by liking, commenting, and following users who share your interests.
+Welcome to the GoGoGetaway, the perfect companion for travel enthusiasts! This application allows you to create detailed itineraries for destinations around the world and share them with fellow travelers. Discover and get inspired by others' travel plans, and engage with the community by liking, commenting, and following users who share your interests.
 
 ## Features
 - **Create Itineraries:** Plan your trips with detailed itineraries for any destination.
